@@ -5,8 +5,7 @@ const { createSociety,joinRequest,addmember,listmembers} = require('../controlle
 
 router.post('/create_society', createSociety);
 router.post('/join_request',joinRequest);
-router.post('/addMember',addmember);
-router.get('/listmembers/:societyID', listmembers);
+
 
 
 

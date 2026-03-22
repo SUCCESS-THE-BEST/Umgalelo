@@ -64,6 +64,16 @@ const getSocietyMembers = async (societyID) => {
   return response;
 };
 
+const listJoinedRequests = async (societyID) => {
+
+  const [response] = await db.execute(
+    'SELECT * FROM join_requests WHERE society_id = ? AND status = "pending"',
+    [societyID]
+  );
+
+  return response;
+};
+
 //remove member
 const removeMember = async (userID, societyID) => {
   const [response] = await db.execute(
@@ -74,6 +84,14 @@ const removeMember = async (userID, societyID) => {
   return response;
 };
 
+const adminSocieties= async(adminID)=>{
+  const [response] = await db.execute(
+    'SELECT * FROM societies WHERE admin_id = ? ',
+    [adminID]
+  );
+
+  return response;  
+}
 
 module.exports={
     createsocieties,
@@ -82,5 +100,7 @@ module.exports={
     joinRequests,
     addmembers,
     getSocietyMembers,
-    removeMember
+    removeMember,
+    listJoinedRequests,
+    adminSocieties
 }

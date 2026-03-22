@@ -12,8 +12,8 @@ app.use('/api/users', userRoutes);
 const societyRoutes = require('./routes/societyRoutes');
 app.use('/api/societies', societyRoutes);
 
-const removeRoutes = require('./routes/removeRoutes');
-app.use('/api/admin', removeRoutes);
+const adminRoutes = require('./routes/adminRoutes');
+app.use('/api/admin', adminRoutes);
 
 app.use(cors());
 
