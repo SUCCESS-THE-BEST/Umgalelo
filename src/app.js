@@ -12,6 +12,9 @@ app.use('/api/users', userRoutes);
 const societyRoutes = require('./routes/societyRoutes');
 app.use('/api/societies', societyRoutes);
 
+const removeRoutes = require('./routes/removeRoutes');
+app.use('/api/admin', removeRoutes);
+
 app.use(cors());
 
 app.get('/', (req, res) => {

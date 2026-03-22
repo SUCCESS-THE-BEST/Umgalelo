@@ -11,6 +11,7 @@ const createsocieties = async (societyName, monthlyContribution, adminID) => {
     'INSERT INTO society_members (society_id, user_id, role) VALUES (?, ?, ?)',
     [newSocietyId, adminID, 'admin'] 
   );
+
   return response;
 };
 
@@ -63,11 +64,23 @@ const getSocietyMembers = async (societyID) => {
   return response;
 };
 
+//remove member
+const removeMember = async (userID, societyID) => {
+  const [response] = await db.execute(
+    'DELETE FROM society_members WHERE society_id = ? AND user_id = ?',
+    [societyID, userID]
+  );
+
+  return response;
+};
+
+
 module.exports={
     createsocieties,
     findAdminID,
     findSocietyName,
     joinRequests,
     addmembers,
-    getSocietyMembers
+    getSocietyMembers,
+    removeMember
 }
