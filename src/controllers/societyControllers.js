@@ -18,12 +18,8 @@ const createSociety = async (req, res) => {
         if (exists.length > 0) {
             return res.status(400).json({message: 'society already exists'});
         }
-        /* const adminExists= await societyModel.findAdminID(adminID)
-         if (adminExists.length > 0) {
-            return res.status(400).json({message: 'admin already exists'});
-        }*/
-        await societyModel.createsocieties(societyName,monthlyContribution, adminID);
-
+        const societyID=await societyModel.createsocieties(societyName,monthlyContribution, adminID);
+        await societyModel.addmembers(societyID,adminID,"admin")
         res.status(200).json({ message: 'society created successfully' });
 
     } catch (error) {
