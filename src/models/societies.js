@@ -1,27 +1,31 @@
 const db = require('../config/db');
-
 const createsocieties = async (societyName, monthlyContribution, adminID) => {
   const [response] = await db.execute(
     'INSERT INTO societies (society_name, monthly_contribution, admin_id) VALUES (?, ?, ?)',
     [societyName, monthlyContribution, adminID]
   );
-//adds admin in society_members table
-  const newSocietyId = response.insertId;
-  await db.execute(
-    'INSERT INTO society_members (society_id, user_id, role) VALUES (?, ?, ?)',
-    [newSocietyId, adminID, 'admin'] 
-  );
-
-  return response;
+  return response.insertId;
 };
+const addmembers = async (societyID,userID,role)=>{
+  const [response] = await db.execute(
+    'INSERT INTO society_members (society_id, user_id, role) VALUES (?, ?, ?)',
+    [societyID,userID, role] 
+  );
+  return response;
+}
 
-const findAdminID = async (adminID) => {
-    const [response] = await db.execute(
-        'SELECT * FROM societies WHERE admin_id = ?',
-        [adminID]
+
+const findSocietyID = async (societyName) => {
+    const [rows] = await db.execute(
+        'SELECT society_id FROM societies WHERE society_name = ?',
+        [societyName]
     );
 
-    return response;
+    if (rows.length === 0) {
+        return null; 
+    }
+
+    return rows[0].society_id;
 };
 
 const findSocietyName = async (societyName) => {
@@ -29,7 +33,6 @@ const findSocietyName = async (societyName) => {
         'SELECT * FROM societies WHERE society_name = ?',
         [societyName]
     );
-
     return response;
 };
 
@@ -41,17 +44,11 @@ const joinRequests= async (userID,societyID)=>{
     return response;
 };
 //Add user to society_members
-const addmembers = async (userID, societyID) => {
+const approveRequest = async (userID, societyID) => {
   const [response] = await db.execute(
     'UPDATE join_requests SET status = ? WHERE user_id = ? AND society_id = ?',
     ['approved', userID, societyID]
   );
-
-  await db.execute(
-    'INSERT IGNORE INTO society_members (society_id, user_id, role) VALUES (?, ?, ?)',
-    [societyID, userID, 'member']
-  );
-
   return response;
 };
 //list members 
@@ -95,12 +92,13 @@ const adminSocieties= async(adminID)=>{
 
 module.exports={
     createsocieties,
-    findAdminID,
     findSocietyName,
     joinRequests,
     addmembers,
     getSocietyMembers,
     removeMember,
     listJoinedRequests,
-    adminSocieties
+    adminSocieties,
+    findSocietyID,
+    approveRequest,
 }

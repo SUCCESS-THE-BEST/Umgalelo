@@ -7,7 +7,11 @@ const addmember = async (req, res) => {
         if (!userID || !societyID ) {
             return res.status(400).json({ message: 'All fields are required' });
         }
-        await societyModel.addmembers(userID,societyID);
+       const result = await societyModel.approveRequest(userID, societyID);
+        if (result.affectedRows === 0) {
+        return res.status(404).json({ message: "Join request not found" });
+        }
+        await societyModel.addmembers(societyID, userID, "member");
         res.status(200).json({ message: 'member was added successfully' });
 
     } catch (error) {
