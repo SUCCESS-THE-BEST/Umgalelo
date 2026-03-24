@@ -15,8 +15,11 @@ app.use('/api/societies', societyRoutes);
 const adminRoutes = require('./routes/adminRoutes');
 app.use('/api/admin', adminRoutes);
 
-const financialRoutes = require('./routes/FinancialRoutes');
-app.use('/api/Financial', financialRoutes);
+const contributionRoutes = require('./routes/ContributionRoutes');
+app.use('/api/Contribution', contributionRoutes);
+
+const claimlRoutes = require('./routes/ClaimRoutes');
+app.use('/api/Claim', claimlRoutes);
 
 app.use(cors());
 
