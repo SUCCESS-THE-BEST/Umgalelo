@@ -3,7 +3,7 @@ const db = require('../config/db');
 // creating a society
 const createsocieties = async (societyName, monthlyContribution, coverAmount,waitingPeriod,addtionalRules,province,city,maximumMembers,minimumAge,adminID) => {
   const [response] = await db.execute(
-    'INSERT INTO societies (society_name, monthly_contribution,cover_amount,waiting_period,additional_rules,province,city,maximum_members,minimum_age,admin_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+    'INSERT INTO societies (society_name, monthly_contribution,cover_amount,waiting_period,additional_rules,province,city,maximum_members,minimum_age,admin_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
     [societyName, monthlyContribution,coverAmount,waitingPeriod,addtionalRules,province,city,maximumMembers,minimumAge, adminID]
   );
   return response.insertId;
@@ -103,7 +103,7 @@ const adminSocieties= async(adminID)=>{
 //list all user societies such as societies that a user have joined 
 const displayUser_societies= async(userID)=>{
   const [response] = await db.execute(
-    'SELECT * FROM society_members WHERE user_id= ?'
+    'SELECT * FROM society_members WHERE user_id= ?',
     [userID]
   )
   return response;

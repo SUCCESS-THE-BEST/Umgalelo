@@ -8,7 +8,7 @@ router.post('/addMember',addmember);
 router.get('/listmembers/:societyID', listmembers);
 router.get('/listrequest/:societyID', listJoinRequest);
 router.get('/listadminSocieties/:adminID', listAdminSocieties);
-router.get('/listadminSocieties/:userID', listUserSocieties);
+router.get('/listUserSocieties/:userID', listUserSocieties);
 router.delete('/removeMember/:societyID/:userID', removeMembers);
 
 module.exports = router;
