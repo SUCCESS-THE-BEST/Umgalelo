@@ -1,33 +1,107 @@
 const db = require('../config/db');
 
 //Add Contributions
-const AddContribution = async (userId, societyId, amount) => {
+const AddContribution = async (userId, societyId, amount, connection) => {
+  const [response] = await connection.execute(
+    'INSERT INTO contributions (society_id, user_id, amount) VALUES (?, ?, ?)',
+    [societyId, userId, amount]
+  );
+
+  return response;
+};
+
+const UpdateSocietyWallet = async (societyId, amount, connection) => {
+  const [result] = await connection.execute(
+    'UPDATE society_wallet SET balance = balance + ? WHERE society_id = ?',
+    [amount, societyId]
+  );
+
+  if (result.affectedRows === 0) {
+    throw new Error('Society wallet not found');
+  }
+};
+
+const CreateTransaction = async (societyId, amount, connection) => {
+  await connection.execute(
+    'INSERT INTO transactions (society_id, type, amount) VALUES (?, "contribution", ?)',
+    [societyId, amount]
+  );
+};
+
+const ProcessContribution = async (userId, societyId, amount) => {
   const connection = await db.getConnection();
 
   try {
     await connection.beginTransaction();
 
-    const [response] = await connection.execute(
-      'INSERT INTO contributions (society_id, user_id, amount) VALUES (?, ?, ?)',
-      [societyId, userId, amount]
-    );
-
-    await connection.execute(
-      'UPDATE society_wallet SET balance = balance + ? WHERE society_id = ?',
-      [amount, societyId]
-    );
-
-    await connection.execute(
-      'INSERT INTO transactions (society_id, type, amount) VALUES (?, "contribution", ?)',
-      [societyId, amount]
-    );
+    await AddContribution(userId, societyId, amount, connection);
+    await UpdateSocietyWallet(societyId, amount, connection);
+    await CreateTransaction(societyId, amount, connection);
 
     await connection.commit();
 
-    return response;
-
   } catch (error) {
     await connection.rollback();
+    throw error;
+  } finally {
+    connection.release();
+  }
+};
+
+const GetContributionsBySociety = async (societyId) => {
+  const connection = await db.getConnection();
+
+  try {
+    const [rows] = await connection.execute(
+      `SELECT * FROM contributions WHERE society_id = ? ORDER BY contribution_id DESC`,
+      [societyId]
+    );
+
+    return rows;
+
+  } catch (error) {
+    console.error(error);
+    throw error;
+  } finally {
+    connection.release();
+  }
+};
+
+const GetContributionsByUser = async (userId) => {
+  const connection = await db.getConnection();
+
+  try {
+    const [rows] = await connection.execute(
+      `SELECT * FROM contributions WHERE user_id = ? ORDER BY contribution_id DESC`,
+      [userId]
+    );
+
+    return rows;
+
+  } catch (error) {
+    console.error(error);
+    throw error;
+  } finally {
+    connection.release();
+  }
+};
+
+const GetSocietyWallet = async (societyId) => {
+  const connection = await db.getConnection();
+
+  try {
+    const [rows] = await connection.execute(
+      `SELECT balance FROM society_wallet WHERE society_id = ?`,
+      [societyId]
+    );
+
+    if (rows.length === 0) {
+      throw new Error('Society wallet not found');
+    }
+
+    return rows[0];
+
+  } catch (error) {
     console.error(error);
     throw error;
   } finally {
@@ -36,5 +110,11 @@ const AddContribution = async (userId, societyId, amount) => {
 };
 
 module.exports = { 
-    AddContribution
+  AddContribution,
+  UpdateSocietyWallet,
+  CreateTransaction,
+  ProcessContribution,
+  GetContributionsBySociety,
+  GetContributionsByUser,
+  GetSocietyWallet
 };

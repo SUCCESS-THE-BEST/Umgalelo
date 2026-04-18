@@ -85,8 +85,32 @@ const RejectClaim = async (req, res) => {
   }
 }
 
+const GetClaimsBySociety = async (req, res) => {
+  try {
+    const societyId = req.params.societyId;
+
+    if (!societyId) {
+      return res.status(400).json({ message: 'Society ID is required' });
+    }
+
+    const claims = await financialModel.getClaimsBySociety(societyId);
+
+    res.status(200).json({
+      message: 'Claims fetched successfully',
+      data: claims
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: 'Error fetching claims'
+    });
+  }
+};
+
 module.exports = {
     SubmitClaim,
     ApproveClaim,
-    RejectClaim
+    RejectClaim,
+    GetClaimsBySociety
 }

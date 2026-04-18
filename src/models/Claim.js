@@ -77,8 +77,40 @@ const RejectClaim = async (claimId) => {
   return result;
 };
 
+const GetClaimsBySociety = async (societyId) => {
+  const connection = await db.getConnection();
+
+  try {
+    const [rows] = await connection.execute(
+      `SELECT 
+          c.claim_id,
+          c.society_id,
+          c.user_id,
+          u.name AS user_name,
+          c.deceased_name,
+          c.relationship,
+          c.amount,
+          c.status
+       FROM claims c
+       JOIN users u ON c.user_id = u.user_id
+       WHERE c.society_id = ?
+       ORDER BY c.claim_id DESC`,
+      [societyId]
+    );
+
+    return rows;
+
+  } catch (error) {
+    console.error(error);
+    throw error;
+  } finally {
+    connection.release();
+  }
+};
+
 module.exports = {
-    SubmitClaim,
-    ApproveClaim,
-    RejectClaim
+  SubmitClaim,
+  ApproveClaim,
+  RejectClaim,
+  GetClaimsBySociety
 };
