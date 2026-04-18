@@ -1,0 +1,210 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 260px;
+
+  background:
+    linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.65)),
+    url('images/hugpic.jpeg') center/cover no-repeat;
+background-position: center;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: 0.3s;
+  
+}
+
+
+  
+
+.sidebar.collapsed {
+  width: 80px;
+}
+
+.logo-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px;
+}
+
+/* When collapsed */
+.sidebar.collapsed .logo {
+  display: none;
+}
+.sidebar.collapsed .item {
+  justify-content: center;
+}
+
+.sidebar.collapsed .profile {
+  justify-content: center;
+}
+
+.logo {
+  width: 150px;
+  margin-bottom: 40px;
+}
+
+.toggle {
+  width: 22px;
+  height: 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+}
+.toggle img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+}
+
+.toggle:hover {
+  background: rgba(255,255,255,0.2);
+  border-radius: 6px;
+} 
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+.profile img {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 5px solid white;
+  display: block;
+}
+
+.menu {
+  padding: 10px;
+}
+
+.section {
+  font-size: 15px;
+  margin: 10px 0;
+  /* opacity: 0.7; */
+  font-weight: bold;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.item img {
+  width: 20px;
+}
+
+/* COLLAPSE TEXT */
+.sidebar.collapsed .item span,
+.sidebar.collapsed .section,
+.sidebar.collapsed .info {
+  display: none;
+}
+
+/* LOGOUT */
+.logout {
+  display: flex;
+  gap: 10px;
+  padding: 20px;
+}
+
+/* MAIN */
+.main {
+  flex: 1;
+  background: #f5f5f5;
+  overflow-y: auto;
+}
+
+/* STICKY HEADER */
+.header {
+  position: sticky;
+  top: 0;
+  background: #f5f5f5;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  z-index: 10;
+}
+
+/* CONTENT */
+.content {
+  padding: 20px;
+}
+
+.user-card {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.user-card img {
+   width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 50%;
+  
+  display: block;
+}
+hr{
+    margin-bottom: 20px;
+}
+.section-title {
+  color: #a36b42;
+  margin: 20px 0 10px;
+}
+
+/* GRID FORM */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.field label {
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+.field input {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background: #eaeaea;
+}
+a{
+    text-decoration: none;
+    color: #f5f5f5;
+}
+a:hover{
+    color: #a36b42;
+}

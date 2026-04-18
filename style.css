@@ -1,0 +1,164 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+/* LEFT */
+.left {
+  width: 40%;
+  background: url('images/holdhands.jpeg') center/cover no-repeat;
+  position: relative;
+  color: white;
+}
+.back a {
+  color: white;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 100px;
+}
+a:hover{
+    color: #a36b42;
+}
+.imgLogo{
+    justify-content: center;
+    align-items: center;
+    width: 200px;
+    margin-left: 180px;
+    margin-bottom: 100px;
+}
+
+.arrow {
+  font-size: 18px;
+}
+.overlay {
+  padding: 40px;
+  height: 100%;
+  background: rgba(0,0,0,0.3);
+}
+
+.logo {
+  margin-bottom: 100px;
+}
+
+.left-text{
+  margin-left: 180px;
+  /* margin-bottom: 100px; */
+}
+.left-text h2 {
+  font-size: 32px;
+  /* margin-bottom: 10px; */
+
+  margin-bottom: 80px;
+}
+
+.left-text p {
+  margin-bottom: 30px;
+}
+
+.login button {
+  /* margin-left: 10px; */
+  padding: 5px 15px;
+  border-radius: 20px;
+  border: 1px solid white;
+  background: transparent;
+  color: white;
+  cursor: pointer;
+
+}
+
+a{
+    text-decoration: none;
+    color: aliceblue;
+}
+/* RIGHT */
+.right {
+  width: 60%;
+  padding: 40px;
+  background: #f7f7f7;
+}
+
+form h3 {
+  margin: 20px 0 10px;
+  color: #a36b42;
+}
+
+.row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.field {
+  flex: 1;
+  display: flex;
+  flex-direction: column; /* THIS is the magic */
+}
+
+.field label {
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+input {
+  flex: 1;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+/* PASSWORD STRENGTH */
+.strength {
+  display: flex;
+  gap: 10px;
+  margin: 10px 0 20px;
+}
+
+.strength div {
+  flex: 1;
+  height: 6px;
+  background: #ddd;
+  border-radius: 5px;
+}
+
+.strength .active {
+  background: #8b5e3c; /* brown */
+}
+.checkbox{
+    width: 20px;
+    height: 20px;
+}
+/* TERMS */
+.terms {
+  display: flex;
+  gap: 10px;
+  font-size: 12px;
+  margin-bottom: 20px;
+  color: #585757;
+  font-weight: bold;
+  
+  
+}
+.tnc{
+    color: #d49d73;
+}
+
+/* BUTTON */
+.submit {
+  width: 50%;
+  padding: 15px;
+  border: none;
+  background: #a36b42;
+  color: white;
+  border-radius: 25px;
+  cursor: pointer;
+  margin-left: 180px;
+}
