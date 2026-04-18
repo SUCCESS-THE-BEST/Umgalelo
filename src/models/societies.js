@@ -1,11 +1,15 @@
 const db = require('../config/db');
-const createsocieties = async (societyName, monthlyContribution, adminID) => {
+
+// creating a society
+const createsocieties = async (societyName, monthlyContribution, coverAmount,waitingPeriod,addtionalRules,province,city,maximumMembers,minimumAge,adminID) => {
   const [response] = await db.execute(
-    'INSERT INTO societies (society_name, monthly_contribution, admin_id) VALUES (?, ?, ?)',
-    [societyName, monthlyContribution, adminID]
+    'INSERT INTO societies (society_name, monthly_contribution,cover_amount,waiting_period,additional_rules,province,city,maximum_members,minimum_age,admin_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+    [societyName, monthlyContribution,coverAmount,waitingPeriod,addtionalRules,province,city,maximumMembers,minimumAge, adminID]
   );
   return response.insertId;
 };
+
+//adding a member to a specific society
 const addmembers = async (societyID,userID,role)=>{
   const [response] = await db.execute(
     'INSERT INTO society_members (society_id, user_id, role) VALUES (?, ?, ?)',
@@ -14,7 +18,7 @@ const addmembers = async (societyID,userID,role)=>{
   return response;
 }
 
-
+//getting the society id
 const findSocietyID = async (societyName) => {
     const [rows] = await db.execute(
         'SELECT society_id FROM societies WHERE society_name = ?',
@@ -28,6 +32,7 @@ const findSocietyID = async (societyName) => {
     return rows[0].society_id;
 };
 
+//getting the society name
 const findSocietyName = async (societyName) => {
     const [response] = await db.execute(
         'SELECT * FROM societies WHERE society_name = ?',
@@ -36,6 +41,7 @@ const findSocietyName = async (societyName) => {
     return response;
 };
 
+//creating a join request from a specific society 
 const joinRequests= async (userID,societyID)=>{
     const [response] = await db.execute(
         'INSERT INTO join_requests (user_id,society_id,status) VALUES (?,?,?)',
@@ -43,6 +49,7 @@ const joinRequests= async (userID,societyID)=>{
     );
     return response;
 };
+
 //Add user to society_members
 const approveRequest = async (userID, societyID) => {
   const [response] = await db.execute(
@@ -51,8 +58,9 @@ const approveRequest = async (userID, societyID) => {
   );
   return response;
 };
-//list members 
-const getSocietyMembers = async (societyID) => {
+
+//list society members 
+const displayMembers = async (societyID) => {
   const [response] = await db.execute(
     'SELECT * FROM society_members WHERE society_id = ?',
     [societyID]
@@ -61,7 +69,8 @@ const getSocietyMembers = async (societyID) => {
   return response;
 };
 
-const listJoinedRequests = async (societyID) => {
+// display all request associated with a specific society
+const displayRequests = async (societyID) => {
 
   const [response] = await db.execute(
     'SELECT * FROM join_requests WHERE society_id = ? AND status = "pending"',
@@ -71,7 +80,7 @@ const listJoinedRequests = async (societyID) => {
   return response;
 };
 
-//remove member
+//remove a member from a specific society 
 const removeMember = async (userID, societyID) => {
   const [response] = await db.execute(
     'DELETE FROM society_members WHERE society_id = ? AND user_id = ?',
@@ -81,6 +90,7 @@ const removeMember = async (userID, societyID) => {
   return response;
 };
 
+//list of all socities that are under a same admin
 const adminSocieties= async(adminID)=>{
   const [response] = await db.execute(
     'SELECT * FROM societies WHERE admin_id = ? ',
@@ -90,15 +100,24 @@ const adminSocieties= async(adminID)=>{
   return response;  
 }
 
+//list all user societies such as societies that a user have joined 
+const displayUser_societies= async(userID)=>{
+  const [response] = await db.execute(
+    'SELECT * FROM society_members WHERE user_id= ?',
+    [userID]
+  )
+  return response;
+}
 module.exports={
     createsocieties,
     findSocietyName,
     joinRequests,
     addmembers,
-    getSocietyMembers,
+    displayMembers,
     removeMember,
-    listJoinedRequests,
+    displayRequests,
     adminSocieties,
     findSocietyID,
     approveRequest,
+    displayUser_societies
 }
