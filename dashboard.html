@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="main-container">
+        <div class="container">
+            <div class="left-side">
+                <div class="image">
+                    <!--UMGALELO LOGO-->
+                </div>
+                <div class="user-profile">
+                    <!--profile image-->
+                    <img src="profile_picture.jpeg" alt="profile picture">
+                    <p id="fullname">Sindi Gumede <br> sindi@gmail.com</p>
+                </div>
+
+                <div class="nav-bar">
+                    <div class="align-logos">
+                    <a href="#"> Main</a>
+                    </div>
+                    
+                    <div class="align-logos">
+                        <img src="dashboard.jpeg" alt="">
+                        <a href="dashboard.html">Dashboard</a>
+                    </div>
+
+                </div>
+                <div class="societies">
+                    <p class="section-tittles">My Societies</p>
+                    <nav class="nav-barsociety">
+
+                        <div class="align-logos">
+                            <img src="society_logo.jpeg" alt="">
+                            <a href="#"> Soweto Solidarity</a>
+                        </div>
+
+                        <div class="align-logos">
+                            <img src="society_logo.jpeg" alt="">
+                            <a href="#">Gumede Family</a>
+                        </div>
+                        
+                        <div class="align-logos">
+                            <img src="society_logo.jpeg" alt="">
+                            <a href="#"> Jozi Workers</a>
+                        </div>
+                    </nav>
+                </div>
+                <div class="discover">
+                    <p class="section-tittles">Discover</p>
+                    <nav class="nav-bardiscover">
+                        <div class="align-logos">
+                            <img src="search_logo.jpeg" alt="">
+                            <a href="#">Browse Societies</a>
+                        </div>
+
+                        <div class="align-logos">
+                            <img src="create_soc_logo.jpeg" alt="">
+                            <a href="#"> Create Society</a>
+                        </div>
+
+                    </nav>
+                </div>
+
+                <div class="signout">
+
+                    <div class="align-logos">
+                        <img src="signout_logo.jpeg" alt="">
+                        <a href="#"> Sign Out</a>
+                    </div>
+                    
+                </div>
+
+            </div>
+
+            <div class="right-side">
+                <div class="top-info">
+                    <p class="heading">Good Morning, Sindi</p>
+                    <p id="date"></p> <!--code is in JS-->
+                    <!--the notification bell-->
+                    <div class="notification">
+                        <img src="#" class="icon" alt="notifications">
+                        <span class="badge">0</span>
+                    </div>
+                </div>
+
+                <div class="panel-container">
+                    <div class="panels">
+                        <div class="panel-one">
+                            <p class="panel-tittle">My Societies</p>
+                            <h5 class="numbers">3</h5>
+                        </div>
+                        <div class="panel-two">
+                            <p class="panel-tittle">Payments Due</p>
+                            <h5 class="numbers">1</h5>
+                        </div>
+                        <div class="panel-three">
+                            <p class="panel-tittle">Pending Claims</p>
+                            <h5 class="numbers">0</h5>
+                        </div>
+                        <div class="pop-ups">
+                        <a href="#"> + Add Payment</a>
+                        <a href="#"> + Submit Claim</a>
+                    </div>
+
+                    </div>
+                    
+                </div>
+
+                <div class="other-half">
+
+                    <div class="societies-section">
+                        <h2>My Societies</h2>
+
+                        <div class="society-card">
+                            <div class="card-left">
+                            <div class="initials">SS</div>
+                            </div>
+                            
+                            <div class="card-right">
+                                <h3>Soweto Solidarity Circle</h3>
+                                <p class="society-info">27 members · Joined Jan 2026</p>
+                                <div class="third-container">
+                                    <div class="contribution-row">
+                                        <span class="label">Contribution</span>
+                                        <span class="amount">R150/pm</span>
+                                    </div>
+                                    <div class="status-row">
+                                        <span class="status-badge due">This month</span>
+                                        <span class="status-label-due">Due</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Gumede Family card - PAID -->
+                        <div class="society-card">
+                            <div class="card-left">
+                                <div class="initials">GF</div>
+                            </div>
+                            <div class="card-right">
+                                <h3>Gumede Family</h3>
+                                <p class="society-info">41 members · Joined Jan 2026</p>
+                                <div class="third-container">
+                                    <div class="contribution-row">
+                                        <span class="label">Contribution</span>
+                                        <span class="amount">R100/pm</span>
+                                    </div>
+                                    <div class="status-row">
+                                        <span class="status-badge paid">This month</span>
+                                        <span class="status-label">Paid</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Jozi Workers card - PAID -->
+                        <div class="society-card">
+                            <div class="card-left">
+                                <div class="initials">JW</div>
+                            </div>
+                            <div class="card-right">
+                                <h3>Jozi Workers</h3>
+                                <p class="society-info">8 members · Joined Jan 2026</p>
+
+                                <div class="third-container">
+                                    <div class="contribution-row">
+                                        <span class="label">Contribution</span>
+                                        <span class="amount">R200/pm</span>
+                                    </div>
+                                    <div class="status-row">
+                                        <span class="status-badge paid">This month</span>
+                                        <span class="status-label">Paid</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                    
+                </div>
+
+                <div class="calender">
+                    <h3>My Calender</h3>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    
+</body>
+</html>

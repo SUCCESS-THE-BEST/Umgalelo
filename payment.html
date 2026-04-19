@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+    <link rel="stylesheet" href="paymentstyle.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+</head>
+<body>
+    
+    <div class="container">
+        <div class="page-info">
+            <h2 id="heading">Make Payment</h2>
+
+            <div class="form-group">
+                <label for="" class="labels">Member</label> <br>
+                <input type="text" class="userinput" placeholder="Fullname" required> <br>
+            </div>
+
+            <div class="form-group">
+                <label for="" class="labels">Society</label> <br>
+                <select name="Societies" id="Societies">
+                    <option value="opts"> Select Society</option>
+                    <option value="opt1"> Society1</option>
+                    <option value="opt2">Society2</option>
+                    <option value="opt3">Society3</option>
+                </select> <br>
+            </div>
+
+            <div class="payment-opts">
+                <div class="form-group">
+                    <label for="" class="labels">Amount</label> <br>
+                    <input type="text" class="userinput" placeholder="R0.00" required> <br>
+               
+                    <label for="" class="labels">Month</label> <br>
+                    <input type="text" class="userinput" placeholder="01-01-2026" required>
+                 </div>
+            </div>
+            
+            <div class="buttons-container">
+                <button class="cancel-btn">Cancel</button>
+                <button class="payment-btn">Confirm Payment</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="paymentpage.js"></script>
+</body>
+</html>
