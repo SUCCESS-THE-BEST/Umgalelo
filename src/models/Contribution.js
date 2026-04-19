@@ -11,24 +11,22 @@ const AddContribution = async (userId, societyId, amount, connection) => {
 };
 
 const UpdateSocietyWallet = async (societyId, amount, connection) => {
-  const [result] = await connection.execute(
-    'UPDATE society_wallet SET balance = balance + ? WHERE society_id = ?',
-    [amount, societyId]
-  );
-
-  if (result.affectedRows === 0) {
-    throw new Error('Society wallet not found');
-  }
-};
-
-const CreateTransaction = async (societyId, amount, connection) => {
   await connection.execute(
-    'INSERT INTO transactions (society_id, type, amount) VALUES (?, "contribution", ?)',
-    [societyId, amount]
+    `INSERT INTO society_wallet (society_id, balance)
+     VALUES (?, ?)
+     ON DUPLICATE KEY UPDATE balance = balance + ?`,
+    [societyId, amount, amount]
+  );
+}
+
+const CreateTransaction = async (societyId, userID,amount, connection) => {
+  await connection.execute(
+    'INSERT INTO transactions (society_id, user_id ,type, amount) VALUES (?,?, "contribution", ?)',
+    [societyId,userID, amount]
   );
 };
 
-const ProcessContribution = async (userId, societyId, amount) => {
+const processContribution = async (userId, societyId, amount) => {
   const connection = await db.getConnection();
 
   try {
@@ -113,7 +111,7 @@ module.exports = {
   AddContribution,
   UpdateSocietyWallet,
   CreateTransaction,
-  ProcessContribution,
+  processContribution,
   GetContributionsBySociety,
   GetContributionsByUser,
   GetSocietyWallet

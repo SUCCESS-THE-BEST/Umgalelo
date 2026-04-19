@@ -93,7 +93,7 @@ const GetClaimsBySociety = async (req, res) => {
       return res.status(400).json({ message: 'Society ID is required' });
     }
 
-    const claims = await financialModel.getClaimsBySociety(societyId);
+    const claims = await financialModel.GetClaimsBySociety(societyId);
 
     res.status(200).json({
       message: 'Claims fetched successfully',
@@ -103,7 +103,7 @@ const GetClaimsBySociety = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({
-      message: 'Error fetching claims'
+    message: 'Error fetching claims'
     });
   }
 };

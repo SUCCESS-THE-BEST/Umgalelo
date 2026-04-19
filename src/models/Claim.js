@@ -86,10 +86,10 @@ const GetClaimsBySociety = async (societyId) => {
           c.claim_id,
           c.society_id,
           c.user_id,
-          u.name AS user_name,
+          CONCAT(u.first_name, ' ', u.last_name) AS user_name,
           c.deceased_name,
           c.relationship,
-          c.amount,
+          c.claim_amount,
           c.status
        FROM claims c
        JOIN users u ON c.user_id = u.user_id

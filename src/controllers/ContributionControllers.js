@@ -1,6 +1,6 @@
 const financialModel = require('../models/Contribution');
 
-const ProcessContribution = async (req, res) => {
+const processContributionController = async (req, res) => {
   try {
     const { userId, societyId, amount } = req.body;
 
@@ -8,7 +8,7 @@ const ProcessContribution = async (req, res) => {
       return res.status(400).json({ message: 'Invalid input' });
     }
 
-    await financialModel.ProcessContribution(userId, societyId, amount);
+    await financialModel.processContribution(userId, societyId, amount);
 
     res.status(200).json({
       message: 'Contribution successful'
@@ -17,7 +17,7 @@ const ProcessContribution = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({
-      message: 'Error processing contribution'
+      message: error.message   // 👈 IMPORTANT for debugging
     });
   }
 };
@@ -77,7 +77,7 @@ const GetSocietyWallet = async (req, res) => {
 };
 
 module.exports = { 
-  ProcessContribution,
+  processContributionController,
   GetContributionsBySociety,
   GetContributionsByUser,
   GetSocietyWallet

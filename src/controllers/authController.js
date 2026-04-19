@@ -27,7 +27,7 @@ const register = async (req, res) => {
 
         const exists = await userModel.findUserByEmail(email);
 
-        if (exists) {
+        if (exists.length>0) {
             return res.status(400).json({message: 'user already exists'});
         }
 

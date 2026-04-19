@@ -11,3 +11,5 @@ const db = sql.createPool({
 });
 
 module.exports = db;
+
+console.log(process.env.DB_HOST);
