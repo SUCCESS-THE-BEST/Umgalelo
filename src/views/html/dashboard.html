@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+    
+    <div class="dashboard-container">
+      <button
+        class="mobile-menu-toggle"
+        onClick='{() => setSidebarOpen(!sidebarOpen)}'
+      >
+        ☰
+      </button>
+
+      <!-- sidebar section -->
+
+      <aside class='sidebar'>
+        <div class="sidebar-logo">
+          <img src='/images/umgalelo.png'} alt="UMGALELO" />
+        </div>
+
+        <hr class="sidebar-divider" />
+
+        <div class="user-profile" onclick="window.location.href='profile.html'">
+          <img src='/images/profile-image.png' alt="User" class="user-avatar" />
+            <div class="user-info">
+            <h3>Sindi Gumede</h3>
+            <p>sindi @example.com</p>
+          </div>
+        </div>
+
+        <hr class="sidebar-divider" />
+
+        <nav>
+          <div class="nav-section">
+            <h4>Main</h4>
+            <div class="nav-item active">
+              <img src='/images/dashboard (4).png' alt="" />
+              <span>Dashboard</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <h4>My Societies</h4>
+            <div class="nav-item" onclick="window.location.href='society.html'">
+              <img src='/images/networking.png' alt="" />
+              <span>Soweto Solidarity</span>
+            </div>
+            <div class="nav-item admin-badge" onclick="window.location.href='society2.html'">
+              <img src='/images/networking.png' alt="" />
+              <span>Gumede Family</span>
+              <span class="admin-tag">Admin</span>
+            </div>
+            <div class="nav-item" onclick="window.location.href='society3.html'">
+              <img src='/images/networking.png' alt="" />
+              <span>Jozi Workers</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <h4>Discover</h4>
+            <div class="nav-item" onclick="window.location.href='browse.html'">
+              <img src='/images/search-interface-symbol (2).png' alt="" />
+              <span>Browse Societies</span>
+            </div>
+            <div class="nav-item" onclick="window.location.href='createSociety.html'">
+              <img src='/images/more (1).png' alt="" />
+              <span>Create Society</span>
+            </div>
+          </div>
+        </nav>
+
+        <div class="sign-out">
+          <div class="nav-item" onclick="window.location.href='login.html'">
+            <img src='/images/logout.png' alt="" />
+            <span>Sign out</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- main content -->
+      
+      <main class="main-content">
+        <header class="header">
+          <div class="header-content">
+            <div>
+              <h1>Good morning, Sindi</h1>
+              <p>Sunday, 29 March 2026</p>
+            </div>
+            <img src='/images/bell.png' alt="Notifications" class="notification-icon" />
+          </div>
+        </header>
+
+        <!-- statistics/summary -->
+
+        <div class="stats-banner">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <h3>My Societies</h3>
+              <p class="stat-number">3</p>
+            </div>
+            <div class="stat-card">
+              <h3>Payments Due</h3>
+              <p class="stat-number">1</p>
+            </div>
+            <div class="stat-card">
+              <h3>Pending Claims</h3>
+              <p class="stat-number">0</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- societies -->
+
+        <section class="content-section">
+          <div class="section-header">
+            <img src='/images/networking (2).png' alt="" />
+            <h2>My Societies</h2>
+          </div>
+
+          <!-- Society Card 1 -->
+          <div class="society-grid">
+            <div class="society-card" onclick="window.location.href='society.html'" style="cursor: pointer;">
+              <div class="society-header">
+                <div class="society-avatar">
+                  <span>SS</span>
+                </div>
+                <div class="society-info">
+                  <h3>Soweto Solidarity Circle</h3>
+                  <p>27 members ; Joined Jan 2026</p>
+                </div>
+              </div>
+              <div class="society-details">
+                <div class="detail-column">
+                  <h4>Contribution</h4>
+                  <p class="amount">R150/pm</p>
+                </div>
+                <div class="detail-divider"></div>
+                <div class="detail-column">
+                  <h4>This month</h4>
+                  <p class="status due">Due</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Society Card 2 -->
+            <div class="society-card" onclick="window.location.href='society2.html'" style="cursor: pointer;">
+              <div class="society-header">
+                <div class="society-avatar">
+                  <span>GF</span>
+                </div>
+                <div class="society-info">
+                  <h3>Gumede Family Society</h3>
+                  <p>8 members ; Joined Jan 2026</p>
+                </div>
+              </div>
+              <div class="society-details">
+                <div class="detail-column">
+                  <h4>Contribution</h4>
+                  <p class="amount">R200/pm</p>
+                </div>
+                <div class="detail-divider"></div>
+                <div class="detail-column">
+                  <h4>This month</h4>
+                  <p class="status paid">Paid</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Society Card 3 -->
+            <div class="society-card" onclick="window.location.href='society3.html'" style="cursor: pointer;">
+              <div class="society-header">
+                <div class="society-avatar">
+                  <span>JW</span>
+                </div>
+                <div class="society-info">
+                  <h3>Joburg Workers Fund</h3>
+                  <p>41 members ; Joined Jan 2026</p>
+                </div>
+              </div>
+              <div class="society-details">
+                <div class="detail-column">
+                  <h4>Contribution</h4>
+                  <p class="amount">R100/pm</p>
+                </div>
+                <div class="detail-divider"></div>
+                <div class="detail-column">
+                  <h4>This month</h4>
+                  <p class="status paid">Paid</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- calender -->
+
+        <section class="content-section">
+          <div class="section-header">
+            <img src='/images/calendar (1).png' alt="" />
+            <h2>My Calendar</h2>
+          </div>
+
+          <div class="calendar-card">
+            <div class="calendar-item">
+              <div class="calendar-date">
+                <span class="day">22</span>
+                <span class="month">Mar</span>
+              </div>
+              <div class="calendar-info">
+                <h3>Funeral - Mama Dube</h3>
+                <p>Soweto Solidarity Circle: Orlando East</p>
+              </div>
+            </div>
+
+            <div class="calendar-item">
+              <div class="calendar-date">
+                <span class="day">23</span>
+                <span class="month">Apr</span>
+              </div>
+              <div class="calendar-info">
+                <h3>Monthly Meeting</h3>
+                <p>Soweto Solidarity Circle: Thabo's home</p>
+              </div>
+            </div>
+
+            <div class="calendar-item">
+              <div class="calendar-date">
+                <span class="day">5</span>
+                <span class="month">Apr</span>
+              </div>
+              <div class="calendar-info">
+                <h3>Funeral - Mama Dube</h3>
+                <p>Gumede Family Society: Your home (hosting)</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- payment history -->
+
+        <section class="content-section">
+          <div class="section-header">
+            <img src='/images/credit-card.png' alt="" />
+            <h2>Payment History</h2>
+          </div>
+
+          <div class="payment-history">
+            <div class="payment-item">
+              <div class="payment-info">
+                <h3>Soweto Solidarity Circle</h3>
+                <p>March 2026</p>
+              </div>
+              <div class="payment-amount">R150.00</div>
+            </div>
+
+            <div class="payment-item">
+              <div class="payment-info">
+                <h3>Gumede Family Society</h3>
+                <p>March 2026</p>
+              </div>
+              <div class="payment-amount">R200.00</div>
+            </div>
+
+            <div class="payment-item">
+              <div class="payment-info">
+                <h3>Jozi Workers Fund</h3>
+                <p>March 2026</p>
+              </div>
+              <div class="payment-amount">R100.00</div>
+            </div>
+
+            <div class="payment-item">
+              <div class="payment-info">
+                <h3>Jozi Workers Fund</h3>
+                <p>March 2026</p>
+              </div>
+              <div class="payment-amount">R100.00</div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+</body>
+</html>

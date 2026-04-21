@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Societies</title>
+    <link rel="stylesheet" href="/css/browse.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&family=Inknut+Antiqua:wght@900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="browse-container">
+      <button
+        class="mobile-menu-toggle"
+        onClick='{() => setSidebarOpen(!sidebarOpen)}'
+      >
+        ☰
+      </button>
+
+      <aside class='sidebar'>
+        <div class="sidebar-logo">
+          <img src='/images/umgalelo.png'} alt="UMGALELO" />
+        </div>
+
+        <hr class="sidebar-divider" />
+
+        <div class="user-profile" onclick="window.location.href='profile.html'">
+          <img src='/images/profile-image.png' alt="User" class="user-avatar" />
+            <div class="user-info">
+            <h3>Sindi Gumede</h3>
+            <p>sindi @example.com</p>
+          </div>
+        </div>
+
+        <hr class="sidebar-divider" />
+
+        <nav>
+          <div class="nav-section">
+            <h4>Main</h4>
+            <div class="nav-item" onclick="window.location.href='dashboard.html'">
+              <img src='/images/dashboard-interface.png' alt="" />
+              <span>Dashboard</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <h4>My Societies</h4>
+            <div class="nav-item" onclick="window.location.href='society.html'">
+              <img src='/images/networking.png' alt="" />
+              <span>Soweto Solidarity</span>
+            </div>
+            <div class="nav-item admin-badge" onclick="window.location.href='society2.html'">
+              <img src='/images/networking.png' alt="" />
+              <span>Gumede Family</span>
+              <span class="admin-tag">Admin</span>
+            </div>
+            <div class="nav-item" onclick="window.location.href='society3.html'">
+              <img src='/images/networking.png' alt="" />
+              <span>Jozi Workers</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <h4>Discover</h4>
+            <div class="nav-item active" onclick="window.location.href='browse.html'">
+              <img src='/images/search-interface-symbol.png' alt="" />
+              <span>Browse Societies</span>
+            </div>
+            <div class="nav-item" onclick="window.location.href='createSociety.html'">
+              <img src='/images/more (1).png' alt="" />
+              <span>Create Society</span>
+            </div>
+          </div>
+        </nav>
+
+        <div class="sign-out">
+          <div class="nav-item" onclick="window.location.href='login.html'">
+            <img src='/images/logout.png' alt="" />
+            <span>Sign out</span>
+          </div>
+        </div>
+      </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="page-header">
+            <h1>Browse Societies</h1>
+            <p class="subtitle">Find and join a burial society in your community across South Africa</p>
+
+            <div class="controls">
+                <div class="search-box">
+                    <span class="search-icon"><img src="/images/search-interface-symbol (2).png" alt="" style="width: 10px;"></span>
+                    <input type="text" placeholder="Search by name...">
+                </div>
+                <select class="filter-select">
+                    <option>All Provinces</option>
+                    <option>Gauteng</option>
+                    <option>KwaZulu-Natal</option>
+                    <option>Limpopo</option>
+                    <option>Free State</option>
+                </select>
+                <select class="filter-select">
+                    <option>Sort: Default</option>
+                    <option>Sort: Name</option>
+                    <option>Sort: Contribution</option>
+                </select>
+            </div>
+
+            <button class="create-btn" onclick="window.location.href='create.html'">
+                <img src="/images/more (1).png" alt="">
+                Create Society
+            </button>
+        </header>
+
+        <div class="societies-grid">
+            <!-- Society Card 1 -->
+            <article class="society-card">
+                <div class="card-header">
+                    <div class="society-logo">GF</div>
+                    <div class="society-info">
+                        <h3>Gumede Family Society</h3>
+                        <img src="/images/location.png" alt="location">
+                        <p class="location">Newcastle; Kwazulu-Natal</p>
+                    </div>
+                </div>
+                <p class="description">A family-focused society for the extended Khumalo family and close friends. Small, tight, and very responsive. Claims are usually approved within 24 hour</p>
+
+                <div class="stats">
+                    <div class="stat">
+                        <span class="label">Contribution</span>
+                        <span class="value">R100/pm</span>
+                    </div>
+                    <div class="stat">
+                        <span class="label">Cover</span>
+                        <span class="value">R10,000</span>
+                    </div>
+                    <div class="stat">
+                        <span class="label">Capacity</span>
+                        <span class="value">8/15</span>
+                    </div>
+                </div>
+
+                <div class="card-actions">
+                    <button class="btn-primary">Already a member</button>
+                    <button class="btn-outline">View</button>
+                </div>
+            </article>
+
+            <!-- Society Card 2 -->
+            <article class="society-card">
+                <div class="card-header">
+                    <div class="society-logo">SS</div>
+                    <div class="society-info">
+                        <h3>Soweto Solidarity Circle</h3>
+                        <img src="/images/location.png" alt="location">
+                        <p class="location">Soweto; Gauteng</p>
+                    </div>
+                </div>
+                <p class="description">A close-knit community society in Orlando East founded in 2022. Monthly meetings rotate among member homes and 100% attendance is encouraged at funerals.</p>
+
+                <div class="stats">
+                    <div class="stat">
+                        <span class="label">Contribution</span>
+                        <span class="value">R200/pm</span>
+                    </div>
+                    <div class="stat">
+                        <span class="label">Cover</span>
+                        <span class="value">R20,000</span>
+                    </div>
+                    <div class="stat">
+                        <span class="label">Capacity</span>
+                        <span class="value">27/30</span>
+                    </div>
+                </div>
+
+                <div class="card-actions">
+                    <button class="btn-primary">Already a member</button>
+                    <button class="btn-outline">View</button>
+                </div>
+            </article>
+
+            <!-- Society Card 3 -->
+            <article class="society-card disabled">
+                <div class="card-header">
+                    <div class="society-logo">PP</div>
+                    <div class="society-info">
+                        <h3>Polokwane People's Society</h3>
+                        <img src="/images/location.png" alt="location">
+                        <p class="location">Polokwane; Limpopo</p>
+                    </div>
+                </div>
+                <p class="description">A values-driven society in Polowane with a proven track record. We prioritise community trust above all else.</p>
+
+                <div class="stats">
+                    <div class="stat">
+                        <span class="label">Contribution</span>
+                        <span class="value">R100/pm</span>
+                    </div>
+                    <div class="stat">
+                        <span class="label">Cover</span>
+                        <span class="value">R10,000</span>
+                    </div>
+                    <div class="stat">
+                        <span class="label">Capacity</span>
+                        <span class="value">20/20</span>
+                    </div>
+                </div>
+
+                <div class="card-actions">
+                    <button class="btn-primary">Society Full</button>
+                    <button class="btn-outline">View</button>
+                </div>
+            </article>
+
+            <!-- Society Card 4 -->
+            <article class="society-card">
+                <div class="card-header">
+                    <div class="society-logo">BB</div>
+                    <div class="society-info">
+                        <h3>Bloemfontein Basadi Society</h3>
+                        <img src="/images/location.png" alt="location">
+                        <p class="location">Mangaung; Free State</p>
+                    </div>
+                </div>
+                <p class="description">Women-led burial society for women and their families in Mangaung. The most affordable contributions in the Free State with genuine community warmth.</p>
+
+                <div class="stats">
+                    <div class="stat">
+                        <span class="label">Contribution</span>
+                        <span class="value">R90/pm</span>
+                    </div>
+                    <div class="stat">
+                        <span class="label">Cover</span>
+                        <span class="value">R9,000</span>
+                    </div>
+                    <div class="stat">
+                        <span class="label">Capacity</span>
+                        <span class="value">9/20</span>
+                    </div>
+                </div>
+
+                <div class="card-actions">
+                    <button class="btn-primary">Request to Join</button>
+                    <button class="btn-outline">View</button>
+                </div>
+            </article>
+
+            <!-- Society Card 5 -->
+            <article class="society-card">
+                <div class="card-header">
+                    <div class="society-logo">UB</div>
+                    <div class="society-info">
+                        <h3>Umlazi Burial Society</h3>
+                        <img src="/images/location.png" alt="location">
+                        <p class="location">Umlazi; Kwazulu-Natal</p>
+                    </div>
+                </div>
+                <p class="description">Established 2019 in Umlazi township. We believe in showing up physically and financially for every member's family during their time of loss. Society is about being there for each other</p>
+
+                <div class="stats">
+                    <div class="stat">
+                        <span class="label">Contribution</span>
+                        <span class="value">R120/pm</span>
+                    </div>
+                    <div class="stat">
+                        <span class="label">Cover</span>
+                        <span class="value">R12,000</span>
+                    </div>
+                    <div class="stat">
+                        <span class="label">Capacity</span>
+                        <span class="value">18/25</span>
+                    </div>
+                </div>
+
+                <div class="card-actions">
+                    <button class="btn-primary">Request to Join</button>
+                    <button class="btn-outline">View</button>
+                </div>
+            </article>
+
+            <!-- Society Card 6 -->
+            <article class="society-card">
+                <div class="card-header">
+                    <div class="society-logo">JW</div>
+                    <div class="society-info">
+                        <h3>Jozi Workers Fund</h3>
+                        <img src="/images/location.png" alt="location">
+                        <p class="location">Johannesburg; Gauteng</p>
+                    </div>
+                </div>
+                <p class="description">Founded by civil servants in Soweto. Higher monthly contributions for higher cover amounts. Ideal for those wanting more comprehensive funeral coverage.</p>
+
+                <div class="stats">
+                    <div class="stat">
+                        <span class="label">Contribution</span>
+                        <span class="value">R150/pm</span>
+                    </div>
+                    <div class="stat">
+                        <span class="label">Cover</span>
+                        <span class="value">R30,000</span>
+                    </div>
+                    <div class="stat">
+                        <span class="label">Capacity</span>
+                        <span class="value">41/50</span>
+                    </div>
+                </div>
+
+                <div class="card-actions">
+                    <button class="btn-primary">Request to Join</button>
+                    <button class="btn-outline">View</button>
+                </div>
+            </article>
+        </div>
+    </main>
+    </div>
+</body>
+</html>

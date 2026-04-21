@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soweto Solidarity Circle - Society Page</title>
+    <link rel="stylesheet" href="/css/society.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Port+Lligat+Sans&family=DM+Sans:wght@400;600&family=Inknut+Antiqua:wght@700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- society container -->
+    <div class="society-container">
+
+        <!-- sidebar -->
+        <button
+        class="mobile-menu-toggle"
+        onClick='{() => setSidebarOpen(!sidebarOpen)}'
+        >
+            ☰
+        </button>
+
+        <aside class='sidebar'>
+            <!-- <img src='images/community.jpg' alt="" class="sidebar-bg" /> -->
+            <div class="sidebar-logo">
+                <img src='/images/umgalelo.png'} alt="UMGALELO" />
+            </div>
+
+            <hr class="sidebar-divider" />
+
+                <div class="user-profile" onclick="window.location.href='profile.html'">
+                    <img src='/images/profile-image.png' alt="User" class="user-avatar" />
+                    <div class="user-info">
+                        <h3>Sindi Gumede</h3>
+                        <p>sindi @example.com</p>
+                    </div>
+            </div>
+
+            <hr class="sidebar-divider" />
+
+            <nav>
+                <div class="nav-section">
+                    <h4>Main</h4>
+                    <div class="nav-item" onclick="window.location.href='dashboard.html'">
+                        <img src='/images/dashboard-interface.png' alt="" />
+                        <span>Dashboard</span>
+                    </div>
+                </div>
+
+                <div class="nav-section">
+                    <h4>My Societies</h4>
+                    <div class="nav-item active" onclick="window.location.href='society.html'">
+                        <img src='/images/networking (2).png' alt="" />
+                        <span>Soweto Solidarity</span>
+                    </div>
+                    <div class="nav-item admin-badge" onclick="window.location.href='society2.html'">
+                        <img src='/images/networking.png' alt="" />
+                        <span>Gumede Family</span>
+                        <span class="admin-tag">Admin</span>
+                    </div>
+                    <div class="nav-item" onclick="window.location.href='society3.html'">
+                        <img src='/images/networking.png' alt="" />
+                        <span>Jozi Workers</span>
+                    </div>
+                </div>
+
+                <div class="nav-section">
+                    <h4>Discover</h4>
+                    <div class="nav-item" onclick="window.location.href='browse.html'">
+                        <img src='/images/search-interface-symbol (2).png' alt="" />
+                        <span>Browse Societies</span>
+                    </div>
+                    <div class="nav-item" onclick="window.location.href='createSociety.html'">
+                        <img src='/images/more (1).png' alt="" />
+                        <span>Create Society</span>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="sign-out">
+                <div class="nav-item" onclick="window.location.href='login.html'">
+                    <img src='/images/logout.png' alt="" />
+                    <span>Sign out</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- page header -->
+        <main class="main-content">
+            <header class="society-header">
+                <div class="society-logo">SS</div>
+                <div class="society-info">
+                    <h1>Soweto Solidarity Circle</h1>
+                    <div class="society-meta">
+                        <span>27 members</span>
+                        <span>R200/month</span>
+                        <span><img src="/images/location.png" width="15px" alt="" class="location-icon"> Soweto, Gauteng</span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                        <button class="btn btn-outline" id="payNowBtn">
+                            <img src="/images/credit-card (2).png" width="25px" alt="" class="btn-icon">
+                            Pay Now
+                        </button>
+                        <button class="btn btn-primary" id="submitClaimBtn">
+                            <img src="/images/document (2).png" width="20px" alt="" class="btn-icon">
+                            Submit Claim
+                        </button>
+                    </div>
+            </header>
+
+            <!-- statistics -->
+            <section class="stats">
+                <div class="stat-card"><p class="stat-label">Total Funds Collected</p><p class="stat-value">R20,000</p></div>
+                <div class="stat-card"><p class="stat-label">Claims Paid To Date</p><p class="stat-value">3</p></div>
+                <div class="stat-card"><p class="stat-label">Collected This Month</p><p class="stat-value">R3,600</p></div>
+            </section>
+            <nav class="tabs">
+                <a href="#" class="tab active">Overview</a>
+                <a href="#" class="tab">Payments</a>
+                <a href="#" class="tab">Claims</a>
+                <a href="#" class="tab">Report</a>
+            </nav>
+            <section class="card society-card">
+                <div class="card-header">
+                    <img src="/images/info (1).png" width="25px" alt="" class="card-icon">
+                    <h2>About This Society</h2>
+                </div>
+                <div class="card-divider"></div>
+                <p class="society-description">A close-knit community society in Orlando East founded in 2022. Monthly meetings rotate among member homes and 100% attendance is encouraged at funerals.</p>
+                <div class="society-details">
+                    <div class="detail-item"><p class="detail-label">Contribution</p><p class="detail-value">R200/month</p></div>
+                    <div class="detail-item"><p class="detail-label">Cover Amount</p><p class="detail-value">R20,000</p></div>
+                    <div class="detail-item"><p class="detail-label">Max Members</p><p class="detail-value">30</p></div>
+                    <div class="detail-item"><p class="detail-label">Admin</p><p class="detail-value">Thabo Nkosi</p></div>
+                </div>
+            </section>
+
+            <!-- society members -->
+            <section class="card members-card">
+                <div class="card-header">
+                    <img src="/images/networking (1).png" width="25px" alt="" class="card-icon">
+                    <h2>Members (27)</h2>
+                </div>
+                <div class="card-divider"></div>
+                <div class="member-list">
+                    <div class="member-item">
+                        <div class="member-avatar">TN</div>
+                        <div class="member-info"><p class="member-name">Thabo Nkosi</p><p class="member-since">Member since Jan 2019</p></div>
+                        <span class="member-badge">Admin</span>
+                    </div>
+                    <div class="member-item">
+                        <div class="member-avatar">TN</div>
+                        <div class="member-info"><p class="member-name">Thabo Nkosi</p><p class="member-since">Member since Jan 2019</p></div>
+                    </div>
+                    <div class="member-item">
+                        <div class="member-avatar">TN</div>
+                        <div class="member-info"><p class="member-name">Thabo Nkosi</p><p class="member-since">Member since Jan 2019</p></div>
+                    </div>
+                    <div class="member-item">
+                        <div class="member-avatar">TN</div>
+                        <div class="member-info"><p class="member-name">Thabo Nkosi</p><p class="member-since">Member since Jan 2019</p></div>
+                    </div>
+                    <div class="member-item">
+                        <div class="member-avatar">TN</div>
+                        <div class="member-info"><p class="member-name">Thabo Nkosi</p><p class="member-since">Member since Jan 2019</p></div>
+                    </div>
+                </div>
+                <div class="card-divider"></div>
+                <p class="more-members">+ 22 more members</p>
+            </section>
+
+            <!-- join requests -->
+            <section class="card join-requests-card">
+                <div class="card-header">
+                    <img src="/images/add-friend.png" width="25px" alt="" class="card-icon">
+                    <h2>Join Requests (3)</h2>
+                </div>
+                <div class="card-divider"></div>
+                <div class="member-list">
+                    <div class="member-item">
+                        <div class="member-avatar">TN</div>
+                        <div class="member-info"><p class="member-name">Thabo Nkosi</p><p class="member-since">Member since Jan 2019</p></div>
+                        <div class="request-actions">
+                            <button class="btn btn-primary btn-sm">Approve</button>
+                            <button class="btn btn-outline btn-sm">Reject</button>
+                        </div>
+                    </div>
+                    <div class="member-item">
+                        <div class="member-avatar">TN</div>
+                        <div class="member-info"><p class="member-name">Thabo Nkosi</p><p class="member-since">Member since Jan 2019</p></div>
+                        <div class="request-actions">
+                            <button class="btn btn-primary btn-sm">Approve</button>
+                            <button class="btn btn-outline btn-sm">Reject</button>
+                        </div>
+                    </div>
+                    <div class="member-item">
+                        <div class="member-avatar">TN</div>
+                        <div class="member-info"><p class="member-name">Thabo Nkosi</p><p class="member-since">Member since Jan 2019</p></div>
+                        <div class="request-actions">
+                            <button class="btn btn-primary btn-sm">Approve</button>
+                            <button class="btn btn-outline btn-sm">Reject</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- payment dialog -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <h2 class="modal-title">Make Payment</h2>
+            <form class="form">
+                <div class="form-group"><label>Member</label><input type="text" value="Sindi Gumede" readonly></div>
+                <div class="form-group"><label>Society</label>
+                    <select><option>Soweto Solidarity Circle</option></select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Amount</label><input type="text" placeholder="R150"></div>
+                    <div class="form-group"><label>Month</label>
+                        <select><option>March 2026</option><option>April 2026</option><option>May 2026</option></select>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" id="closePaymentModal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Confirm Payment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- claim dialog -->
+    <div id="claimModal" class="modal">
+        <div class="modal-content modal-large">
+            <h2 class="modal-title">Submit a Claim</h2>
+            <form class="form">
+                <div class="form-group"><label>Member</label><input type="text" value="Sindi Gumede" readonly></div>
+                <div class="form-group"><label>Society</label>
+                    <select><option>Soweto Solidarity Circle</option></select>
+                </div>
+                <div class="form-group"><label>Full Name Of Deceased *</label><input type="text" placeholder="e.g. Zama Gumede"></div>
+                <div class="form-row">
+                    <div class="form-group"><label>Relationship To You *</label>
+                        <select><option>Mother</option><option>Father</option><option>Sibling</option><option>Spouse</option><option>Child</option></select>
+                    </div>
+                    <div class="form-group"><label>Date of Passing *</label><input type="date" placeholder="dd/mm/yyyy"></div>
+                </div>
+                <div class="form-group"><label>Upload Death Certificate *</label>
+                    <input type="file">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" id="closeClaimModal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Confirm Payment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/scripts/society.js">
+    </script>
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create a New Society</title>
+    <link rel="stylesheet" href="/css/createSociety.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=DM+Sans:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="create-society-container">
+
+        <!-- sidebar -->
+
+        <button
+            class="mobile-menu-toggle"
+            onClick='{() => setSidebarOpen(!sidebarOpen)}'
+        >
+            ☰
+        </button>
+
+        <aside class='sidebar'>
+            <div class="sidebar-logo">
+                <img src='/images/umgalelo.png' alt="UMGALELO" />
+            </div>
+
+            <hr class="sidebar-divider" />
+
+                <div class="user-profile" onclick="window.location.href='profile.html'">
+                    <img src='/images/profile-image.png' alt="User" class="user-avatar" />
+                    <div class="user-info">
+                        <h3>Sindi Gumede</h3>
+                        <p>sindi @example.com</p>
+                    </div>
+            </div>
+
+            <hr class="sidebar-divider" />
+
+            <nav>
+                <div class="nav-section">
+                    <h4>Main</h4>
+                    <div class="nav-item" onclick="window.location.href='dashboard.html'">
+                        <img src='/images/dashboard-interface.png' alt="" />
+                        <span>Dashboard</span>
+                    </div>
+                </div>
+
+                <div class="nav-section">
+                    <h4>My Societies</h4>
+                    <div class="nav-item" onclick="window.location.href='society.html'">
+                        <img src='/images/networking.png' alt="" />
+                        <span>Soweto Solidarity</span>
+                    </div>
+                    <div class="nav-item admin-badge" onclick="window.location.href='society2.html'">
+                        <img src='/images/networking.png' alt="" />
+                        <span>Gumede Family</span>
+                        <span class="admin-tag">Admin</span>
+                    </div>
+                    <div class="nav-item" onclick="window.location.href='society3.html'">
+                        <img src='/images/networking.png' alt="" />
+                        <span>Jozi Workers</span>
+                    </div>
+                </div>
+
+                <div class="nav-section">
+                    <h4>Discover</h4>
+                    <div class="nav-item" onclick="window.location.href='browse.html'">
+                        <img src='/images/search-interface-symbol (2).png' alt="" />
+                        <span>Browse Societies</span>
+                    </div>
+                    <div class="nav-item active">
+                        <img src='/images/add (1).png' alt="" />
+                        <span>Create Society</span>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="sign-out">
+                <div class="nav-item" onclick="window.location.href='login.html'">
+                    <img src='/images/logout.png' alt="" />
+                    <span>Sign out</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-content">
+                    <h1>Create a New Society</h1>
+                    <p class="subtitle">Set up your burial society in a few simple steps</p>
+
+                    <!-- Progress Bar -->
+                    <div class="progress-bar">
+                        <div class="progress-step active"></div>
+                        <div class="progress-step"></div>
+                        <div class="progress-step"></div>
+                        <div class="progress-step"></div>
+                    </div>
+
+                    <button class="btn-browse" onclick="window.location.href='browse.html'">
+                        <img src="/images/search-interface-symbol (2).png" alt="Browse Icon">
+                        Browse Societies
+                    </button>
+                </div>
+            </header>
+
+            <!-- Form Content -->
+            <div class="form-wrapper">
+                <form class="society-form">
+                    <!-- Basic Information -->
+                    <section class="form-section">
+                        <h2>Basic Information</h2>
+                        <p class="section-description">Tell people about your society; name, location, and what it stands for.</p>
+                        <div class="section-divider"></div>
+
+                        <div class="form-group">
+                            <label for="society-name">Society Name *</label>
+                            <input type="text" id="society-name" class="form-input" placeholder="">
+                            <p id="email-error" style="padding: 5px;"></p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Description *</label>
+                            <textarea id="description" class="form-textarea" placeholder="Tell potential members about the society, it's values, how it was founded, and who it's for..."></textarea>
+                            <p id="email-error" style="padding: 5px;"></p>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="province">Province *</label>
+                                <input type="text" id="province" class="form-input" placeholder="">
+                                <p id="email-error" style="padding: 5px;"></p>
+                            </div>
+                            <div class="form-group">
+                                <label for="city">City/Township *</label>
+                                <input type="text" id="city" class="form-input" placeholder="">
+                                <p id="email-error" style="padding: 5px;"></p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Contributions & Cover -->
+                    <section class="form-section">
+                        <h2>Contributions & Cover</h2>
+                        <p class="section-description">Set the financial rules of your society — how much members pay and how much they get covered for.</p>
+                        <div class="section-divider"></div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="monthly-contribution">Monthly Contribution *</label>
+                                <div class="input-currency">
+                                    <span class="currency-symbol">R</span>
+                                    <input type="text" id="monthly-contribution" class="form-input" placeholder="e.g. 150">
+                                    <p id="email-error" style="padding: 5px;"></p>
+                                </div>
+                                <small class="helper-text">Per member per month</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="cover-amount">Cover Amount *</label>
+                                <div class="input-currency">
+                                    <span class="currency-symbol">R</span>
+                                    <input type="text" id="cover-amount" class="form-input" placeholder="e.g. 15000">
+                                    <p id="email-error" style="padding: 5px;"></p>
+                                </div>
+                                <small class="helper-text">Paid out per approved claim</small>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="waiting-period">Waiting Period (Months)</label>
+                            <input type="text" id="waiting-period" class="form-input short" placeholder="3">
+                            <p id="email-error" style="padding: 5px;"></p>
+                            <small class="helper-text">Months before new member can claim</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="additional-rules">Additional Rules (Optional)</label>
+                            <textarea id="additional-rules" class="form-textarea" placeholder="e.g. Members with 2+ consecutive  missing payments will be suspended. All claims require certified death certificate...."></textarea>
+                            <p id="email-error" style="padding: 5px;"></p>
+                        </div>
+                    </section>
+
+                    <!-- Banking Details -->
+                    <section class="form-section">
+                        <h2>Banking Details</h2>
+                        <p class="section-description">Set your society's bank account details; member contributions will go to this account.</p>
+                        <div class="section-divider"></div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="bank-name">Bank Name *</label>
+                                <input type="text" id="bank-name" class="form-input" placeholder="Select your bank from the list.">
+                                <p id="email-error" style="padding: 5px;"></p>
+                            </div>
+                            <div class="form-group">
+                                <label for="account-holder">Account Holder *</label>
+                                <input type="text" id="account-holder" class="form-input" placeholder="The name registered on the bank account.">
+                                <p id="email-error" style="padding: 5px;"></p>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="account-number">Account Number *</label>
+                                <input type="text" id="account-number" class="form-input" placeholder="Enter the societies account number.">
+                                <p id="email-error" style="padding: 5px;"></p>
+                            </div>
+                            <div class="form-group">
+                                <label for="account-type">Account Type *</label>
+                                <input type="text" id="account-type" class="form-input" placeholder="Current, cheque, or other...">
+                                <p id="email-error" style="padding: 5px;"></p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Membership Settings -->
+                    <section class="form-section">
+                        <h2>Membership Settings</h2>
+                        <p class="section-description">Control the size and structure of your society</p>
+                        <div class="section-divider"></div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="max-members">Maximum Members *</label>
+                                <input type="text" id="max-members" class="form-input" placeholder="30">
+                                <p id="email-error" style="padding: 5px;"></p>
+                                <small class="helper-text">Recommended 10-50 members</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="min-age">Minimum Age</label>
+                                <input type="text" id="min-age" class="form-input" placeholder="18">
+                                <p id="email-error" style="padding: 5px;"></p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contact-email">Contact Email for Society</label>
+                            <input type="email" id="contact-email" class="form-input" placeholder="sindi @example.com">
+                            <p id="email-error" style="padding: 5px;"></p>
+                        </div>
+                    </section>
+
+                    <!-- Form Actions -->
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-cancel" id="cancel" onclick="window.scrollTo({ top: 0, behavior: 'smooth' });">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="create">Create Society</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script src="/scripts/createSociety.js"></script>
+</body>
+</html>

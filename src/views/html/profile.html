@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/profile.css">
+</head>
+<body>
+ 
+    <div class="profile-container">
+
+      <!-- sidebar -->
+      <button
+        class="mobile-menu-toggle"
+        onClick='{() => setSidebarOpen(!sidebarOpen)}'
+      >
+        ☰
+      </button>
+
+      <aside class='sidebar'>
+        <div class="sidebar-logo">
+          <img src='/images/umgalelo.png' alt="UMGALELO" />
+        </div>
+
+        <hr class="sidebar-divider" />
+
+        <!-- user profile -->
+        <div class="user-profile">
+          <img src='/images/profile-image.png' alt="User" class="user-avatar" />
+          <div class="user-info">
+            <h3>Sindi Gumede</h3>
+            <p>sindi @example.com</p>
+          </div>
+        </div>
+
+        <hr class="sidebar-divider" />
+
+        <nav>
+          <div class="nav-section">
+            <h4>Main</h4>
+            <div class="nav-item" onclick="window.location.href='dashboard.html'">
+              <img src='/images/dashboard-interface.png' alt="" />
+              <span>Dashboard</span>
+            </div>
+          </div>
+
+          <!-- societies -->
+          <div class="nav-section">
+            <h4>My Societies</h4>
+            <div class="nav-item" onclick="window.location.href='society.html'">
+              <img src='/images/networking.png' alt="" />
+              <span>Soweto Solidarity</span>
+            </div>
+            <div class="nav-item admin-badge">
+              <img src='/images/networking.png' alt="" />
+              <span>Gumede Family</span>
+              <span class="admin-tag">Admin</span>
+            </div>
+            <div class="nav-item">
+              <img src='/images/networking.png' alt="" />
+              <span>Jozi Workers</span>
+            </div>
+          </div>
+
+          <!-- discover -->
+          <div class="nav-section">
+            <h4>Discover</h4>
+            <div class="nav-item" onclick="window.location.href='browse.html'">
+              <img src='/images/search-interface-symbol (2).png' alt="" />
+              <span>Browse Societies</span>
+            </div>
+            <div class="nav-item" onclick="window.location.href='createSociety.html'">
+              <img src='/images/more (1).png' alt="" />
+              <span>Create Society</span>
+            </div>
+          </div>
+        </nav>
+
+        <div class="sign-out" onclick="window.location.href='login.html'">
+          <div class="nav-item">
+            <img src='/images/logout.png' alt="" />
+            <span>Sign out</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <!-- Header -->
+        <header class="header">
+          <div class="header-inner">
+            <div>
+              <h1 class="header-title">Good morning, Sindi</h1>
+              <p class="header-date">Sunday, 29 March 2026</p>
+            </div>
+            <img src='/images/bell.png' alt="Notifications" class="header-notification" />
+          </div>
+        </header>
+
+        <!-- Profile Content -->
+        <div class="profile-content">
+          <!-- Profile Header -->
+          <div class="profile-header">
+            <img src='/images/profile-image.png' alt="Profile" class="profile-avatar" />
+            <div>
+              <h2 class="profile-name">Sindi Gumede</h2>
+              <p class="profile-email">sindi @example.com</p>
+            </div>
+          </div>
+
+          <!-- Personal Details -->
+          <section class="form-section">
+            <h3 class="section-title">Personal Details</h3>
+            <div class="form-grid">
+              <div class="form-field">
+                <label class="form-label">First Name</label>
+                <input type="text" placeholder="Your First Name" class="form-input" />
+              </div>
+              <div class="form-field">
+                <label class="form-label">Last Name</label>
+                <input type="text" placeholder="Your Last Name" class="form-input" />
+              </div>
+              <div class="form-field">
+                <label class="form-label">SA ID Number</label>
+                <input type="text" placeholder="9811193200087" class="form-input" />
+              </div>
+              <div class="form-field">
+                <label class="form-label">Gender</label>
+                <input type="text" placeholder="Female" class="form-input" />
+              </div>
+              <div class="form-field">
+                <label class="form-label">Date-Of-Birth</label>
+                <input type="text" placeholder="dd-mm-yyyy" class="form-input" />
+              </div>
+              <div class="form-field">
+                <label class="form-label">Age</label>
+                <input type="text" placeholder="28" class="form-input" />
+              </div>
+            </div>
+          </section>
+
+          <!-- Contact Details -->
+          <section class="form-section">
+            <h3 class="section-title">Contact Details</h3>
+            <div class="form-grid">
+              <div class="form-field">
+                <label class="form-label">Email Address</label>
+                <input type="email" placeholder="sindi@example.com" class="form-input" />
+              </div>
+              <div class="form-field">
+                <label class="form-label">Contact Number</label>
+                <input type="tel" placeholder="+27" class="form-input" />
+                <p class="field-helper-text">South African 10-digit Number</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Address Details -->
+          <section class="form-section">
+            <h3 class="section-title">Address Details</h3>
+            <div class="form-grid">
+              <div class="form-field">
+                <label class="form-label">Address Line1</label>
+                <input type="text" placeholder="123  Stay Street" class="form-input" />
+              </div>
+              <div class="form-field">
+                <label class="form-label">City</label>
+                <input type="text" placeholder="Boksburg" class="form-input" />
+              </div>
+              <div class="form-field">
+                <label class="form-label">Province</label>
+                <select class="form-select">
+                  <option>Select Province</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label class="form-label">Postal Code</label>
+                <input type="text" placeholder="1475" class="form-input" />
+              </div>
+            </div>
+          </section>
+
+          <!-- Next Of Kin -->
+          <section class="form-section">
+            <h3 class="section-title">Next Of Kin</h3>
+            <div class="form-grid">
+              <div class="form-field">
+                <label class="form-label">Full Name</label>
+                <input type="text" placeholder="Provide next of kin full name" class="form-input" />
+              </div>
+              <div class="form-field">
+                <label class="form-label">Contact Number</label>
+                <input type="tel" placeholder="+27" class="form-input" />
+              </div>
+            </div>
+          </section>
+
+          <!-- Banking Details -->
+          <section class="form-section">
+            <h3 class="section-title">Banking details</h3>
+            <div class="form-grid">
+              <div class="form-field">
+                <label class="form-label">Bank Name</label>
+                <input type="text" placeholder="Select your bank from the list." class="form-input text-small" />
+              </div>
+              <div class="form-field">
+                <label class="form-label">Account Holder</label>
+                <input type="text" placeholder="The name registered on the bank account." class="form-input text-small" />
+              </div>
+              <div class="form-field">
+                <label class="form-label">Account Number</label>
+                <input type="text" placeholder="Enter the society's account number." class="form-input text-small" />
+              </div>
+              <div className="form-field">
+                <label class="form-label">Account Type</label>
+                <input type="text" placeholder="Standard or universal branch code" class="form-input text-small" />
+              </div>
+            </div>
+          </section>
+
+          <!-- Upload Documents -->
+          <section class="form-section">
+            <h3 class="section-title">Upload documents</h3>
+            <div class="form-grid">
+              <div class="form-field">
+                <label class="form-label">ID Document</label>
+                <input type="file" class="file-input">
+                <br><br>
+                <label class="form-label">Proof of banking details</label>
+                <input type="file" class="file-input">
+              </div>
+            </div>
+          </section>
+
+          <div class="action-buttons">
+            <button class="btn btn-cancel" onclick="window.scrollTo({ top: 0, behavior: 'smooth' });">Cancel</button>
+            <button class="btn btn-update">Update Profile</button>
+          </div>
+        </div>
+      </main>
+    </div>
+
+</body>
+</html>
+
+
+
