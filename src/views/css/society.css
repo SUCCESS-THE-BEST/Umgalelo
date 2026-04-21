@@ -33,7 +33,7 @@ body {
 /* Sidebar Styles */
 .sidebar {
   width: 400px;
-  background: url(/images/community.jpg);
+  background: url(../images/community.jpg);
   color: white;
   padding: 30px 20px;
   position: fixed;

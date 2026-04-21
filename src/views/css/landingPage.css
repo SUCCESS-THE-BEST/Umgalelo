@@ -314,7 +314,7 @@ h4 {
 
 /* How It Works Section */
 .how-it-works {
-    background: url('/images/holding hands.jpg') center/cover no-repeat;
+    background: url('../images/holding hands.jpg') center/cover no-repeat;
     padding: 6rem 0;
     text-align: center;
     position: relative;
@@ -422,7 +422,7 @@ h4 {
 
 /* Footer */
 .footer {
-    background: url('/images/social.jpg') center/cover no-repeat;
+    background: url('../images/social.jpg') center/cover no-repeat;
     padding: 4rem 0 2rem;
     color: white;
     position: relative;
