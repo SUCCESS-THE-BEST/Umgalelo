@@ -4,9 +4,9 @@ const userModel = require('../models/user');
 //create society
 const createSociety = async (req, res) => {
     try {
-        const { societyName,monthly_contribution,cover_amount,waiting_period,additional_rules,province,city,maximum_members,minimum_age} = req.body;
+        const { societyName,monthly_contribution,cover_amount,waiting_period,additional_rules,province,city,maximum_members,minimum_age,adminID} = req.body;
 
-        if (!societyName || !monthly_contribution ||!cover_amount||!waiting_period||!additional_rules||!province||!city||!maximum_members||!minimum_age) {
+        if (!societyName || !monthly_contribution ||!cover_amount||!waiting_period||!additional_rules||!province||!city||!maximum_members||!minimum_age||!adminID) {
             return res.status(400).json({ message: 'All fields are required' });
         }
         if (Number(monthly_contribution)< 1) {
@@ -18,8 +18,8 @@ const createSociety = async (req, res) => {
         if (exists.length > 0) {
             return res.status(400).json({message: 'society already exists'});
         }
-        const societyID=await societyModel.createsocieties(societyName,monthly_contribution,cover_amount,waiting_period,additional_rules,province,city,maximum_members,minimum_age,req.user.userId);
-        await societyModel.addmembers(societyID,req.user.userId,"admin")
+        const societyID=await societyModel.createsocieties(societyName,monthly_contribution,cover_amount,waiting_period,additional_rules,province,city,maximum_members,minimum_age,adminID);
+        await societyModel.addmembers(societyID,adminID,"admin")
         res.status(200).json({ message: 'society created successfully' });
 
     } catch (error) {

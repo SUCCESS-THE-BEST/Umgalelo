@@ -62,22 +62,44 @@ const approveRequest = async (userID, societyID) => {
 //list society members 
 const displayMembers = async (societyID) => {
   const [response] = await db.execute(
-    'SELECT * FROM society_members WHERE society_id = ?',
+    `SELECT
+      sm.member_id,
+      CONCAT(u.first_name, ' ', u.last_name) AS user_name,
+      sm.role,
+      u.email,
+      u.phone,
+      c.status
+     FROM society_members sm
+     JOIN users u ON sm.user_id = u.user_id
+     JOIN contributions c ON sm.user_id=c.user_id
+     WHERE sm.society_id = ?`,
     [societyID]
   );
 
   return response;
+  console.log(response)
 };
 
 // display all request associated with a specific society
 const displayRequests = async (societyID) => {
 
   const [response] = await db.execute(
-    'SELECT * FROM join_requests WHERE society_id = ? AND status = "pending"',
+    `SELECT 
+      jr.request_id,
+      jr.society_id,
+      CONCAT(u.first_name, ' ', u.last_name) AS user_name,
+      u.email,
+      u.phone,
+      jr.status
+    FROM join_requests jr
+    JOIN users u ON jr.user_id = u.user_id
+    WHERE jr.society_id = ? 
+      AND jr.status = 'pending'`,
     [societyID]
   );
 
   return response;
+  
 };
 
 //remove a member from a specific society 
@@ -93,20 +115,38 @@ const removeMember = async (userID, societyID) => {
 //list of all socities that are under a same admin
 const adminSocieties= async(adminID)=>{
   const [response] = await db.execute(
-    'SELECT * FROM societies WHERE admin_id = ? ',
+    `SELECT
+    sm.society_id,
+    s.society_name,
+    sm.role
+    FROM society_members sm
+    JOIN societies s ON sm.society_id=s.society_id
+    WHERE sm.user_id=?
+    AND sm.role='admin'
+    `,
     [adminID]
   );
-
+  console.log(response)
   return response;  
+
 }
 
 //list all user societies such as societies that a user have joined 
 const displayUser_societies= async(userID)=>{
   const [response] = await db.execute(
-    'SELECT * FROM society_members WHERE user_id= ?',
+    `SELECT
+    sm.society_id,
+    s.society_name,
+    sm.role
+    FROM society_members sm
+    JOIN societies s ON sm.society_id=s.society_id
+    WHERE sm.user_id=?
+    `,
     [userID]
   )
+   console.log(response)
   return response;
+ 
 }
 module.exports={
     createsocieties,

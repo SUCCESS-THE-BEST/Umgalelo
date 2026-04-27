@@ -4,8 +4,11 @@ const addmember = async (req, res) => {
     try {
         const { userID,societyID,role} = req.body;
 
-        if (!userID || !societyID ) {
+        if (!userID || !societyID ||!role) {
             return res.status(400).json({ message: 'All fields are required' });
+        }
+        if(role.toLowerCase()!="treasurer"||role.toLowerCase()!="admin"||role.toLowerCase()!="member"){
+            return res.status(400).json({ message: 'incorrect role inserted' });
         }
        const result = await societyModel.approveRequest(userID, societyID);
         if (result.affectedRows === 0) {
