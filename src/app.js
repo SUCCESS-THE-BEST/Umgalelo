@@ -9,6 +9,12 @@ app.use('/api/auth', authRoutes);
 const userRoutes = require('./routes/userRoutes');
 app.use('/api/users', userRoutes);
 
+const societyRoutes = require('./routes/societyRoutes');
+app.use('/api/societies', societyRoutes);
+
+const adminRoutes = require('./routes/adminRoutes');
+app.use('/api/admin', adminRoutes);
+
 app.use(cors());
 
 app.get('/', (req, res) => {
