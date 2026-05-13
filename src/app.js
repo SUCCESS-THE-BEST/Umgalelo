@@ -27,6 +27,12 @@ app.use('/api/dashboard', dashboardRoutes);
 const joinReqRoutes = require('./routes/joinRequestRoutes');
 app.use('/api/joinRequest', joinReqRoutes);
 
+const claimRoutes = require('./routes/claimRoutes');
+app.use('/api/claimRoute', claimRoutes);
+
+const contributionRoutes = require('./routes/contributionRoutes');
+app.use('/api/contributionRoute', contributionRoutes);
+
 app.use(cors());
 
 app.get('/', (req, res) => {
