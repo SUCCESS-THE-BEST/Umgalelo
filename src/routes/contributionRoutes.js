@@ -1,11 +1,16 @@
 const express = require('express');
 const router = express.Router();
+const authMiddleware = require('../middleware/authMiddleware');
+const {
+  makeContribution,
+  getUserContributionHistory,
+  getSocietyContributionHistory,
+  sendPaymentReminders,
+} = require('../controllers/contributionController');
 
-const { processContributionController, GetContributionsBySociety, GetContributionsByUser, GetSocietyWallet } = require('../controllers/contributionController');
-
-router.post('/contribute', processContributionController);
-router.get('/contributions/society/:societyId', GetContributionsBySociety);
-router.get('/contributions/user/:userId', GetContributionsByUser);
-router.get('/wallet/:societyId', GetSocietyWallet);
+router.post('/contribute/:id', authMiddleware, makeContribution);
+router.get('/my-history', authMiddleware, getUserContributionHistory);
+router.get('/history/:id', authMiddleware, getSocietyContributionHistory);
+router.post('/reminders/:id', authMiddleware, sendPaymentReminders)
 
 module.exports = router;

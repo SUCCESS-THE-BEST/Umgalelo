@@ -1,116 +1,125 @@
 const db = require('../config/db');
 
-//Submit Claims
-const SubmitClaim = async (societyId, userId, deceasedName, relationship,  amount) => {
+const createClaim = async (user_id, society_id, deceased_name, relationship, claim_amount, date_of_passing) => {
   const [result] = await db.execute(
-    'INSERT INTO  claims (user_id, society_id, deceased_name, relationship, claim_amount, status) VALUES (?, ?, ?, ?, ?, "pending")',
-    [societyId, userId, deceasedName, relationship, amount]
+    `INSERT INTO claims (user_id, society_id, deceased_name, relationship, claim_amount, date_of_death)
+     VALUES (?, ?, ?, ?, ?, ?)`,
+    [user_id, society_id, deceased_name, relationship, claim_amount, date_of_passing]
   );
-
   return result;
 };
 
-//Approve Claims
-const ApproveClaim = async (claimId) => {
-  const connection = await db.getConnection();
-
-  try {
-    await connection.beginTransaction();
-
-    const [claims] = await connection.execute(
-      'SELECT * FROM claims WHERE claim_id = ?',
-      [claimId]
-    );
-
-    const claim = claims[0];
-
-    if (!claim) throw new Error('Claim not found');
-    if (claim.status !== 'pending') throw new Error('Already processed');
-
-    const [walletRows] = await connection.execute(
-      'SELECT balance FROM society_wallet WHERE society_id = ?',
-      [claim.society_id]
-    );
-
-    const balance = walletRows[0].balance;
-
-    if (balance < claim.amount) {
-      throw new Error('Insufficient funds');
-    }
-
-    // 3. Deduct from wallet
-    await connection.execute(
-      'UPDATE society_wallet SET balance = balance - ? WHERE society_id = ?',
-      [claim.amount, claim.society_id]
-    );
-
-    // 4. Update claim status
-    await connection.execute(
-      'UPDATE claims SET status = "approved" WHERE id = ?',
-      [claimId]
-    );
-
-    // 5. Record transaction
-    await connection.execute(
-      'INSERT INTO transactions (society_id, type, amount) VALUES (?, "claim", ?)',
-      [claim.society_id, claim.amount]
-    );
-
-    await connection.commit();
-
-    return { message: 'Claim approved' };
-
-  } catch (error) {
-    await connection.rollback();
-    throw error;
-  } finally {
-    connection.release();
-  }
+const getById = async (id) => {
+  const [rows] = await db.execute(
+    `SELECT * FROM claims WHERE claim_id = ?`,
+    [id]
+  );
+  return rows[0]; // return single claim
 };
 
-const RejectClaim = async (claimId) => {
-  const [result] = await db.execute(
-    'UPDATE claims SET status = "rejected" WHERE claim_id = ?',
-    [claimId]
+const getPendingClaims = async (society_id) => {
+  const [rows] = await db.execute(
+    `SELECT c.*, u.first_name, u.last_name
+     FROM claims c
+     JOIN users u ON c.user_id = u.user_id
+     WHERE c.society_id = ? AND c.status = 'pending'`,
+    [society_id]
   );
+  return rows;
+};
 
+const updateStatus = async (claim_id, status, connection = db) => {
+  const [result] = await connection.execute(
+    `UPDATE claims SET status = ? WHERE claim_id = ?`,
+    [status, claim_id]
+  );
   return result;
 };
 
-const GetClaimsBySociety = async (societyId) => {
-  const connection = await db.getConnection();
-
-  try {
-    const [rows] = await connection.execute(
-      `SELECT 
-          c.claim_id,
-          c.society_id,
-          c.user_id,
-          CONCAT(u.first_name, ' ', u.last_name) AS user_name,
-          c.deceased_name,
-          c.relationship,
-          c.claim_amount,
-          c.status
-       FROM claims c
-       JOIN users u ON c.user_id = u.user_id
-       WHERE c.society_id = ?
-       ORDER BY c.claim_id DESC`,
-      [societyId]
-    );
-
-    return rows;
-
-  } catch (error) {
-    console.error(error);
-    throw error;
-  } finally {
-    connection.release();
-  }
+const getTotalClaims = async (society_id) => {
+  const [rows] = await db.execute(
+    `SELECT IFNULL(SUM(amount), 0) AS total
+     FROM claims WHERE society_id = ? AND status = 'approved'`,
+    [society_id]
+  );
+  return rows[0].total;
 };
+
+const getClaims = async (society_id) => {
+  const [rows] = await db.execute(
+    `SELECT 
+        c.claim_id,
+        c.claim_amount,
+        c.relationship,
+        c.status,
+        c.date_of_death,
+        c.claim_date,
+        u.first_name,
+        u.last_name
+
+     FROM claims c
+     JOIN users u ON c.user_id = u.user_id
+     WHERE c.society_id = ?
+     ORDER BY c.claim_date DESC`,
+    [society_id]
+  );
+
+  return rows;
+};
+
+
+const getClaimsSummary = async (society_id) => {
+
+  // total claims paid
+  const [paidClaims] = await db.execute(
+    `SELECT COUNT(*) AS total_paid
+     FROM claims
+     WHERE society_id = ?
+     AND status = 'paid'`,
+    [society_id]
+  );
+
+  // total amount paid
+  const [amountPaid] = await db.execute(
+    `SELECT IFNULL(SUM(claim_amount), 0) AS total_amount
+     FROM claims
+     WHERE society_id = ?
+     AND status = 'paid'`,
+    [society_id]
+  );
+
+  // pending claims
+  const [pendingClaims] = await db.execute(
+    `SELECT COUNT(*) AS pending
+     FROM claims
+     WHERE society_id = ?
+     AND status = 'pending'`,
+    [society_id]
+  );
+
+  // wallet balance
+  // const [wallet] = await db.execute(
+  //   `SELECT balance
+  //    FROM society_wallet
+  //    WHERE society_id = ?`,
+  //   [society_id]
+  // );
+
+  return {
+    total_paid: paidClaims[0].total_paid || 0,
+    total_amount: amountPaid[0].total_amount || 0,
+    pending: pendingClaims[0].pending || 0,
+    // wallet_balance: wallet[0]?.balance || 0
+  };
+};
+
 
 module.exports = {
-  SubmitClaim,
-  ApproveClaim,
-  RejectClaim,
-  GetClaimsBySociety
+  createClaim,
+  getById,
+  getPendingClaims,
+  updateStatus,
+  getTotalClaims,
+  getClaims,
+  getClaimsSummary
 };

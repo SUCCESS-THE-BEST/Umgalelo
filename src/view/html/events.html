@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soweto Solidarity Circle</title>
+    <link rel="stylesheet" href="../css/common-society.css">
+    <link rel="stylesheet" href="../css/events.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Josefin+Sans:wght@600&family=DM+Sans:wght@400;600&family=Port+Lligat+Sans&family=Inknut+Antiqua:wght@900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="society-container">
+        <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+        ☰
+    </button>
+
+    <!-- Sidebar -->
+
+        <aside class='sidebar'>
+            <div class="sidebar-logo">
+                <img src='../images/umgalelo.png' alt="UMGALELO" />
+            </div>
+
+            <hr class="sidebar-divider" />
+
+                <div class="user-profile" onclick="window.location.href='profile.html'">
+                    <img src='../images/profile-image.png' alt="User" class="user-avatar" />
+                    <div class="user-info">
+                        <h3 id="userName">Sindi Gumede</h3>
+                        <p id="userEmail">sindi @example.com</p>
+                    </div>
+            </div>
+
+            <hr class="sidebar-divider" />
+
+            <nav>
+                <div class="nav-section">
+                    <h4>Main</h4>
+                    <div class="nav-item" onclick="window.location.href='dashboard.html'">
+                        <img src='../images/dashboard-interface.png' alt="" />
+                        <span>Dashboard</span>
+                    </div>
+                </div>
+
+                <div class="nav-section">
+                    <h4>My Societies</h4>
+                    <div id="sidebarSocieties">
+
+                    </div>
+                </div>
+
+                <div class="nav-section">
+                    <h4>Discover</h4>
+                    <div class="nav-item" onclick="window.location.href='browse.html'">
+                        <img src='../images/search-interface-symbol (2).png' alt="" />
+                        <span>Browse Societies</span>
+                    </div>
+                    <div class="nav-item" onclick="window.location.href='createSociety.html'">
+                        <img src='../images/more (1).png' alt="" />
+                        <span>Create Society</span>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="sign-out">
+                <div class="nav-item" onclick="logout()">
+                    <img src='../images/logout.png' alt="" />
+                    <span>Sign out</span>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="society-header">
+                <div class="society-logo" id="societyLogo"></div>
+                <div class="society-info">
+                    <h1 id="societyName"></h1>
+                    <div class="society-meta">
+                        <span id="memberCount"></span>
+                        <span id="monthlyContribution"></span>
+                        <span id="locationText">
+                            
+                        </span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                        <button class="btn btn-outline" id="payNowBtn">
+                            <img src="../images/credit-card (2).png" width="25px" alt="" class="btn-icon">
+                            Pay Now
+                        </button>
+                        <button class="btn btn-primary" id="submitClaimBtn">
+                            <img src="../images/document (2).png" width="20px" alt="" class="btn-icon">
+                            Submit Claim
+                        </button>
+                    </div>
+            </header>
+            <section class="stats">
+                <div class="stat-card">
+                    <p class="stat-label">Total Funds Collected</p>
+                    <p class="stat-value" id="totalCollected"></p>
+                </div>
+                <div class="stat-card">
+                    <p class="stat-label">Claims Paid To Date</p>
+                    <p class="stat-value" id="totalClaims"></p>
+                </div>
+                <div class="stat-card">
+                    <p class="stat-label">Collected This Month</p>
+                    <p class="stat-value" id="collectedThisMonth"></p>
+                </div>
+            </section>
+            <nav class="tabs">
+                <a href="#" class="tab">Overview</a>
+                <a href="payments.html" class="tab">Payments</a>
+                <a href="claims.html" class="tab">Claims</a>
+                <a href="events.html" class="tab active">Events</a>
+            </nav>
+
+        <!-- Events Section -->
+        <section class="events-section">
+            <div class="section-header">
+                <!-- <h2>Events</h2> -->
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="meetings">Meetings</button>
+                    <button class="filter-btn" data-filter="funerals">Funerals</button>
+                </div>
+                <button class="btn btn-primary" id="addEventBtn">
+                    <img src="../images/more (1).png" width="20px" alt="" class="btn-icon">
+                    Add Event
+                </button>
+            </div>
+
+            <div class="events-list">
+                <div class="event-card" data-event-type="funeral" data-event-id="1">
+                    <div class="event-date">
+                        <div class="date-badge">
+                            <span class="day">22</span>
+                            <span class="month">MAR</span>
+                        </div>
+                    </div>
+                    <div class="event-details">
+                        <h3>Funeral - Mama Dube</h3>
+                        <p>08:00 · Orlando East Community Hall</p>
+                    </div>
+                </div>
+
+                <div class="event-card" data-event-type="meeting" data-event-id="2">
+                    <div class="event-date">
+                        <div class="date-badge">
+                            <span class="day">5</span>
+                            <span class="month">APR</span>
+                        </div>
+                    </div>
+                    <div class="event-details">
+                        <h3>April Monthly Meeting</h3>
+                        <p>14:00 · 12 Vilakazi Street, Orlando East · Thabo Nkosi</p>
+                    </div>
+                </div>
+
+                <div class="event-card" data-event-type="meeting" data-event-id="3">
+                    <div class="event-date">
+                        <div class="date-badge">
+                            <span class="day">23</span>
+                            <span class="month">MAY</span>
+                        </div>
+                    </div>
+                    <div class="event-details">
+                        <h3>May Monthly Meeting</h3>
+                        <p>14:00 · 47 Moema Street, Meadowlands · Nomsa Mthembu</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    </div>
+
+        <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <h2 class="modal-title">Make Payment</h2>
+            <form class="form">
+                <div class="form-group"><label>Member</label><input type="text" value="Sindi Gumede" id="member" readonly></div>
+                <div class="form-group"><label>Society</label>
+                    <input type="text" id="society-name" placeholder="society-name">
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Amount</label><input type="text" placeholder="R150" id="amount"></div>
+                    <div class="form-group"><label>Month</label>
+                        <input type="text" id="month" placeholder="dd/mm/yyyy">
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" id="closePaymentModal">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="submitPayment">Confirm Payment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="claimModal" class="modal">
+        <div class="modal-content modal-large">
+            <h2 class="modal-title">Submit a Claim</h2>
+            <form class="form">
+                <div class="form-group"><label>Member</label><input type="text" value="Sindi Gumede" id="member-name" readonly></div>
+                <div class="form-group"><label>Society</label>
+                    <input type="text" id="societyname" placeholder="society name">
+                </div>
+                <div class="form-group"><label>Full Name Of Deceased *</label><input type="text"  id="deceased-name" placeholder="e.g. Zama Gumede" required></div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Relationship To You *</label>
+                        <select id="deceased-relationship"><option>Mother</option><option>Father</option><option>Sibling</option><option>Spouse</option><option>Child</option></select>
+                    </div>
+                    <div class="form-group"><label>Date of Passing *</label><input type="date" id="date_of_passing" placeholder="dd/mm/yyyy" required></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Amount</label>
+                        <input type="text" id="claim_amount" placeholder="e.g R15,000">
+                    </div>
+                    <div class="form-group">
+                        <label>Upload Death Certificate *</label>
+                        <input type="file">
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" id="closeClaimModal">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="submitClaim">Confirm Payment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+
+    <!-- Add Event Modal -->
+    <div class="modal" id="addEventModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content modal-large">
+            <h2 class="modal-title">Add To Calendar</h2>
+            <form class="event-form" id="eventForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Event Type</label>
+                        <div class="form-group-event-type">
+                            <span class="btn btn-outline" id="eventTypeBadge" name="eventType1">
+                            <p>Funeral</p>
+                        </span>
+                        <span class="btn btn-outline" id="eventTypeBadge">
+                            <p>Meeting</p>
+                        </span>
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" class="form-control" name="title" placeholder="e.g. April Monthly Meeting" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" class="form-control" name="date" value="2026-05-01" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Time</label>
+                        <input type="time" class="form-control" name="time" value="14:00" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Location / Venue</label>
+                    <input type="text" class="form-control" name="location" placeholder="e.g. 28 member street" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Member's Name</label>
+                    <input type="text" class="form-control" name="member" placeholder="e.g. Thabo Khoza">
+                </div>
+
+                <div class="form-group">
+                    <label>Additional Information</label>
+                    <textarea class="form-control" name="notes" rows="3"></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" id="cancelAddEvent">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add to Calendar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Event Details Modal -->
+    <div class="modal" id="eventDetailsModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <h2 class="modal-title" id="eventTitle">Funeral - Mama Dube</h2>
+            <span class="event-type-badge" id="eventTypeBadge">Funeral</span>
+
+            <div class="modal-section">
+                <h3>Member</h3>
+                <p id="eventMember">Thabo Nkosi</p>
+            </div>
+
+            <div class="modal-section">
+                <h3>Date & Time</h3>
+                <p id="eventDateTime">Sunday, 23 March 2026 · 08:00</p>
+            </div>
+
+            <div class="modal-section">
+                <h3>Location</h3>
+                <p id="eventLocation">Orlando East Community Hall</p>
+            </div>
+
+            <div class="modal-section">
+                <h3>Notes</h3>
+                <p id="eventNotes">Please arrive by 07:45. Transport departs from Vilakazi St at 07:30.</p>
+            </div>
+
+            <button class="btn btn-primary btn-block" id="closeEventDetails">Close</button>
+        </div>
+    </div>
+
+    <script src="../scripts/events.js"></script>
+
+    <script>
+const addEventModal = document.getElementById('addEventModal');
+const eventDetailsModal = document.getElementById('eventDetailsModal');
+const addEventBtn = document.getElementById('addEventBtn');
+const cancelAddEvent = document.getElementById('cancelAddEvent');
+const closeEventDetails = document.getElementById('closeEventDetails');
+const eventForm = document.getElementById('eventForm');
+
+// Sidebar elements
+const sidebar = document.getElementById('sidebar');
+const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+const mainContent = document.getElementById('mainContent');
+
+// Open Add Event Modal
+if (addEventBtn) {
+    addEventBtn.addEventListener('click', () => {
+        addEventModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    });
+}
+
+// Close Add Event Modal
+if (cancelAddEvent) {
+    cancelAddEvent.addEventListener('click', () => {
+        addEventModal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    });
+}
+
+// Close Event Details Modal
+if (closeEventDetails) {
+    closeEventDetails.addEventListener('click', () => {
+        eventDetailsModal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    });
+}
+
+// Close modal on overlay click
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+            addEventModal.classList.remove('active');
+            eventDetailsModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+    });
+});
+
+//Open Event Details Modal
+const eventCards = document.querySelectorAll('.event-card');
+eventCards.forEach(card => {
+    card.addEventListener('click', () => {
+        eventDetailsModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    });
+});
+    </script>
+
+
+    <script>
+const paymentModal=document.getElementById('paymentModal');
+const claimModal=document.getElementById('claimModal');
+const payNowBtn=document.getElementById('payNowBtn');
+const submitClaimBtn=document.getElementById('submitClaimBtn');
+const closePaymentModal=document.getElementById('closePaymentModal');
+const closeClaimModal=document.getElementById('closeClaimModal');
+payNowBtn.addEventListener('click',()=>{paymentModal.classList.add('active');});
+submitClaimBtn.addEventListener('click',()=>{claimModal.classList.add('active');});
+closePaymentModal.addEventListener('click',()=>{paymentModal.classList.remove('active');});
+closeClaimModal.addEventListener('click',()=>{claimModal.classList.remove('active');});
+paymentModal.addEventListener('click',(e)=>{if(e.target===paymentModal){paymentModal.classList.remove('active');}});
+claimModal.addEventListener('click',(e)=>{if(e.target===claimModal){claimModal.classList.remove('active');}});
+//document.addEventListener('keydown',(e)=>{if(e.key==='Escape'){paymentModal.classList.remove('active');claimModal.classList.remove('active');}});
+    </script>
+</body>
+</html>

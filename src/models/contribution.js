@@ -1,118 +1,214 @@
 const db = require('../config/db');
 
-//Add Contributions
-const AddContribution = async (userId, societyId, amount, connection) => {
-  const [response] = await connection.execute(
-    'INSERT INTO contributions (society_id, user_id, amount) VALUES (?, ?, ?)',
-    [societyId, userId, amount]
+const createContribution = async (user_id, society_id, amount, month, connection = db) => {
+  const [result] = await connection.execute(
+    `INSERT INTO contributions (user_id, society_id, amount, payment_month, status)
+     VALUES (?, ?, ?, ?, 'paid')`,
+    [user_id, society_id, amount, month]
   );
-
-  return response;
+  return result;
 };
 
-const UpdateSocietyWallet = async (societyId, amount, connection) => {
-  await connection.execute(
-    `INSERT INTO society_wallet (society_id, balance)
-     VALUES (?, ?)
-     ON DUPLICATE KEY UPDATE balance = balance + ?`,
-    [societyId, amount, amount]
-  );
+const checkMonthlyContributionExists = async (user_id, society_id, month) =>{
+  const [result] = await db.execute(
+    'SELECT * FROM contributions WHERE user_id = ? AND society_id = ? AND payment_month = ?',
+    [user_id, society_id, month]
+  )
+
+  return result
 }
 
-const CreateTransaction = async (societyId, userID,amount, connection) => {
-  await connection.execute(
-    'INSERT INTO transactions (society_id, user_id ,type, amount) VALUES (?,?, "contribution", ?)',
-    [societyId,userID, amount]
+const UpdateSocietyWallet = async (societyId, amount, connection = db) => {
+  const [result] = await connection.execute(
+    'UPDATE society_wallet SET balance = balance + ? WHERE society_id = ?',
+    [amount, societyId]
   );
+  return result;
 };
 
-const processContribution = async (userId, societyId, amount) => {
-  const connection = await db.getConnection();
+const getUserContributionHistory = async (user_id) => {
+  const [rows] = await db.execute(
+    `SELECT 
+        c.contribution_id,
+        c.amount,
+        c.payment_date,
+        s.society_name AS society_name
 
-  try {
-    await connection.beginTransaction();
+     FROM contributions c
+     JOIN societies s ON c.society_id = s.society_id
+     WHERE c.user_id = ?
+     ORDER BY c.payment_date DESC`,
+    [user_id]
+  );
 
-    await AddContribution(userId, societyId, amount, connection);
-    await UpdateSocietyWallet(societyId, amount, connection);
-    await CreateTransaction(societyId, amount, connection);
-
-    await connection.commit();
-
-  } catch (error) {
-    await connection.rollback();
-    throw error;
-  } finally {
-    connection.release();
-  }
+  return rows;
 };
 
-const GetContributionsBySociety = async (societyId) => {
-  const connection = await db.getConnection();
+const getSocietyPaymentHistory = async (society_id) => {
 
-  try {
-    const [rows] = await connection.execute(
-      `SELECT * FROM contributions WHERE society_id = ? ORDER BY contribution_id DESC`,
-      [societyId]
+    const now = new Date();
+
+    const currentMonth =
+    `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+
+    const [rows] = await db.execute(
+    `
+    -- CURRENT MONTH (all members)
+    SELECT
+        u.user_id,
+        u.first_name,
+        u.last_name,
+
+        COALESCE(c.payment_month, ?) AS payment_month,
+
+        c.amount,
+
+        c.payment_date,
+
+        CASE
+            WHEN c.status = 'paid' THEN 'paid'
+            ELSE 'due'
+        END AS status
+
+    FROM society_members sm
+
+    JOIN users u
+        ON sm.user_id = u.user_id
+
+    LEFT JOIN contributions c
+        ON c.user_id = sm.user_id
+        AND c.society_id = sm.society_id
+        AND c.payment_month = ?
+
+    WHERE sm.society_id = ?
+
+    UNION ALL
+
+    -- PREVIOUS MONTHS (paid only)
+    SELECT
+        u.user_id,
+        u.first_name,
+        u.last_name,
+
+        c.payment_month,
+
+        c.amount,
+
+        c.payment_date,
+
+        'paid' AS status
+
+    FROM contributions c
+
+    JOIN users u
+        ON c.user_id = u.user_id
+
+    WHERE c.society_id = ?
+    AND c.payment_month <> ?
+
+    ORDER BY payment_month DESC,
+             status ASC,
+             payment_date DESC
+    `,
+    [
+        currentMonth,
+        currentMonth,
+        society_id,
+
+        society_id,
+        currentMonth
+    ]
     );
 
     return rows;
-
-  } catch (error) {
-    console.error(error);
-    throw error;
-  } finally {
-    connection.release();
-  }
 };
 
-const GetContributionsByUser = async (userId) => {
-  const connection = await db.getConnection();
+const getTotalBySociety = async (society_id) => {
+  const [rows] = await db.execute(
+    `SELECT IFNULL(SUM(amount), 0) AS total
+     FROM contributions WHERE society_id = ?`,
+    [society_id]
+  );
+  return rows[0].total;
+};
 
-  try {
-    const [rows] = await connection.execute(
-      `SELECT * FROM contributions WHERE user_id = ? ORDER BY contribution_id DESC`,
-      [userId]
+const getUnpaidMembers = async (society_id, payment_month) => {
+
+    const [rows] = await db.execute(
+        `
+        SELECT 
+            u.user_id,
+            u.first_name,
+            u.last_name,
+            sm.society_id
+
+        FROM society_members sm
+
+        JOIN users u
+        ON sm.user_id = u.user_id
+
+        WHERE sm.society_id = ?
+
+        AND sm.user_id NOT IN (
+
+            SELECT c.user_id
+            FROM contributions c
+            WHERE c.society_id = ?
+            AND c.payment_month = ?
+            AND c.status = 'paid'
+
+        )
+        `,
+        [society_id, society_id, payment_month]
     );
 
     return rows;
-
-  } catch (error) {
-    console.error(error);
-    throw error;
-  } finally {
-    connection.release();
-  }
 };
 
-const GetSocietyWallet = async (societyId) => {
-  const connection = await db.getConnection();
+const getMemberStatement = async (
+    user_id,
+    society_id
+) => {
 
-  try {
-    const [rows] = await connection.execute(
-      `SELECT balance FROM society_wallet WHERE society_id = ?`,
-      [societyId]
+    const [rows] = await db.execute(
+        `
+        SELECT
+            c.payment_month,
+            c.amount,
+            c.status,
+            c.payment_date,
+
+            s.society_name,
+
+            u.first_name,
+            u.last_name
+
+        FROM contributions c
+
+        JOIN societies s
+        ON c.society_id = s.society_id
+
+        JOIN users u
+        ON c.user_id = u.user_id
+
+        WHERE c.user_id = ?
+        AND c.society_id = ?
+
+        ORDER BY c.payment_month DESC
+        `,
+        [user_id, society_id]
     );
 
-    if (rows.length === 0) {
-      throw new Error('Society wallet not found');
-    }
-
-    return rows[0];
-
-  } catch (error) {
-    console.error(error);
-    throw error;
-  } finally {
-    connection.release();
-  }
+    return rows;
 };
 
 module.exports = { 
-  AddContribution,
-  UpdateSocietyWallet,
-  CreateTransaction,
-  processContribution,
-  GetContributionsBySociety,
-  GetContributionsByUser,
-  GetSocietyWallet
+  createContribution, 
+  UpdateSocietyWallet, 
+  getUserContributionHistory, 
+  getSocietyPaymentHistory, 
+  getTotalBySociety,
+  checkMonthlyContributionExists,
+  getUnpaidMembers,
+  getMemberStatement
 };

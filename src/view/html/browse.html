@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Societies</title>
+    <link rel="stylesheet" href="../css/browse.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&family=Inknut+Antiqua:wght@900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="browse-container">
+      <button
+        class="mobile-menu-toggle"
+        onClick='{() => setSidebarOpen(!sidebarOpen)}'
+      >
+        ☰
+      </button>
+
+      <aside class='sidebar'>
+        <!-- <img src='images/community.jpg' alt="" class="sidebar-bg" /> -->
+        <div class="sidebar-logo">
+          <img src='../images/umgalelo.png' alt="UMGALELO" />
+        </div>
+
+        <hr class="sidebar-divider" />
+
+        <div class="user-profile" onclick="window.location.href='profile.html'">
+          <img src='../images/profile-image.png' alt="User" class="user-avatar" />
+            <div class="user-info">
+            <h3 id="userName">Sindi Gumede</h3>
+            <p id="userEmail">sindi @example.com</p>
+          </div>
+        </div>
+
+        <hr class="sidebar-divider" />
+
+        <nav>
+          <div class="nav-section">
+            <h4>Main</h4>
+            <div class="nav-item" onclick="window.location.href='dashboard.html'">
+              <img src='../images/dashboard-interface.png' alt="" />
+              <span>Dashboard</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <h4>My Societies</h4>
+            <div id="sidebarSocieties">
+
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <h4>Discover</h4>
+            <div class="nav-item active">
+              <img src='../images/search-interface-symbol (3).png' alt="" />
+              <span>Browse Societies</span>
+            </div>
+            <div class="nav-item" onclick="window.location.href='createSociety.html'">
+              <img src='../images/more (1).png' alt="" />
+              <span>Create Society</span>
+            </div>
+          </div>
+        </nav>
+
+        <div class="sign-out">
+          <div class="nav-item" onclick="logout()">
+            <img src='../images/logout.png' alt="" />
+            <span>Sign out</span>
+          </div>
+        </div>
+      </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="page-header">
+            <h1>Browse Societies</h1>
+            <p class="subtitle">Find and join a burial society in your community across South Africa</p>
+
+            <div class="controls">
+                <div class="search-box">
+                    <span class="search-icon"><img src="../images/search-interface-symbol (2).png" alt="" style="width: 10px;"></span>
+                    <input type="text" id="searchInput" placeholder="Search by name...">
+                </div>
+                <select class="filter-select" id="provinceFilter">
+                    <option>All Provinces</option>
+                    <option>Gauteng</option>
+                    <option>KwaZulu-Natal</option>
+                    <option>Limpopo</option>
+                    <option>Free State</option>
+                    <option>Mpumalanga</option>
+                    <option>Eastern Cape</option>
+                    <option>Northern Cape</option>
+                    <option>Western Cape</option>
+                </select>
+                <select class="filter-select" id="sortFilter">
+                    <option>Default</option>
+                    <option>Name</option>
+                    <option>Contribution</option>
+                </select>
+            </div>
+
+            <button class="create-btn">
+                <img src="../images/more (1).png" alt="">
+                Create Society
+            </button>
+        </header>
+
+        <div class="societies-grid">
+            
+        </div>
+    </main>
+    </div>
+
+    <script src="../scripts/browse.js"></script>
+</body>
+</html>

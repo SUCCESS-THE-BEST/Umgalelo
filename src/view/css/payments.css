@@ -1,0 +1,259 @@
+/*Payment container*/
+.create-society-container {
+    display: flex;
+    min-height: 100vh;
+    background: #fafbfc;
+    overflow-x: hidden;
+}
+
+/* Sidebar Styles */
+.sidebar {
+  width: 400px;
+  background: url(../images/community.jpg);
+  color: white;
+  padding: 30px 20px;
+  position: fixed;
+  height: 100vh;
+
+  transition: transform 0.3s ease;
+}
+
+.sidebar-logo {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.sidebar-logo img {
+  max-width: 200px;
+  height: auto;
+}
+
+.sidebar-divider {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  margin: 20px 0;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 20px 10px;
+}
+
+.user-profile:hover{
+  background: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+}
+
+.user-avatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-info h3 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  margin: 0 0 5px 0;
+}
+
+.user-info p {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  margin: 0;
+  opacity: 0.9;
+}
+
+.nav-section {
+  margin: 30px 0;
+}
+
+.nav-section h4 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: 15px;
+  padding-left: 10px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 12px 15px;
+  border-radius: 35px;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.nav-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.nav-item.active {
+  background: white;
+  color: rgb(107, 64, 56);
+}
+
+.nav-item img {
+  width: 28px;
+  height: 28px;
+}
+
+.nav-item.admin-badge {
+  position: relative;
+}
+
+.admin-tag {
+  position: absolute;
+  right: 10px;
+  border: 1px solid white;
+  padding: 3px 10px;
+  border-radius: 10px;
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.sign-out {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Payments Page Specific Styles */
+
+.payments-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px;
+}
+
+.filter-group {
+    display: flex;
+    gap: 12px;
+}
+
+.payments-table-card {
+    overflow-x: auto;
+}
+
+.payments-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.payments-table thead {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.payments-table th {
+    padding: 20px;
+    text-align: left;
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--text-dark);
+}
+
+.payments-table td {
+    padding: 20px;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 16px;
+    font-weight: 600;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text-dark);
+}
+
+.payments-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.member-cell {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.status-badge {
+    font-size: 16px;
+    font-weight: 600;
+    padding: 4px 0;
+}
+
+.status-paid {
+    color: rgba(11, 195, 54, 0.65);
+}
+
+.status-due {
+    color: #eb1d0e;
+}
+
+/* Responsive */
+@media (max-width: 968px) {
+    .payments-controls {
+        flex-direction: column;
+        gap: 20px;
+        align-items: flex-start;
+    }
+
+    .filter-group {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .filter-group .btn {
+        flex: 1;
+        min-width: 100px;
+    }
+
+    .payments-table {
+        font-size: 14px;
+    }
+
+    .payments-table th,
+    .payments-table td {
+        padding: 12px 8px;
+    }
+}
+
+@media (max-width: 640px) {
+    .payments-table-card {
+        margin: 15px 0;
+    }
+
+    .payments-table {
+        display: block;
+        overflow-x: auto;
+    }
+
+    .payments-table thead {
+        display: none;
+    }
+
+    .payments-table tr {
+        display: block;
+        margin-bottom: 20px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 15px;
+    }
+
+    .payments-table td {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border: none;
+    }
+
+    .payments-table td:before {
+        content: attr(data-label);
+        font-weight: 400;
+        color: var(--text-light);
+    }
+}

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claims - Soweto Solidarity Circle</title>
+    <link rel="stylesheet" href="../css/claims.css">
+    <link rel="stylesheet" href="../css/common-society.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Port+Lligat+Sans&family=DM+Sans:wght@400;600&family=Inknut+Antiqua:wght@700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="society-container">
+        <button
+        class="mobile-menu-toggle"
+        onClick='{() => setSidebarOpen(!sidebarOpen)}'
+      >
+        ☰
+    </button>
+
+    <aside class='sidebar'>
+        <div class="sidebar-logo">
+          <img src='../images/umgalelo.png'} alt="UMGALELO" />
+        </div>
+
+        <hr class="sidebar-divider" />
+
+        <div class="user-profile" onclick="window.location.href='profile.html'">
+          <img src='../images/profile-image.png' alt="User" class="user-avatar" />
+            <div class="user-info">
+            <h3 id="userName">Sindi Gumede</h3>
+            <p id="userEmail">sindi @example.com</p>
+          </div>
+        </div>
+
+        <hr class="sidebar-divider" />
+
+        <nav>
+          <div class="nav-section">
+            <h4>Main</h4>
+            <div class="nav-item" onclick="window.location.href='dashboard.html'">
+              <img src='../images/dashboard-interface.png' alt="" />
+              <span>Dashboard</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <h4>My Societies</h4>
+            <div id="sidebarSocieties">
+
+            </div>
+
+          <div class="nav-section">
+            <h4>Discover</h4>
+            <div class="nav-item" onclick="window.location.href='browse.html'">
+              <img src='../images/search-interface-symbol (2).png' alt="" />
+              <span>Browse Societies</span>
+            </div>
+            <div class="nav-item" onclick="window.location.href='createSociety.html'">
+              <img src='../images/more (1).png' alt="" />
+              <span>Create Society</span>
+            </div>
+          </div>
+        </nav>
+
+        <div class="sign-out">
+          <div class="nav-item" onclick="window.location.href='login.html'">
+            <img src='../images/logout.png' alt="" />
+            <span>Sign out</span>
+          </div>
+        </div>
+    </aside>
+    <main class="main-content">
+            <header class="society-header">
+                <div class="society-logo" id="societyLogo">SS</div>
+                <div class="society-info">
+                    <h1 id="societyName"></h1>
+                    <div class="society-meta">
+                        <span id="memberCount"></span>
+                        <span id="monthlyContribution"></span>
+                        <span id="locationText"></span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                        <button class="btn btn-outline" id="payNowBtn">
+                            <img src="../images/credit-card (2).png" width="25px" alt="" class="btn-icon">
+                            Pay Now
+                        </button>
+                        <button class="btn btn-primary" id="submitClaimBtn">
+                            <img src="../images/document (2).png" width="20px" alt="" class="btn-icon">
+                            Submit Claim
+                        </button>
+                    </div>
+            </header>
+
+            <!-- statistics -->
+            <section class="stats">
+                <div class="stat-card">
+                  <p class="stat-label">Total Funds Collected</p>
+                  <p class="stat-value" id="totalCollected"></p>
+                </div>
+                <div class="stat-card">
+                  <p class="stat-label">Claims Paid To Date</p>
+                  <p class="stat-value" id="totalClaims"></p>
+                </div>
+                <div class="stat-card">
+                  <p class="stat-label">Collected This Month</p>
+                  <p class="stat-value" id="collectedThisMonth"></p>
+                </div>
+            </section>
+            <nav class="tabs">
+                <a href="" class="tab" id="overview">Overview</a>
+                <a href="payments.html" class="tab">Payments</a>
+                <a href="#" class="tab active">Claims</a>
+                <a href="events.html" class="tab">Events</a>
+            </nav>
+            <section class="payments-controls">
+                <div class="filter-group">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="pending">Pending</button>
+                    <button class="filter-btn" data-filter="approved">Approved</button>
+                    <button class="filter-btn" data-filter="rejected">Rejected</button>
+                </div>
+            </section>
+            <div id="claimsContainer"></div>
+      
+    </main>
+
+    </div>
+
+    
+        <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <h2 class="modal-title">Make Payment</h2>
+            <form class="form">
+                <div class="form-group"><label>Member</label><input type="text" value="Sindi Gumede" id="member" readonly></div>
+                <div class="form-group"><label>Society</label>
+                    <input type="text" id="society-name" placeholder="society-name">
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Amount</label><input type="text" placeholder="R150" id="amount"></div>
+                    <div class="form-group"><label>Month</label>
+                        <input type="text" id="month" placeholder="dd/mm/yyyy">
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" id="closePaymentModal">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="submitPayment">Confirm Payment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="claimModal" class="modal">
+        <div class="modal-content modal-large">
+            <h2 class="modal-title">Submit a Claim</h2>
+            <form class="form">
+                <div class="form-group"><label>Member</label><input type="text" value="Sindi Gumede" id="member-name" readonly></div>
+                <div class="form-group"><label>Society</label>
+                    <input type="text" id="societyname" placeholder="society name">
+                </div>
+                <div class="form-group"><label>Full Name Of Deceased *</label><input type="text"  id="deceased-name" placeholder="e.g. Zama Gumede" required></div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Relationship To You *</label>
+                        <select id="deceased-relationship"><option>Mother</option><option>Father</option><option>Sibling</option><option>Spouse</option><option>Child</option></select>
+                    </div>
+                    <div class="form-group"><label>Date of Passing *</label><input type="date" id="date_of_passing" placeholder="dd/mm/yyyy" required></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Amount</label>
+                        <input type="text" id="claim_amount" placeholder="e.g R15,000">
+                    </div>
+                    <div class="form-group">
+                        <label>Upload Death Certificate *</label>
+                        <input type="file">
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" id="closeClaimModal">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="submitClaim">Confirm Payment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    
+    <script src="../scripts/claims.js"></script>
+
+
+        <script>
+const paymentModal=document.getElementById('paymentModal');
+const claimModal=document.getElementById('claimModal');
+const payNowBtn=document.getElementById('payNowBtn');
+const submitClaimBtn=document.getElementById('submitClaimBtn');
+const closePaymentModal=document.getElementById('closePaymentModal');
+const closeClaimModal=document.getElementById('closeClaimModal');
+payNowBtn.addEventListener('click',()=>{paymentModal.classList.add('active');});
+submitClaimBtn.addEventListener('click',()=>{claimModal.classList.add('active');});
+closePaymentModal.addEventListener('click',()=>{paymentModal.classList.remove('active');});
+closeClaimModal.addEventListener('click',()=>{claimModal.classList.remove('active');});
+paymentModal.addEventListener('click',(e)=>{if(e.target===paymentModal){paymentModal.classList.remove('active');}});
+claimModal.addEventListener('click',(e)=>{if(e.target===claimModal){claimModal.classList.remove('active');}});
+//document.addEventListener('keydown',(e)=>{if(e.key==='Escape'){paymentModal.classList.remove('active');claimModal.classList.remove('active');}});
+    </script>
+</body>
+</html>

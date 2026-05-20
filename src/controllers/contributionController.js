@@ -1,84 +1,173 @@
-const financialModel = require('../models/contribution');
+const db = require('../config/db')
+const contributionModel = require('../models/contribution');
+const claimModel = require('../models/claim')
+const membershipModel = require('../models/membership');
+const { sendEmail } = require('../services/emailServices');
+const userModel = require('../models/user');
+const societyModel = require('../models/society');
+const notificationModel = require('../models/notifications')
 
-const processContributionController = async (req, res) => {
+
+// ========= MAKE CONTRIBUTION ==========
+const makeContribution = async (req, res) => {
   try {
-    const { userId, societyId, amount } = req.body;
+    const user_id = req.user.userId;
+    const society_id = req.params.id;
+    const { amount, month } = req.body;
 
-    if (!userId || !societyId || amount <= 0) {
-      return res.status(400).json({ message: 'Invalid input' });
+    const exits = await contributionModel.checkMonthlyContributionExists(user_id, society_id, month)
+    if (exits.length > 0) {
+      return res.status(400).json({message: 'Payment Already Exists For The Month'})
     }
 
-    await financialModel.processContribution(userId, societyId, amount);
+    const contributionRes = await contributionModel.createContribution(user_id, society_id, amount, month);
 
-    res.status(200).json({
-      message: 'Contribution successful'
-    });
+    // ========= UPDATE SOCIETY WALLET ===========
+    const walletRes = await contributionModel.UpdateSocietyWallet(society_id, amount);
 
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      message: error.message   // 👈 IMPORTANT for debugging
-    });
-  }
-};
+    // ========= EMAIL START ==============
+    const [user] = await userModel.findUserById(user_id);
 
-const GetContributionsBySociety = async (req, res) => {
-  try {
-    const societyId = req.params.societyId;
+    const [society] = await societyModel.findSocietyById(society_id);
+    
+    await sendEmail(
+      user.email,
+      'Payment Receipt - Umgalelo',
+      `
+        <h2>Payment Successful</h2>
+        <p>Hi ${user.first_name},</p>
+        <p>Your payment of <strong>R${amount}</strong> was received.</p>
+        <p><strong>Society:</strong> ${society.society_name}</p>
+        <p><strong>Month:</strong> ${month}</p>
+        <p><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
+      `
+    );
 
-    const data = await financialModel.GetContributionsBySociety(societyId);
+    // ========== EMAIL END =============
+    
 
-    res.status(200).json(data);
+    res.json({ message: 'Payment Successfull' });
+    
 
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-const GetContributionsByUser = async (req, res) => {
+
+// ======== USER SPECIFIC CONTRIBUTION HISTORY ===========
+const getUserContributionHistory = async (req, res) => {
   try {
-    const userId = req.params.userId;
+    const user_id = req.user.userId;
 
-    const data = await financialModel.GetContributionsByUser(userId);
+    const payments = await contributionModel.getUserContributionHistory(user_id);
 
-    res.status(200).json(data);
+    const formatted = payments.map(p => ({
+      id: p.contribution_idid,
+      society: p.society_name,
+      amount: p.amount,
+      date: new Date(p.payment_date).toLocaleDateString()
+    }));
+
+    res.json(formatted);
 
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-const GetSocietyWallet = async (req, res) => {
-  try {
-    const societyId = req.params.societyId;
 
-    if (!societyId) {
-      return res.status(400).json({ message: 'Society ID is required' });
+//society contribution history
+const getSocietyContributionHistory = async (req, res) => {
+  try {
+    const user_id = req.user.userId;
+    const society_id = req.params.id;
+    
+
+    // ====== ONLY MEMBERS ==========
+    const isMember = await membershipModel.findMember(user_id, society_id);
+    if (!isMember) {
+      return res.status(403).json({ message: 'Access denied' });
     }
 
-    const wallet = await financialModel.getSocietyWallet(societyId);
+    const payments = await contributionModel.getSocietyPaymentHistory(society_id);
 
-    res.status(200).json({
-      message: 'Wallet fetched successfully',
-      data: wallet
-    });
+    const formatted = payments.map(p => ({
+      id: p.contribution_id,
+      first_name: p.first_name,
+      last_name: p.last_name,
+      amount: p.amount,
+      status: p.status,
+      payment_date: p.payment_date != null ? new Date(p.payment_date).toLocaleDateString() : null,
+      payment_month: p.payment_month
+    }));
+
+    res.json(formatted);
 
   } catch (error) {
-    console.error(error);
-
-    if (error.message === 'Society wallet not found') {
-      return res.status(404).json({ message: error.message });
-    }
-
-    res.status(500).json({
-      message: 'Error fetching wallet'
-    });
+    res.status(500).json({ message: error.message });
   }
 };
 
-module.exports = { 
-  processContributionController,
-  GetContributionsBySociety,
-  GetContributionsByUser,
-  GetSocietyWallet
+// ======= DATE FORMATTING HELPER ==========
+const formatDate = (date) => {
+  return new Date(date).toLocaleDateString();
 };
+
+const sendPaymentReminders = async (req, res) => {
+
+    try {
+
+        const user_id = req.user.userId;
+        const society_id = req.params.id;
+
+        // =========== CHECK ADMIN ============
+        const member = await membershipModel.findMember(user_id, society_id);
+
+        if (!member || member.role !== 'admin') {
+            return res.status(403).json({
+                message: 'Only admins can send reminders'
+            });
+        }
+
+        // ======== CURRENT MONTH ==========
+        const payment_month = new Date().toISOString().slice(0, 7);
+
+        // ======== GET UNPAID MEMBERS ============
+        const unpaidMembers =
+            await contributionModel.getUnpaidMembers(
+                society_id,
+                payment_month
+            );
+
+        // =========== SEND NOTIFICATIONS ==============
+        for (const member of unpaidMembers) {
+
+            await notificationModel.createNotification(
+                member.user_id,
+                member.society_id,
+                `Reminder: Your ${payment_month} contribution payment is still due.`
+            );
+        }
+
+        res.json({
+            message: `Reminders sent to ${unpaidMembers.length} members`
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+            message: error.message
+        });
+    }
+};
+
+
+module.exports = {
+  makeContribution,
+  getUserContributionHistory,
+  getSocietyContributionHistory,
+  sendPaymentReminders,
+}

@@ -1,5 +1,7 @@
 const db = require('../config/db');
+const societyModel = require('../models/society')
 
+// ================ PERSONAL DASHBOARD SUMMARY/STATS ============================
 const getDashboardSummary = async (req, res) => {
   try {
     const user_id = req.user.userId;
@@ -44,6 +46,8 @@ const getDashboardSummary = async (req, res) => {
   }
 };
 
+
+// ====================== SOCIETY DASHBOARD SUMMARY/STATS ======================
 const getSocietyDashboard = async (req, res) => {
   try {
     const society_id = req.params.id;
@@ -88,55 +92,43 @@ const getSocietyDashboard = async (req, res) => {
   }
 };
 
+
+// ==================== PERSONAL DASHBOARD SOCIETY CARDS =========================
 const getUserSocietyCards = async (req, res) => {
-  try {
-    const user_id = req.user.userId;
 
-    const [rows] = await db.execute(`SELECT 
-    s.society_id,
-    s.society_name,
-    s.monthly_contribution,
-    sm.role,
-    sm.joined_at,
+    try {
 
-    (SELECT COUNT(*) 
-     FROM society_members sm2 
-     WHERE sm2.society_id = s.society_id) AS member_count,
+        const user_id = req.user.userId;
 
-    EXISTS (
-        SELECT 1
-        FROM contributions c
-        WHERE c.user_id = sm.user_id
-        AND c.society_id = s.society_id
-        AND c.status = 'paid'
-    ) AS has_paid
+        const rows =
+            await societyModel.getUserSocietyCards(user_id);
 
-FROM societies s
-JOIN society_members sm 
-    ON s.society_id = sm.society_id
+        const formatted = rows.map(s => ({
 
-WHERE sm.user_id = ?;`
-, [user_id, user_id]);
+            id: s.society_id,
+            society_name: s.society_name,
+            monthly_contribution: s.monthly_contribution,
+            role: s.role,
+            society_members: s.member_count,
 
-    //Format response for frontend
-    const formatted = rows.map(s => ({
-      id: s.society_id,
-      society_name: s.society_name,
-      monthly_contribution: s.monthly_contribution,
-      role: s.role,
-      society_members: s.member_count,
+            joined: formatDate(s.joined_at),
 
-      joined: formatDate(s.joined_at),
+            has_paid: !!s.has_paid,
 
-      has_paid: !!s.has_paid,
-      payment_status: s.has_paid ? 'Paid' : 'Due'
-    }));
+            payment_status:
+                s.has_paid ? 'Paid' : 'Due'
+        }));
 
-    res.json(formatted);
+        res.json(formatted);
 
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
+    } catch (error) {
+
+        console.log(error);
+
+        res.status(500).json({
+            message: error.message
+        });
+    }
 };
 
 
@@ -149,8 +141,36 @@ const formatDate = (date) => {
   });
 };
 
+// ================== GET EVENTS/CALENDER ===================
+const getUserEvents = async (req, res) => {
+    try {
+        const userId = req.user.userId;
+
+        const [rows] = await db.execute(`
+            SELECT 
+                e.id,
+                e.title,
+                e.type,
+                e.date,
+                e.time,
+                e.location,
+                s.society_name
+            FROM events e
+            JOIN societies s ON e.society_id = s.society_id
+            JOIN society_members sm ON sm.society_id = s.society_id
+            WHERE sm.user_id = ?
+            ORDER BY e.date ASC
+        `, [userId]);
+
+        res.json(rows);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
 module.exports = {
   getDashboardSummary,
   getSocietyDashboard,
-  getUserSocietyCards
+  getUserSocietyCards,
+  getUserEvents
 };

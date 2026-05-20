@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/profile.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=DM+Sans:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+ 
+    <div class="profile-container">
+
+      <button
+        class="mobile-menu-toggle"
+        onClick='{() => setSidebarOpen(!sidebarOpen)}'
+      >
+        ☰
+      </button>
+
+      <aside class='sidebar'>
+        <!-- <img src='images/community.jpg' alt="" class="sidebar-bg" /> -->
+        <div class="sidebar-logo">
+          <img src='../images/umgalelo.png'} alt="UMGALELO" />
+        </div>
+
+        <hr class="sidebar-divider" />
+
+        <div class="user-profile">
+          <img src='../images/profile-image.png' alt="User" class="user-avatar" />
+          <div class="user-info">
+            <h3 id="userName">Sindi Gumede</h3>
+            <p id="userEmail" style="color: white;">sindi @example.com</p>
+          </div>
+        </div>
+
+        <hr class="sidebar-divider" />
+
+        <nav>
+          <div class="nav-section">
+            <h4>Main</h4>
+            <div class="nav-item" onclick="window.location.href='dashboard.html'">
+              <img src='../images/dashboard-interface.png' alt="" />
+              <span>Dashboard</span>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <h4>My Societies</h4>
+            <div id="sidebarSocieties">
+
+            </div>
+            <!-- <div class="nav-item">
+              <img src='../images/networking.png' alt="" />
+              <span>Soweto Solidarity</span>
+            </div>
+            <div class="nav-item admin-badge">
+              <img src='../images/networking.png' alt="" />
+              <span>Gumede Family</span>
+              <span class="admin-tag">Admin</span>
+            </div>
+            <div class="nav-item">
+              <img src='../images/networking.png' alt="" />
+              <span>Jozi Workers</span>
+            </div>
+          </div> -->
+
+          <div class="nav-section">
+            <h4>Discover</h4>
+            <div class="nav-item" onclick="window.location.href='browse.html'">
+              <img src='../images/search-interface-symbol (2).png' alt="" />
+              <span>Browse Societies</span>
+            </div>
+            <div class="nav-item" onclick="window.location.href='createSociety.html'">
+              <img src='../images/more (1).png' alt="" />
+              <span>Create Society</span>
+            </div>
+          </div>
+        </nav>
+
+        <div class="sign-out">
+          <div class="nav-item" onclick="logout()">
+            <img src='../images/logout.png' alt="" />
+            <span>Sign out</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div>
+              <p class="header-date" id="date">Sunday, 29 March 2026</p>
+            </div>
+            <div class="user-profile">
+                    <div class="notification-wrapper">
+                        <button class="notification-btn" id="notificationBtn">
+                            <img 
+                                src='../images/notification (1).png' 
+                                alt="Notifications" 
+                                class="header-notification" 
+                                width="25px"
+                            />
+
+                            <span class="notification-count" id="notificationCount">3</span>
+                        </button>
+
+                        <div class="notification-dropdown" id="notificationDropdown">
+                            <div class="notification-header">
+                                Notifications
+                            </div>
+
+                            <div id="notificationList">
+                                <!-- notifications render here -->
+                            </div>
+                        </div>
+                    </div>
+                    <img src='../images/profile-image.png' alt="User" class="user-avatar" />
+                    <div class="user-info">
+                        <h3 id="profileName">Sindi Gumede</h3>
+                        <p id="profileEmail">sindi @example.com</p>
+                    </div>
+                </div>
+        </header>
+
+        <!-- Profile Header -->
+        <div class="profile-wrapper">
+          
+        <div class="profile-content">
+          
+          <!-- Personal Details -->
+          <section class="form-section">
+            <h3 class="section-title">Personal Details</h3>
+            <div class="section-divider"></div>
+            <div class="form-grid">
+              <div class="form-field">
+                <label class="form-label">First Name</label>
+                <input type="text" placeholder="Your First Name" class="form-input" id="firstName"/>
+              </div>
+              <div class="form-field">
+                <label class="form-label">Last Name</label>
+                <input type="text" placeholder="Your Last Name" class="form-input" id="lastName"/>
+              </div>
+              <div class="form-field">
+                <label class="form-label">SA ID Number</label>
+                <input type="text" placeholder="9811193200087" class="form-input" id="idNumber"/>
+              </div>
+              <div class="form-field">
+                <label class="form-label">Gender</label>
+                <input type="text" placeholder="Female" class="form-input" id="gender"/>
+              </div>
+              <div class="form-field">
+                <label class="form-label">Date-Of-Birth</label>
+                <input type="text" placeholder="dd-mm-yyyy" class="form-input" id="dob"/>
+              </div>
+              <div class="form-field">
+                <label class="form-label">Age</label>
+                <input type="text" placeholder="28" class="form-input" id="age"/>
+              </div>
+            </div>
+          </section>
+
+          <!-- Contact Details -->
+          <section class="form-section">
+            <h3 class="section-title">Contact Details</h3>
+            <div class="section-divider"></div>
+            <div class="form-grid">
+              <div class="form-field">
+                <label class="form-label">Email Address</label>
+                <input type="email" placeholder="sindi@example.com" class="form-input" id="email"/>
+              </div>
+              <div class="form-field">
+                <label class="form-label">Contact Number</label>
+                <input type="tel" placeholder="+27" class="form-input" id="phone"/>
+              </div>
+            </div>
+          </section>
+
+          <!-- Address Details -->
+          <section class="form-section">
+            <h3 class="section-title">Address Details</h3>
+            <div class="section-divider"></div>
+            <div class="form-grid">
+              <div class="form-field">
+                <label class="form-label">Address Line1</label>
+                <input type="text" placeholder="123  Stay Street" class="form-input" id="addressLine1"/>
+              </div>
+              <div class="form-field">
+                <label class="form-label">City</label>
+                <input type="text" placeholder="Boksburg" class="form-input" id="city"/>
+              </div>
+              <div class="form-field">
+                <label class="form-label">Province</label>
+                <select class="form-select" id="province">
+                  <option>Select Province</option>
+                  <option value="Gauteng">Gauteng</option>
+                  <option value="Western Cape">Western Cape</option>
+                  <option value="Mpumalanga">Mpumalanga</option>
+                  <option value="KwaZulu-Natal">KwaZulu-Natal</option>
+                  <option value="Free-State">Free-State</option>
+                  <option value="Eastern Cape">Eastern Cape</option>
+                  <option value="Northern Cape">Northern Cape</option>
+                  <option value="North West">North West</option>
+                  <option value="Limpopo">Limpopo</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label class="form-label">Postal Code</label>
+                <input type="text" placeholder="1475" class="form-input" id="postalCode"/>
+              </div>
+            </div>
+          </section>
+
+          <!-- Next Of Kin -->
+          <section class="form-section">
+            <h3 class="section-title">Next Of Kin</h3>
+            <div class="section-divider"></div>
+            <div class="form-grid">
+              <div class="form-field">
+                <label class="form-label">Full Name</label>
+                <input type="text" placeholder="Provide next of kin full name" class="form-input" id="nextOfKinName" />
+              </div>
+              <div class="form-field">
+                <label class="form-label">Contact Number</label>
+                <input type="tel" placeholder="+27" class="form-input" id="nextOfKinPhone"/>
+              </div>
+            </div>
+          </section>
+
+          <!-- Banking Details -->
+          <section class="form-section">
+            <h3 class="section-title">Banking details</h3>
+            <div class="section-divider"></div>
+            <div class="form-grid">
+              <div class="form-field">
+                <label class="form-label">Bank Name</label>
+                <input type="text" placeholder="Select your bank from the list." class="form-input text-small" />
+              </div>
+              <div class="form-field">
+                <label class="form-label">Account Holder</label>
+                <input type="text" placeholder="The name registered on the bank account." class="form-input text-small" />
+              </div>
+              <div class="form-field">
+                <label class="form-label">Account Number</label>
+                <input type="text" placeholder="Enter the society's account number." class="form-input text-small" />
+              </div>
+              <div className="form-field">
+                <label class="form-label">Account Type</label>
+                <input type="text" placeholder="Standard or universal branch code" class="form-input text-small" />
+              </div>
+            </div>
+          </section>
+
+          <!-- Upload Documents -->
+          <section class="form-section">
+            <h3 class="section-title">Upload documents</h3>
+            <div class="section-divider"></div>
+            <div class="form-grid">
+              <div class="form-field">
+                <label class="form-label">ID Document</label>
+                <input type="file" class="file-input">
+                <br><br>
+                <label class="form-label">Proof of banking details</label>
+                <input type="file" class="file-input">
+                <br><br>
+                <p id="message"></p>
+              </div>
+            </div>
+          </section>
+
+          <div class="action-buttons">
+            <button class="btn btn-cancel" id="cancel">Cancel</button>
+            <button class="btn btn-update" id="update">Update Profile</button>
+          </div>
+        </div>
+        </div>
+        <!-- Profile Content -->
+
+      </main>
+    </div>
+
+    <script src="../scripts/profile.js"></script>
+    
+</body>
+</html>
+
+
+
