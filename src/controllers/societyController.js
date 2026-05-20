@@ -4,7 +4,7 @@ const membershipModel = require('../models/membership');
 const joinRequestModel = require('../models/joinRequest');
 
 
-//create society page
+
 const createSociety = async (req, res) => {
   try {
     const { societyName, description, monthlyContribution, coverAmount,waitingPeriod,addtionalRules,province,city,maximumMembers,minimumAge } = req.body;
@@ -34,7 +34,33 @@ const createSociety = async (req, res) => {
 };
 
 
-const getUserSocieties = async (req, res) => {
+const requestToJoin = async (req, res) => {
+  try {
+    const user_id = req.user.userId;
+    const society_id = req.body;
+    console.log(society_id.society_id)
+
+    const isMember = await membershipModel.findMember(user_id, society_id.society_id);
+    if (isMember) {
+      return res.status(400).json({ message: 'Already a member' });
+    }
+
+    const existing = await joinRequestModel.findExisting(user_id, society_id.society_id);
+    if (existing) {
+      return res.status(400).json({ message: 'Request already pending' });
+    }
+
+    await joinRequestModel.createRequest(user_id, society_id.society_id);
+
+    res.json({ message: 'Join request sent' });
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+const getMySocieties = async (req, res) => {
   try {
     const user_id = req.user.userId;
 
@@ -47,7 +73,116 @@ const getUserSocieties = async (req, res) => {
   }
 };
 
-//browse page
+
+const getJoinRequests = async (req, res) => {
+  try {
+    const user_id = req.user.userId;
+    const society_id = req.params.id;
+
+    const isAdmin = await membershipModel.isAdmin(user_id, society_id);
+    if (!isAdmin) {
+      return res.status(403).json({ message: 'Admins only' });
+    }
+
+    const requests = await joinRequestModel.getPendingBySociety(society_id);
+
+    res.json(requests);
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+const approveRequest = async (req, res) => {
+  const connection = await db.getConnection();
+
+  try {
+    const user_id = req.user.userId;
+    const request_id = req.params.id;
+
+    const request = await joinRequestModel.getById(request_id);
+
+    if (!request || request.status !== 'pending') {
+      return res.status(400).json({ message: 'Invalid request' });
+    }
+
+    const isAdmin = await membershipModel.isAdmin(user_id, request.society_id);
+    if (!isAdmin) {
+      return res.status(403).json({ message: 'Admins only' });
+    }
+
+    await connection.beginTransaction();
+
+    await membershipModel.addMember(
+      request.user_id,
+      request.society_id,
+      'member',
+      connection
+    );
+
+    await joinRequestModel.updateStatus(request_id, 'approved', connection);
+
+    await connection.commit();
+
+    res.json({ message: 'User approved' });
+
+  } catch (error) {
+    await connection.rollback();
+    res.status(500).json({ message: error.message });
+  } finally {
+    connection.release();
+  }
+};
+
+
+// Reject request
+const rejectRequest = async (req, res) => {
+  try {
+    const user_id = req.user.userId;
+    const request_id = req.params.id;
+
+    const request = await joinRequestModel.getById(request_id);
+
+    if (!request) {
+      return res.status(400).json({ message: 'Invalid request' });
+    }
+
+    const isAdmin = await membershipModel.isAdmin(user_id, request.society_id);
+    if (!isAdmin) {
+      return res.status(403).json({ message: 'Admins only' });
+    }
+
+    await joinRequestModel.updateStatus(request_id, 'rejected');
+
+    res.json({ message: 'Request rejected' });
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const getSocietyMembers = async (req, res) => {
+  try {
+    const user_id = req.user.userId;
+    const society_id = req.params.id;
+
+    //Check if user belongs to this society
+    const isMember = await membershipModel.findMember(user_id, society_id);
+
+    if (!isMember) {
+      return res.status(403).json({ message: 'Access denied' });
+    }
+
+    const members = await membershipModel.getMembersBySociety(society_id);
+
+    res.json(members);
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 const getAllSocieties = async (req, res) => {
     try {
         const userId = req.user.userId;
@@ -67,8 +202,6 @@ const getAllSocieties = async (req, res) => {
     }
 };
 
-
-//load society page
 const getSocietyDetails = async (req, res) => {
 
     const { id } = req.params;
@@ -94,21 +227,58 @@ const getSocietyDetails = async (req, res) => {
 
         // 3. Pending join requests (admin only)
         const [requests] = await db.query(`
-            SELECT jr.request_id, u.first_name, u.last_name
+            SELECT jr.request_id, u.first_name, u.last_name, jr.requested_at
             FROM join_requests jr
             JOIN users u ON jr.user_id = u.user_id
             WHERE jr.society_id = ? AND jr.status = 'pending'
         `, [id]);
 
+        console.log(requests)
+
         // 4. Contributions (recent)
-        const [contributions] = await db.execute(`
-            SELECT c.*, u.first_name, u.last_name
-            FROM contributions c
-            JOIN users u ON c.user_id = u.user_id
-            WHERE c.society_id = ?
-            ORDER BY c.payment_date DESC
-            LIMIT 10
-        `, [id]);
+        // Current month
+        const now = new Date();
+
+        const currentMonth =
+        `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+
+
+        // Contributions + due members for current month
+        const [contributions] = await db.execute(
+        `
+        SELECT 
+            u.user_id,
+            u.first_name,
+            u.last_name,
+
+            c.amount,
+            c.payment_date,
+            c.payment_month,
+
+            CASE
+                WHEN c.contribution_id IS NOT NULL
+                THEN 'paid'
+                ELSE 'due'
+            END AS status
+
+        FROM society_members sm
+
+        JOIN users u
+            ON sm.user_id = u.user_id
+
+        LEFT JOIN contributions c
+            ON c.user_id = sm.user_id
+            AND c.society_id = sm.society_id
+            AND c.payment_month = ?
+
+        WHERE sm.society_id = ?
+
+        ORDER BY
+            status ASC,
+            c.payment_date DESC,
+            u.first_name ASC
+        `,
+        [currentMonth, id]);
 
         // 5. Claims
         const [claims] = await db.execute(`
@@ -128,10 +298,11 @@ const getSocietyDetails = async (req, res) => {
         );
 
         // Total contributions this month
+
         const [months_contributions] = await db.execute(
           `SELECT IFNULL(SUM(amount), 0) AS total
           FROM contributions c
-          WHERE c.society_id = ? AND payment_month = '${new Date().getFullYear()}-0${new Date().getMonth()}'`,
+          WHERE c.society_id = ? AND payment_month = '${now.getFullYear()}-${currentMonth}'`,
           [id]
         );
 
@@ -160,10 +331,49 @@ const getSocietyDetails = async (req, res) => {
     }
 };
 
+const handleJoinRequest = async (req, res) => {
+    const { id } = req.params;
+    const { action } = req.body; // "approve" or "reject"
+  
+    try {
+        const [request] = await db.query(
+            "SELECT * FROM join_requests WHERE request_id = ?",
+            [id]
+        );
+
+        if (!request.length) {
+            return res.status(404).json({ message: "Request not found" });
+        }
+
+        if (action === "approve") {
+            const insert = await db.query(`
+                INSERT INTO society_members (society_id, user_id)
+                VALUES (?, ?)
+            `, [request[0].society_id, request[0].user_id]);
+        }
+
+        const update = await db.query(`
+            UPDATE join_requests 
+            SET status = ? 
+            WHERE request_id = ?
+        `, [action === "approve" ? "approved" : "rejected", id]);
+
+        res.json({ message: `Request ${action}d` });
+
+    } catch (err) {
+        res.status(500).json(err);
+    }
+};
 
 module.exports = {
   createSociety,
-  getUserSocieties,
+  requestToJoin,
+  getMySocieties,
+  getJoinRequests,
+  approveRequest,
+  rejectRequest,
+  getSocietyMembers,
   getAllSocieties,
   getSocietyDetails,
+  handleJoinRequest
 };

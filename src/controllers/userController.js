@@ -60,9 +60,27 @@ const updateNextOfKin =  async (req, res) => {
     }
 }
 
+const updateProfile = async (req, res) => {
+    try {
+        const { addressLine1, city, province, postalCode, nextOfKinName, nextOfKinPhone } = req.body;
+        const user_id = req.user.userId
+
+        // if (req.user.userId != req.params.id) {
+        //     return res.status(403).json({ message: 'Forbidden' });
+        // }
+
+        await userModel.updateProfile(user_id, addressLine1, city, province, postalCode, nextOfKinName, nextOfKinPhone)
+        res.status(201).json({message: "Profile updated successfully!"})
+
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
 module.exports = {
     getUser,
     updateContactDetails,
     updateUserAddress,
-    updateNextOfKin   
+    updateNextOfKin,
+    updateProfile
 }

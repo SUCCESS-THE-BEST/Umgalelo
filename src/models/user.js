@@ -1,10 +1,18 @@
 //database queries
 const db = require('../config/db');
 
-const createUser = async (firstName, lastName, email, phone, idNumber, password) => {
+// const createUser = async (firstName, lastName, email, phone, idNumber, password) => {
+//     const [response] = await db.execute(
+//         'INSERT INTO users (first_name, last_name, email, phone, id_number, password) VALUES (?, ?, ?, ?, ?, ?)',
+//         [firstName, lastName, email, phone, idNumber, password]
+//     );
+//     return response;
+// };
+
+const createUser = async (firstName, lastName, email, phone, idNumber, password, token) => {
     const [response] = await db.execute(
-        'INSERT INTO users (first_name, last_name, email, phone, id_number, password) VALUES (?, ?, ?, ?, ?, ?)',
-        [firstName, lastName, email, phone, idNumber, password]
+        'INSERT INTO users (first_name, last_name, email, phone, id_number, password, verification_token) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        [firstName, lastName, email, phone, idNumber, password, token]
     );
     return response;
 };
@@ -18,6 +26,22 @@ const findUserByEmail = async (email) => {
     return response;
 };
 
+const findByVerificationToken = async (token) => {
+  const [rows] = await db.execute(
+    'SELECT * FROM users WHERE verification_token = ?',
+    [token]
+  );
+  return rows;
+};
+
+const markUserAsVerified = async (token) => {
+  await db.execute(
+    'UPDATE users SET is_verified = true, verification_token = NULL WHERE verification_token = ?',
+    [token]
+  );
+};
+
+
 const findUserById = async (userId) => {
     const [response] = await db.execute(
         'SELECT * FROM users WHERE user_id = ?',
@@ -27,38 +51,69 @@ const findUserById = async (userId) => {
     return response;
 };
 
-const updateContactDetails = async (userId, email, phone) => {
+const updateProfile = async (userId, addressLine1, city, province, postalCode, nextOfKinName, nextOfKinPhone) => {
     const [response] = await db.execute(
-        'UPDATE users SET email = ?, phone = ? WHERE user_id = ?',
-        [email, phone, userId] 
+        'UPDATE users SET address_line1 = ?, city = ?, province = ?, postal_code = ?, next_of_kin_name = ?, next_of_kin_phone = ? WHERE user_id = ?',
+        [addressLine1 || null, city || null, province || null, postalCode || null, nextOfKinName || null, nextOfKinPhone || null, userId]
     );
 
     return response;
+}
+
+const setResetToken = async (email, token, expiry) => {
+
+    const [result] = await db.execute(
+        `
+        UPDATE users
+        SET reset_token = ?,
+            reset_token_expires = ?
+        WHERE email = ?
+        `,
+        [token, expiry, email]
+    );
+
+    return result;
 };
 
-const updateUserAddress = async (userId, addressLine1, city, province, postalCode) => {
-    const [response] = await db.execute(
-        'UPDATE users SET address_line1 = ?, city = ?, province = ?, postal_code = ? WHERE user_id = ?',
-        [addressLine1, city, province, postalCode, userId]
+const findByResetToken = async (token) => {
+
+    const [rows] = await db.execute(
+        `
+        SELECT *
+        FROM users
+        WHERE reset_token = ?
+        AND reset_token_expires > NOW()
+        `,
+        [token]
     );
 
-    return response;
+    return rows;
 };
 
-const updateNextOfKin = async (userId, nextOfKinName, nextOfKinPhone) => {
-    const [response] = await db.execute(
-        'UPDATE users SET next_of_kin_name = ?, next_of_kin_phone = ? WHERE user_id = ?',
-        [nextOfKinName, nextOfKinPhone, userId]
+const updatePassword = async (userId, password) => {
+
+    const [result] = await db.execute(
+        `
+        UPDATE users
+        SET password = ?,
+            reset_token = NULL,
+            reset_token_expires = NULL
+        WHERE user_id = ?
+        `,
+        [password, userId]
     );
 
-    return response;
+    return result;
 };
 
 module.exports = {
     createUser,
     findUserByEmail,
     findUserById,
-    updateContactDetails,
-    updateUserAddress,
-    updateNextOfKin
+    updateProfile,
+    findByVerificationToken,
+    markUserAsVerified,
+    setResetToken,
+    findByResetToken,
+    updatePassword
 }

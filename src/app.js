@@ -1,7 +1,9 @@
 const express = require('express');
 const cors = require('cors');
+const passport = require('./config/passport');
 const app = express();
-app.use(express.json());
+const path = require('path')
+
 
 app.use(cors({
   origin: ['http://127.0.0.1:5501', 'http://localhost:5501'],
@@ -9,7 +11,10 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
+
 app.use(express.json());
+
+app.use(passport.initialize());
 
 const authRoutes = require('./routes/authRoutes');
 app.use('/api/auth', authRoutes);
@@ -20,17 +25,30 @@ app.use('/api/users', userRoutes);
 const societyRoutes = require('./routes/societyRoutes');
 app.use('/api/societies', societyRoutes);
 
-
 const dashboardRoutes = require('./routes/dashboardRoutes');
 app.use('/api/dashboard', dashboardRoutes);
+
+// const financeRoutes = require('./routes/financeRoutes');
+// app.use('/api/finance', financeRoutes);
 
 const joinReqRoutes = require('./routes/joinRequestRoutes');
 app.use('/api/joinRequest', joinReqRoutes);
 
-app.use(cors());
+const contributionRoutes = require('./routes/contributionRoutes');
+app.use('/api/contributions', contributionRoutes);
 
-app.get('/', (req, res) => {
-  res.send('Umgalelo API running...');
-});
+const claimsRoutes = require('./routes/claimRoutes');
+app.use('/api/claims', claimsRoutes);
+
+const eventsRoutes = require('./routes/eventsRoutes');
+app.use('/api/events', eventsRoutes);
+
+const notificationRoutes = require('./routes/notificationRoutes')
+app.use('/api/notifications', notificationRoutes)
+
+
+// app.get('/', (req, res) => {
+//   res.sendFile(path.join(__dirname, './view/html/login.html'));
+// });
 
 module.exports = app;
