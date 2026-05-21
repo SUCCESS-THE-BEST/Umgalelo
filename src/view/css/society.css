@@ -15,6 +15,15 @@
     --white: #ffffff;
     --gray-bg: #f0f0f0;
     --shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+    --primary-gradient: linear-gradient(to bottom, #a96c41, #d99173);
+    --primary-color: #a96c41;
+    --primary-dark: #a55e1d;
+    --text-primary: #3f3f3f;
+    --text-secondary: #777;
+    --bg-white: #ffffff;
+    --bg-gray: #f0f0f0;
+    --sidebar-bg: #6b4038;
 }
 
 body {
@@ -405,6 +414,16 @@ body {
     font-family: 'Inknut Antiqua', serif;
     color: white;
     flex-shrink: 0;
+
+    width: 62px;
+    height: 61px;
+    background: var(--primary-gradient);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
 }
 
 .member-info {
@@ -419,8 +438,9 @@ body {
 }
 
 .member-since {
-    font-size: 16px;
-    color: var(--text-light);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
 }
 
 .member-badge {
@@ -440,7 +460,79 @@ body {
     gap: 10px;
 }
 
-/* Modal */
+/* Events List */
+/* .events-list {
+    background: white;
+    border-radius: 30px;
+    box-shadow: var(--shadow);
+    padding: 20px;
+} */
+
+.event-card {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.event-card:last-child {
+    border-bottom: none;
+}
+
+.event-card:hover {
+    background: rgba(0, 0, 0, 0.02);
+}
+
+.event-card.hidden {
+    display: none;
+}
+
+.event-date {
+    margin-right: 25px;
+}
+
+.date-badge {
+    width: 62px;
+    height: 61px;
+    background: var(--primary-gradient);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.date-badge .day {
+    font-size: 16px;
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.date-badge .month {
+    font-size: 16px;
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.event-details h3 {
+    font-size: 16px;
+    font-weight: 600;
+    font-family: 'DM Sans', sans-serif;
+    margin-bottom: 4px;
+}
+
+.event-details p {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+/* =================== Modal ======================= */
 .modal {
     display: none;
     position: fixed;

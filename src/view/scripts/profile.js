@@ -8,6 +8,7 @@ window.onload = async () => {
     await loadUser();
     await loadSidebarSocieties();
     await loadNotifications();
+    await loadSocieties();
 };
 
 const loadUserData = async () => {
@@ -205,6 +206,7 @@ function parseIDNumber(id) {
   
 }
 
+// =============== NOTIFICATIONS ==================
 async function loadNotifications() {
 
     try {
@@ -379,5 +381,114 @@ async function handleNotificationClick(
     } catch (err) {
 
         console.log(err);
+    }
+}
+
+// =================== LOAD SOCIETY CARDS ====================
+const loadSocieties = async () => {
+
+  const res = await fetch(
+    'http://localhost:3000/api/dashboard/societies',
+    {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
+  );
+
+  const societies = await res.json();
+
+  const container =
+    document.querySelector('.society-list');
+
+  container.innerHTML = '';
+
+  document.getElementById('count').innerText =
+    `(${societies.length})`;
+
+  societies.forEach(s => {
+
+    const initials = s.society_name
+      .split(' ')
+      .map(w => w[0])
+      .join('')
+      .substring(0, 2);
+
+    const canLeave = s.role !== 'admin';
+
+    const card = `
+      <div class="society-item-wrapper">
+
+        <div 
+          class="society-item"
+          onclick="openSociety(${s.id}, '${s.role}')"
+        >
+          <div class="society-avatar">
+            ${initials}
+          </div>
+
+          <div class="society-info">
+            <h3>${s.society_name}</h3>
+            <p>Joined ${s.joined}</p>
+          </div>
+        </div>
+
+        ${
+          canLeave
+          ? `
+            <button
+              class="leave-btn"
+              onclick="event.stopPropagation();
+              leaveSociety(${s.id})"
+            >
+              Leave
+            </button>
+          `
+          : `
+            <span class="admin-badge-label">
+              Admin
+            </span>
+          `
+        }
+
+      </div>
+    `;
+
+    container.innerHTML += card;
+  });
+};
+
+// ============ LEAVE SOCIETY ================
+async function leaveSociety(societyId) {
+
+    const confirmLeave = confirm(
+        'Are you sure you want to leave this society?'
+    );
+
+    if (!confirmLeave) return;
+
+    try {
+
+        const res = await fetch(
+            `http://localhost:3000/api/memberships/leave/${societyId}`,
+            {
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        const data = await res.json();
+
+        alert(data.message);
+
+        loadSocieties();
+        loadSidebarSocieties();
+
+    } catch (err) {
+
+        console.log(err);
+        alert('Error leaving society');
     }
 }
