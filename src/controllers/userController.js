@@ -77,10 +77,49 @@ const updateProfile = async (req, res) => {
     }
 }
 
+const uploadDocuments = async (req, res) => {
+    try {
+        const userId = req.user.userId;
+
+        const profilePhoto = req.files.profilePhoto
+            ? `/uploads/profile/${req.files.profilePhoto[0].filename}`
+            : null;
+
+        const idDocument = req.files.idDocument
+            ? `/uploads/profile/${req.files.idDocument[0].filename}`
+            : null;
+
+        const bankingProof = req.files.bankingProof
+            ? `/uploads/profile/${req.files.bankingProof[0].filename}`
+            : null;
+
+        await userModel.updateUserDocuments(
+            userId,
+            profilePhoto,
+            idDocument,
+            bankingProof
+        );
+
+        res.json({
+            message: 'Documents uploaded successfully',
+            profilePhoto,
+            idDocument,
+            bankingProof
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: 'Upload failed'
+        });
+    }
+};
+
 module.exports = {
     getUser,
     updateContactDetails,
     updateUserAddress,
     updateNextOfKin,
-    updateProfile
+    updateProfile,
+    uploadDocuments
 }

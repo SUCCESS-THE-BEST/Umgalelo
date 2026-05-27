@@ -1,17 +1,17 @@
 // ================= TOKEN HANDLING =================
-const params = new URLSearchParams(window.location.search);
-let token = params.get('token');
+// const params = new URLSearchParams(window.location.search);
+// let token = params.get('token');
 
-if (token) {
-    localStorage.setItem('token', token);
-    window.history.replaceState({}, document.title, "dashboard.html");
-} else {
-    token = localStorage.getItem('token');
-}
+// if (token) {
+//     localStorage.setItem('token', token);
+//     window.history.replaceState({}, document.title, "dashboard.html");
+// } else {
+//     token = localStorage.getItem('token');
+// }
 
-if (!token) {
-    window.location.href = 'login.html';
-}
+// if (!token) {
+//     window.location.href = 'login.html';
+// }
 
 // ================= LOAD PAGE =================
 window.onload = async () => {
@@ -23,73 +23,73 @@ window.onload = async () => {
   await loadNotifications();
 };
 
-// ================= USER =================
-const loadUser = async () => {
-    const res = await fetch('http://localhost:3000/api/auth/profile', {
-        headers: { Authorization: `Bearer ${token}` }
-    });
+// // ================= USER =================
+// const loadUser = async () => {
+//     const res = await fetch('http://localhost:3000/api/auth/profile', {
+//         headers: { Authorization: `Bearer ${token}` }
+//     });
 
-    const [user] = await res.json();
+//     const [user] = await res.json();
 
-    // Update ALL user name/email occurrences
-    document.querySelectorAll('.user-info h3').forEach(el => {
-        el.innerText = user.first_name + ' ' + user.last_name;
-    });
+//     // Update ALL user name/email occurrences
+//     document.querySelectorAll('.user-info h3').forEach(el => {
+//         el.innerText = user.first_name + ' ' + user.last_name;
+//     });
 
-    document.querySelectorAll('.user-info p').forEach(el => {
-        el.innerText = user.email;
-    });
+//     document.querySelectorAll('.user-info p').forEach(el => {
+//         el.innerText = user.email;
+//     });
 
-    // Update date
-    const dateEl = document.querySelector('.page-title h3');
-    const date = new Date();
+//     // Update date
+//     const dateEl = document.querySelector('.page-title h3');
+//     const date = new Date();
 
-    const formatter = new Intl.DateTimeFormat('en-ZA', { 
-        weekday: 'long',
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-    });
+//     const formatter = new Intl.DateTimeFormat('en-ZA', { 
+//         weekday: 'long',
+//         day: 'numeric',
+//         month: 'long',
+//         year: 'numeric'
+//     });
 
-    dateEl.textContent = formatter.format(date);
-};
+//     dateEl.textContent = formatter.format(date);
+// };
 
-// ================= LOAD SIDEBAR SOCIETIES ========================
-const loadSidebarSocieties = async () => {
-  const res = await fetch('http://localhost:3000/api/dashboard/societies', {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  });
+// // ================= LOAD SIDEBAR SOCIETIES ========================
+// const loadSidebarSocieties = async () => {
+//   const res = await fetch('http://localhost:3000/api/dashboard/societies', {
+//     headers: {
+//       Authorization: `Bearer ${token}`
+//     }
+//   });
 
-  const societies = await res.json();
+//   const societies = await res.json();
 
-  const container = document.getElementById('sidebarSocieties');
-  container.innerHTML = '';
+//   const container = document.getElementById('sidebarSocieties');
+//   container.innerHTML = '';
 
-  societies.forEach(s => {
-    const isAdmin = s.role === 'admin';
+//   societies.forEach(s => {
+//     const isAdmin = s.role === 'admin';
     
-    const item = `
-      <div class="nav-item" onclick="openSociety(${s.id}, '${s.role}')">
-        <img src="../images/networking.png" alt="" />
-        <span>${s.society_name}</span>
-        ${isAdmin ? '<span class="admin-tag">Admin</span>' : ''}
-      </div>
-    `;
+//     const item = `
+//       <div class="nav-item" onclick="openSociety(${s.id}, '${s.role}')">
+//         <img src="../images/networking.png" alt="" />
+//         <span>${s.society_name}</span>
+//         ${isAdmin ? '<span class="admin-tag">Admin</span>' : ''}
+//       </div>
+//     `;
 
-    container.innerHTML += item;
-  });
-};
+//     container.innerHTML += item;
+//   });
+// };
 
-// ====================== OPEN SOCIETY ON CARD / SIDEBAR ===========================
-const openSociety = (id, role) => {
+// // ====================== OPEN SOCIETY ON CARD / SIDEBAR ===========================
+// const openSociety = (id, role) => {
 
-  localStorage.setItem("society_id", id);
-  localStorage.setItem("role", role);
+//   localStorage.setItem("society_id", id);
+//   localStorage.setItem("role", role);
 
-  window.location.href = `society.html?id=${id}`;
-};
+//   window.location.href = `society.html?id=${id}`;
+// };
 
 // =================== LOAD SOCIETY CARDS ====================
 const loadSocieties = async () => {
@@ -165,6 +165,15 @@ const loadPayments = async () => {
   // Keep title
   container.innerHTML = `<h2>Payment History</h2>`;
 
+  if (payments.length === 0) {
+
+        container.innerHTML =
+            `<h2>Payment History</h2>
+            <p>No payment history</p>`;
+
+        return;
+    }
+
   payments.forEach(p => {
     const item = `
       <div class="payment-item">
@@ -181,10 +190,10 @@ const loadPayments = async () => {
 };
 
 // ================= LOGOUT =================
-const logout = () => {
-  localStorage.removeItem('token');
-  window.location.href = 'login.html';
-};
+// const logout = () => {
+//   localStorage.removeItem('token');
+//   window.location.href = 'login.html';
+// };
 
 function toggleSidebar() {
   document.querySelector('.sidebar').classList.toggle('open');
@@ -354,14 +363,8 @@ async function markAsRead(notificationId) {
     }
 }
 
-async function handleNotificationClick(
-    notificationId,
-    societyId,
-    type
-) {
-
+async function handleNotificationClick(notificationId, societyId, type) {
     try {
-
         await fetch(
             `http://localhost:3000/api/notifications/read/${notificationId}`,
             {
@@ -372,35 +375,35 @@ async function handleNotificationClick(
             }
         );
 
-        // ================= WELCOME =================
         if (type === 'welcome') {
-
-            window.location.href =
-                'browse.html';
-
+            window.location.href = 'browse.html';
             return;
         }
 
-        // ================= JOIN REQUEST SENT =================
-        if (type === 'join_request_sent') {
-
+        if (
+            type === 'join_request_sent' ||
+            type === 'rejected'
+        ) {
+            loadNotifications();
             return;
         }
 
-        // ================= SOCIETY RELATED =================
-        if (societyId) {
+        if (type === 'approved' && societyId) {
+            localStorage.setItem('society_id', societyId);
+            window.location.href = `society.html?id=${societyId}`;
+            return;
+        }
 
-            localStorage.setItem(
-                'society_id',
-                societyId
-            );
-
-            window.location.href =
-                `society.html?id=${societyId}`;
+        if (
+            type !== 'join_request_sent' &&
+            type !== 'rejected' &&
+            societyId
+        ) {
+            localStorage.setItem('society_id', societyId);
+            window.location.href = `society.html?id=${societyId}`;
         }
 
     } catch (err) {
-
         console.log(err);
     }
 }

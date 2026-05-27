@@ -188,9 +188,60 @@ const getClaimsSummary = async (req, res) => {
   }
 };
 
+
+// =================== DELETE CLAIMS ======================
+const deleteClaim = async (req, res) => {
+
+    try {
+
+        const claimId = req.params.id;
+
+        const userId = req.user.userId;
+
+        const claims = await claimModel.getById(claimId);
+
+        if (claims.length === 0) {
+
+            return res.status(404).json({
+                message: 'Claim not found'
+            });
+        }
+
+        // ================= OWNER CHECK =================
+        if (claims.user_id !== userId) {
+
+            return res.status(403).json({
+                message: 'Unauthorized'
+            });
+        }
+
+        // ================= STATUS CHECK =================
+        if (claims.status !== 'pending') {
+
+            return res.status(400).json({
+                message:
+                'Only pending claims can be cancelled'
+            });
+        }
+
+        const response = await claimModel.cancelClaim(claimId)
+
+        res.json({
+            message: 'Claim cancelled'
+        });
+
+    } catch (err) {
+
+        res.status(500).json({
+            message: err.message
+        });
+    }
+};
+
 module.exports = {
     submitClaim,
     getClaims,
     updateClaimStatus,
-    getClaimsSummary
+    getClaimsSummary,
+    deleteClaim
 }

@@ -285,3 +285,189 @@
         padding: 15px;
     }
 }
+
+
+/* ============ SHARED RESPONSIVE FIX ============ */
+
+html,
+body {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.create-society-container {
+    width: 100%;
+}
+
+/* Sidebar + main layout */
+
+
+.main-content {
+    width: calc(100% - 360px);
+    min-height: 100vh;
+}
+
+/* General cards */
+.card,
+.claim-card,
+.summary-card,
+.payments-table-card {
+    max-width: 100%;
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 280px;
+    }
+
+    .main-content {
+        margin-left: 280px;
+        width: calc(100% - 280px);
+    }
+
+    .claims-header,
+    .payments-controls {
+        padding: 25px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .create-society-container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        padding: 20px;
+    }
+
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .claims-header,
+    .payments-controls {
+        padding: 20px 15px;
+    }
+
+    .claim-header {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .claim-details-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .claim-actions {
+        flex-direction: column;
+    }
+
+    .claim-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .summary-row {
+        gap: 15px;
+        align-items: flex-start;
+    }
+
+    .payments-controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+    }
+
+    .filter-group {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .filter-group .btn {
+        flex: 1;
+        min-width: 110px;
+        justify-content: center;
+    }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+    .sidebar-logo img {
+        max-width: 150px;
+    }
+
+    .user-profile {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .claim-name {
+        font-size: 20px;
+    }
+
+    .detail-box {
+        padding: 15px;
+    }
+
+    .summary-row {
+        flex-direction: column;
+    }
+
+    .summary-value {
+        text-align: left;
+    }
+
+    .payments-table-card {
+        margin: 15px;
+        overflow-x: hidden;
+    }
+
+    .payments-table,
+    .payments-table tbody,
+    .payments-table tr,
+    .payments-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .payments-table thead {
+        display: none;
+    }
+
+    .payments-table tr {
+        margin-bottom: 15px;
+        padding: 15px;
+        border: 1px solid var(--border-color);
+        border-radius: 14px;
+        background: white;
+    }
+
+    .payments-table td {
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .payments-table td:last-child {
+        border-bottom: none;
+    }
+
+    .payments-table td::before {
+        content: attr(data-label);
+        font-weight: 500;
+        color: var(--text-secondary);
+    }
+
+    .member-cell {
+        justify-content: flex-end;
+        text-align: right;
+    }
+}

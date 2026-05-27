@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Soweto Solidarity Circle</title>
-    <link rel="stylesheet" href="../css/common-society.css">
     <link rel="stylesheet" href="../css/events.css">
+    <link rel="stylesheet" href="../css/common-society.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Josefin+Sans:wght@600&family=DM+Sans:wght@400;600&family=Port+Lligat+Sans&family=Inknut+Antiqua:wght@900&display=swap" rel="stylesheet">
@@ -113,7 +113,7 @@
                 </div>
             </section>
             <nav class="tabs">
-                <a href="#" class="tab">Overview</a>
+                <a href="society.html" class="tab">Overview</a>
                 <a href="payments.html" class="tab">Payments</a>
                 <a href="claims.html" class="tab">Claims</a>
                 <a href="events.html" class="tab active">Events</a>
@@ -135,7 +135,7 @@
             </div>
 
             <div class="events-list">
-                <div class="event-card" data-event-type="funeral" data-event-id="1">
+                <!-- <div class="event-card" data-event-type="funeral" data-event-id="1">
                     <div class="event-date">
                         <div class="date-badge">
                             <span class="day">22</span>
@@ -172,7 +172,7 @@
                         <h3>May Monthly Meeting</h3>
                         <p>14:00 · 47 Moema Street, Meadowlands · Nomsa Mthembu</p>
                     </div>
-                </div>
+                </div> -->
             </div>
         </section>
     </main>
@@ -185,7 +185,7 @@
             <form class="form">
                 <div class="form-group"><label>Member</label><input type="text" value="Sindi Gumede" id="member" readonly></div>
                 <div class="form-group"><label>Society</label>
-                    <input type="text" id="society-name" placeholder="society-name">
+                    <input type="text" id="society-name" placeholder="society-name" readonly>
                 </div>
                 <div class="form-row">
                     <div class="form-group"><label>Amount</label><input type="text" placeholder="R150" id="amount"></div>
@@ -194,8 +194,8 @@
                     </div>
                 </div>
                 <div class="form-actions">
-                    <button type="button" class="btn btn-outline" id="closePaymentModal">Cancel</button>
-                    <button type="submit" class="btn btn-primary" id="submitPayment">Confirm Payment</button>
+                    <button type="button" class="btn modal-btn btn-outline" id="closePaymentModal">Cancel</button>
+                    <button type="submit" class="btn modal-btn btn-primary" id="submitPayment">Confirm Payment</button>
                 </div>
             </form>
         </div>
@@ -206,7 +206,7 @@
             <form class="form">
                 <div class="form-group"><label>Member</label><input type="text" value="Sindi Gumede" id="member-name" readonly></div>
                 <div class="form-group"><label>Society</label>
-                    <input type="text" id="societyname" placeholder="society name">
+                    <input type="text" id="societyname" placeholder="society name" readonly>
                 </div>
                 <div class="form-group"><label>Full Name Of Deceased *</label><input type="text"  id="deceased-name" placeholder="e.g. Zama Gumede" required></div>
                 <div class="form-row">
@@ -228,8 +228,8 @@
                 </div>
                 
                 <div class="form-actions">
-                    <button type="button" class="btn btn-outline" id="closeClaimModal">Cancel</button>
-                    <button type="submit" class="btn btn-primary" id="submitClaim">Confirm Payment</button>
+                    <button type="button" class="btn modal-btn btn-outline" id="closeClaimModal">Cancel</button>
+                    <button type="submit" class="btn modal-btn btn-primary" id="submitClaim">Confirm Payment</button>
                 </div>
             </form>
         </div>
@@ -289,8 +289,8 @@
                 </div>
 
                 <div class="form-actions">
-                    <button type="button" class="btn btn-outline" id="cancelAddEvent">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Add to Calendar</button>
+                    <button type="button" class="btn modal-btn btn-outline" id="cancelAddEvent">Cancel</button>
+                    <button type="submit" class="btn modal-btn btn-primary">Add to Calendar</button>
                 </div>
             </form>
         </div>
@@ -327,9 +327,60 @@
         </div>
     </div>
 
+    <!-- Floating Chat Button -->
+<div class="chat-toggle" id="chatToggle">
+        <img src="../images/chat.png" alt="chat-icon" class="chat-icon" width="30px">
+    </div>
+
+    <!-- Chat Popup -->
+    <div class="chat-popup" id="chatPopup">
+
+        <div class="chat-header">
+            <h3>Society Chat</h3>
+            <button id="closeChat">✕</button>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+        </div>
+
+        <div id="typingIndicator"></div>
+        <div class="chat-input-area">
+            <input
+                type="text"
+                id="chatInput"
+                placeholder="Type a message..."
+            />
+
+            <button id="sendMessageBtn">
+                Send
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+const paymentModal=document.getElementById('paymentModal');
+const claimModal=document.getElementById('claimModal');
+const payNowBtn=document.getElementById('payNowBtn');
+const submitClaimBtn=document.getElementById('submitClaimBtn');
+const closePaymentModal=document.getElementById('closePaymentModal');
+const closeClaimModal=document.getElementById('closeClaimModal');
+payNowBtn.addEventListener('click',()=>{paymentModal.classList.add('active');});
+submitClaimBtn.addEventListener('click',()=>{claimModal.classList.add('active');});
+closePaymentModal.addEventListener('click',()=>{paymentModal.classList.remove('active');});
+closeClaimModal.addEventListener('click',()=>{claimModal.classList.remove('active');});
+paymentModal.addEventListener('click',(e)=>{if(e.target===paymentModal){paymentModal.classList.remove('active');}});
+claimModal.addEventListener('click',(e)=>{if(e.target===claimModal){claimModal.classList.remove('active');}});
+//document.addEventListener('keydown',(e)=>{if(e.key==='Escape'){paymentModal.classList.remove('active');claimModal.classList.remove('active');}});
+
+    </script>
+
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script src="../scripts/common.js"></script>
     <script src="../scripts/events.js"></script>
 
     <script>
+// Modal elements
 const addEventModal = document.getElementById('addEventModal');
 const eventDetailsModal = document.getElementById('eventDetailsModal');
 const addEventBtn = document.getElementById('addEventBtn');
@@ -385,23 +436,41 @@ eventCards.forEach(card => {
         document.body.style.overflow = 'hidden';
     });
 });
+
+// Mobile sidebar toggle
+if (mobileMenuToggle) {
+    mobileMenuToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('open');
+    });
+}
+
+// Close sidebar when clicking on main content (mobile)
+if (mainContent) {
+    mainContent.addEventListener('click', () => {
+        if (window.innerWidth <= 968 && sidebar.classList.contains('open')) {
+            sidebar.classList.remove('open');
+        }
+    });
+}
+
+// Close sidebar on window resize
+window.addEventListener('resize', () => {
+    if (window.innerWidth > 968 && sidebar) {
+        sidebar.classList.remove('open');
+    }
+});
+
+// Close modal with Escape key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        if (addEventModal) addEventModal.classList.remove('active');
+        if (eventDetailsModal) eventDetailsModal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+});
+
     </script>
 
 
-    <script>
-const paymentModal=document.getElementById('paymentModal');
-const claimModal=document.getElementById('claimModal');
-const payNowBtn=document.getElementById('payNowBtn');
-const submitClaimBtn=document.getElementById('submitClaimBtn');
-const closePaymentModal=document.getElementById('closePaymentModal');
-const closeClaimModal=document.getElementById('closeClaimModal');
-payNowBtn.addEventListener('click',()=>{paymentModal.classList.add('active');});
-submitClaimBtn.addEventListener('click',()=>{claimModal.classList.add('active');});
-closePaymentModal.addEventListener('click',()=>{paymentModal.classList.remove('active');});
-closeClaimModal.addEventListener('click',()=>{claimModal.classList.remove('active');});
-paymentModal.addEventListener('click',(e)=>{if(e.target===paymentModal){paymentModal.classList.remove('active');}});
-claimModal.addEventListener('click',(e)=>{if(e.target===claimModal){claimModal.classList.remove('active');}});
-//document.addEventListener('keydown',(e)=>{if(e.key==='Escape'){paymentModal.classList.remove('active');claimModal.classList.remove('active');}});
-    </script>
 </body>
 </html>

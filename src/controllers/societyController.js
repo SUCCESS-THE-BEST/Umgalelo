@@ -2,7 +2,7 @@ const db = require('../config/db');
 const societyModel = require('../models/society');
 const membershipModel = require('../models/membership');
 const joinRequestModel = require('../models/joinRequest');
-
+const notificationModel = require('../models/notifications')
 
 
 const createSociety = async (req, res) => {
@@ -21,10 +21,22 @@ const createSociety = async (req, res) => {
         return res.status(400).json({message: "society already exists"});
     }
 
-    const result = await societyModel.createSociety(societyName, description, monthlyContribution, coverAmount,waitingPeriod,addtionalRules,province,city,maximumMembers,minimumAge, user_id);
+    const result = await societyModel.createSociety(
+      societyName, description, monthlyContribution, coverAmount,waitingPeriod,
+      addtionalRules,province,city,maximumMembers,minimumAge, user_id);
+      
     const society_id = result.insertId;
 
     await membershipModel.addMember(user_id, society_id, 'admin');
+
+    // ================= NOTIFY USER =================
+    await notificationModel.createNotification(
+        user_id,
+        society_id,
+        `Your society “${societyName}” has been created successfully. 
+        Members can now discover, request to join, and contribute to your society.`,
+        'Created'
+    );
 
     res.status(201).json({ message: 'Society created' });
 
@@ -302,7 +314,7 @@ const getSocietyDetails = async (req, res) => {
         const [months_contributions] = await db.execute(
           `SELECT IFNULL(SUM(amount), 0) AS total
           FROM contributions c
-          WHERE c.society_id = ? AND payment_month = '${now.getFullYear()}-${currentMonth}'`,
+          WHERE c.society_id = ? AND payment_month = '${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}'`,
           [id]
         );
 

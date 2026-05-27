@@ -466,9 +466,9 @@
     z-index: 1000;
     justify-content:right;
     height: 100vh;
-}
+} */
 
-.modal.active {
+/* .modal.active {
     display: flex;
 }
 
@@ -756,5 +756,220 @@ textarea.form-control {
 
     .tab-btn {
         font-size: 14px;
+    }
+}
+
+/* ============ EVENTS PAGE RESPONSIVE FIX ============ */
+
+html,
+body {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.main-content {
+    min-height: 100vh;
+}
+
+.society-header {
+    flex-wrap: wrap;
+}
+
+.society-info h1 {
+    font-size: clamp(26px, 4vw, 48px);
+    word-break: break-word;
+}
+
+.tabs {
+    white-space: nowrap;
+}
+
+.events-section {
+    padding: 30px;
+}
+
+.section-header {
+    flex-wrap: wrap;
+}
+
+.filter-buttons {
+    flex-wrap: wrap;
+}
+
+.events-list {
+    width: 100%;
+}
+
+.event-card {
+    gap: 20px;
+}
+
+.event-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.event-details h3,
+.event-details p {
+    word-break: break-word;
+}
+
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 280px;
+    }
+
+    .main-content {
+        margin-left: 280px;
+        width: calc(100% - 280px);
+    }
+
+    .society-header {
+        padding: 30px;
+    }
+
+    .events-section {
+        padding: 25px;
+    }
+}
+
+@media (max-width: 768px) {
+    .mobile-menu-toggle {
+        display: block;
+    }
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 280px;
+        height: 100vh;
+        z-index: 100;
+        transform: translateX(-100%);
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .society-header {
+        position: relative;
+        padding: 85px 20px 25px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header-actions {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .header-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .tabs {
+        padding: 12px 15px;
+        gap: 15px;
+    }
+
+    .events-section {
+        padding: 20px 15px;
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .filter-buttons {
+        width: 100%;
+    }
+
+    .filter-btn {
+        flex: 1;
+        min-width: 110px;
+    }
+
+    .add-event-btn {
+        width: 100%;
+        margin-left: 0;
+        justify-content: center;
+    }
+
+    .events-list {
+        border-radius: 20px;
+        padding: 10px;
+    }
+
+    .event-card {
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar {
+        width: 85%;
+    }
+
+    .sidebar-logo img {
+        max-width: 150px;
+    }
+
+    .user-profile {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .society-logo {
+        width: 65px;
+        height: 65px;
+    }
+
+    .society-info h1 {
+        font-size: 26px;
+    }
+
+    .event-card {
+        flex-direction: column;
+        padding: 18px 12px;
+    }
+
+    .event-date {
+        margin-right: 0;
+    }
+
+    .date-badge {
+        width: 58px;
+        height: 58px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .form-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .modal-content {
+        padding: 25px 18px;
+        width: 95%;
+    }
+
+    .modal-title,
+    .modal h2 {
+        font-size: 26px;
     }
 }

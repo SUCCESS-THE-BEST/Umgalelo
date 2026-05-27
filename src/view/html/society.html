@@ -192,7 +192,7 @@
             <form class="form">
                 <div class="form-group"><label>Member</label><input type="text" value="Sindi Gumede" id="member" readonly></div>
                 <div class="form-group"><label>Society</label>
-                    <input type="text" id="society-name" placeholder="society-name">
+                    <input type="text" id="society-name" placeholder="society-name" readonly>
                 </div>
                 <div class="form-row">
                     <div class="form-group"><label>Amount</label><input type="text" placeholder="R150" id="amount"></div>
@@ -201,8 +201,8 @@
                     </div>
                 </div>
                 <div class="form-actions">
-                    <button type="button" class="btn btn-outline" id="closePaymentModal">Cancel</button>
-                    <button type="submit" class="btn btn-primary" id="submitPayment">Confirm Payment</button>
+                    <button type="button" class="btn modal-btn btn-outline" id="closePaymentModal">Cancel</button>
+                    <button type="submit" class="btn modal-btn btn-primary" id="submitPayment">Confirm Payment</button>
                 </div>
             </form>
         </div>
@@ -213,7 +213,7 @@
             <form class="form">
                 <div class="form-group"><label>Member</label><input type="text" value="Sindi Gumede" id="member-name" readonly></div>
                 <div class="form-group"><label>Society</label>
-                    <input type="text" id="societyname" placeholder="society name">
+                    <input type="text" id="societyname" placeholder="society name" readonly>
                 </div>
                 <div class="form-group"><label>Full Name Of Deceased *</label><input type="text"  id="deceased-name" placeholder="e.g. Zama Gumede" required></div>
                 <div class="form-row">
@@ -235,14 +235,43 @@
                 </div>
                 
                 <div class="form-actions">
-                    <button type="button" class="btn btn-outline" id="closeClaimModal">Cancel</button>
-                    <button type="submit" class="btn btn-primary" id="submitClaim">Confirm Payment</button>
+                    <button type="button" class="btn modal-btn btn-outline" id="closeClaimModal">Cancel</button>
+                    <button type="submit" class="btn modal-btn btn-primary" id="submitClaim">Confirm Payment</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <script src="../scripts/society.js"></script>
+<!-- Floating Chat Button -->
+<div class="chat-toggle" id="chatToggle">
+        <img src="../images/chat.png" alt="chat-icon" class="chat-icon" width="30px">
+    </div>
+
+    <!-- Chat Popup -->
+    <div class="chat-popup" id="chatPopup">
+
+        <div class="chat-header">
+            <h3>Society Chat</h3>
+            <button id="closeChat">✕</button>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+        </div>
+
+        <div id="typingIndicator"></div>
+        <div class="chat-input-area">
+            <input
+                type="text"
+                id="chatInput"
+                placeholder="Type a message..."
+            />
+
+            <button id="sendMessageBtn">
+                Send
+            </button>
+        </div>
+
+    </div>
 
     <script>
 const paymentModal=document.getElementById('paymentModal');
@@ -258,6 +287,11 @@ closeClaimModal.addEventListener('click',()=>{claimModal.classList.remove('activ
 paymentModal.addEventListener('click',(e)=>{if(e.target===paymentModal){paymentModal.classList.remove('active');}});
 claimModal.addEventListener('click',(e)=>{if(e.target===claimModal){claimModal.classList.remove('active');}});
 //document.addEventListener('keydown',(e)=>{if(e.key==='Escape'){paymentModal.classList.remove('active');claimModal.classList.remove('active');}});
+
     </script>
+
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script src="../scripts/common.js"></script>
+    <script src="../scripts/society.js"></script>
 </body>
 </html>

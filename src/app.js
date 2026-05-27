@@ -46,6 +46,10 @@ app.use('/api/events', eventsRoutes);
 const notificationRoutes = require('./routes/notificationRoutes')
 app.use('/api/notifications', notificationRoutes)
 
+const messageRoutes = require('./routes/messageRoutes');
+app.use('/api/messages', messageRoutes);
+
+app.use('/uploads', express.static('uploads'));
 
 // app.get('/', (req, res) => {
 //   res.sendFile(path.join(__dirname, './view/html/login.html'));
