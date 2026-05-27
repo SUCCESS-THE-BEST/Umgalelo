@@ -1,4 +1,4 @@
-let token = localStorage.getItem('token')
+// let token = localStorage.getItem('token')
 
 window.onload = async () => {
   await loadUser();
@@ -7,58 +7,58 @@ window.onload = async () => {
 };
 
 // ========================= LOAD SIDEBAR USER INFO =============================
-const loadUser = async () => {
-    const res = await fetch('http://localhost:3000/api/auth/profile', {
-        headers: {
-        Authorization: `Bearer ${token}`
-        }
-    });
+// const loadUser = async () => {
+//     const res = await fetch('http://localhost:3000/api/auth/profile', {
+//         headers: {
+//         Authorization: `Bearer ${token}`
+//         }
+//     });
 
-    const [user] = await res.json();
-    console.log(user)
-    document.getElementById('userName').innerText = user.first_name + ' ' + user.last_name;
-    document.getElementById('userEmail').innerText = user.email;
+//     const [user] = await res.json();
+//     console.log(user)
+//     document.getElementById('userName').innerText = user.first_name + ' ' + user.last_name;
+//     document.getElementById('userEmail').innerText = user.email;
     
-};
+// };
 
 
 // =========================== LOAD SIDEBAR SOCIETIES ==============================
-const loadSidebarSocieties = async () => {
-  const res = await fetch('http://localhost:3000/api/dashboard/societies', {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  });
+// const loadSidebarSocieties = async () => {
+//   const res = await fetch('http://localhost:3000/api/dashboard/societies', {
+//     headers: {
+//       Authorization: `Bearer ${token}`
+//     }
+//   });
 
-  const societies = await res.json();
+//   const societies = await res.json();
 
-  const container = document.getElementById('sidebarSocieties');
-  container.innerHTML = '';
+//   const container = document.getElementById('sidebarSocieties');
+//   container.innerHTML = '';
 
-  societies.forEach(s => {
-    const isAdmin = s.role === 'admin';
+//   societies.forEach(s => {
+//     const isAdmin = s.role === 'admin';
 
-    const item = `
-      <div class="nav-item" onclick="openSociety(${s.id}, '${s.role}')">
-        <img src="../images/networking.png" alt="" />
-        <span>${s.society_name}</span>
-        ${isAdmin ? '<span class="admin-tag">Admin</span>' : ''}
-      </div>
-    `;
+//     const item = `
+//       <div class="nav-item" onclick="openSociety(${s.id}, '${s.role}')">
+//         <img src="../images/networking.png" alt="" />
+//         <span>${s.society_name}</span>
+//         ${isAdmin ? '<span class="admin-tag">Admin</span>' : ''}
+//       </div>
+//     `;
 
-    container.innerHTML += item;
-  });
-};
+//     container.innerHTML += item;
+//   });
+// };
 
 
 // ================= OPEN SOCIETY ON SIDEBAR ============================
-const openSociety = (id, role) => {
+// const openSociety = (id, role) => {
 
-  localStorage.setItem("society_id", id);
-  localStorage.setItem("role", role);
+//   localStorage.setItem("society_id", id);
+//   localStorage.setItem("role", role);
 
-  window.location.href = `society.html?id=${id}`;
-};
+//   window.location.href = `society.html?id=${id}`;
+// };
 
 
 const API = "http://localhost:3000/api/societies/browse";
@@ -105,6 +105,9 @@ function renderSocieties(societies) {
     const container = document.querySelector(".societies-grid");
     container.innerHTML = "";
 
+    if (societies.length === 0){
+        container.innerHTML = "No societies found";
+    }
     societies.forEach(s => {
         const initials = s.society_name
             .split(" ")
