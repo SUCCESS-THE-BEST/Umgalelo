@@ -9,11 +9,12 @@
 <body>
     <div class="registration-container">
 
-      <!-- welcome section / left section -->
       <div class="welcome-section">
-        <img src='../images/holding hands.jpg' alt="Background" class="background-image" />
+        <!-- <img src='../images/holding hands.jpg' alt="Background" class="background-image" /> -->
         <div class="welcome-content">
-          <div class="back-link" onclick="window.location.href='landingPage.html'">← Back to home</div>
+          <button class="back-link" type="button" onclick="window.location.href='landingPage.html'">
+              <span>←</span> Back to home
+          </button>
           <img src='../images/umgalelo.png' alt="Logo" class="logo" />
           <h1 class="welcome-title">Get started with your account</h1>
           <p class="welcome-subtitle">Connect, contribute, and grow with Umgalelo</p>
@@ -24,76 +25,74 @@
         </div>
       </div>
 
-      <!-- personal information -->
+
       <div class="form-section">
-        <form class="registration-form">
+        <form class="registration-form" id="registrationForm">
 
           <section class="form-group">
             <h2 class="section-title">Personal Information</h2>
             <div class="form-row">
               <div class="form-field">
                 <label>First Name</label>
-                <input type="text" placeholder="enter your first name" />
-                <p id="email-error" style="padding: 5px;"></p>
+                <input type="text" placeholder="enter your first name" id="firstname"/>
+                <p id="firstname-error" style="padding: 5px;"></p>
               </div>
               <div class="form-field">
                 <label>Last Name</label>
-                <input type="text" placeholder="enter your last name" />
-                <p id="email-error" style="padding: 5px;"></p>
+                <input type="text" placeholder="enter your last name" id="lastname"/>
+                <p id="lastname" style="padding: 5px;"></p>
               </div>
             </div>
             <div class="form-row">
-              <div class="form-field">
+              <!-- <div class="form-field">
                 <label>Are You South African?</label>
                 <select>
                   <option>YES</option>
                 </select>
-              </div>
+              </div> -->
               <div class="form-field">
                 <label>South African ID Number</label>
-                <input type="text" placeholder="10-digit ID number" />
-                <p id="email-error" style="padding: 5px;"></p>
+                <input type="text" placeholder="10-digit ID number" id="idNumber"/>
+                <p id="idnumber-error" style="padding: 5px;"></p>
               </div>
             </div>
           </section>
 
-          <!-- contact details -->
+
           <section class="form-group">
             <h2 class="section-title">Contact Details</h2>
             <div class="form-row">
               <div class="form-field">
                 <label>Email Address</label>
                 <input type="email" placeholder="example @test.com" id="email"/>
-                <p id="emailError" style="padding: 5px;"></p>
+                <p id="email-error" style="padding: 5px;"></p>
               </div>
               <div class="form-field">
                 <label>Phone Number</label>
-                <input type="tel" placeholder="+27" />
-                <p id="email-error" style="padding: 5px;"></p>
+                <input type="tel" placeholder="+27" id="phone"/>
+                <p id="phone-error" style="padding: 5px;"></p>
               </div>
             </div>
           </section>
 
 
-          <!-- passowrd -->
           <section class="form-group">
             <h2 class="section-title">Secure Your Account</h2>
             <div class="form-row">
               <div class="form-field">
                 <label>Password</label>
                 <input type="password" placeholder="Enter your password" id="password"/>
-                <p id="email-error" style="padding: 5px;"></p>
+                <p id="password-error" style="padding: 5px;"></p>
               </div>
               <div class="form-field">
                 <label>Confirm Password</label>
                 <input type="password" placeholder="Confirm password" id="confirmPassword"/>
-                <p id="confirm-error" style="padding: 5px;"></p>
+                <p id="confirmpassword-error" style="padding: 5px;"></p>
               </div>
             </div>
           </section>
 
 
-          <!-- progress bar -->
           <div class="progress-indicators">
             <div class="progress-bar"></div>
             <div class="progress-bar"></div>
@@ -102,12 +101,12 @@
           </div>
 
 
-          <div class="terms-section">
-            <input type="checkbox" id="terms" class="terms-checkbox"/>
+          <!-- <div class="terms-section">
+            <input type="checkbox" id="terms" class="terms-checkbox" />
             <label htmlFor="terms" class="terms-label" id="terms-label">
               I agree to the <span class="highlight">Terms and Conditions</span> and <span class="highlight">Privacy Policy</span>. I confirm that the information provided is accurate and true.
             </label>
-          </div>
+          </div> -->
 
           <button type="submit" class="submit-button" id="submit">Create Account</button>
         </form>
