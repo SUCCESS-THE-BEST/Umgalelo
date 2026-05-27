@@ -1,4 +1,4 @@
-const token = localStorage.getItem('token');
+// const token = localStorage.getItem('token');
 
 const update = document.getElementById('update');
 const cancel = document.getElementById('cancel');
@@ -53,63 +53,134 @@ const loadUserData = async () => {
 update.addEventListener('click', async (e) => {
     e.preventDefault();
 
-    const data = {
-        addressLine1: document.getElementById('addressLine1').value,
-        city:document.getElementById('city').value,
-        province:document.getElementById('province').value,
-        postalCode:document.getElementById('postalCode').value,
-        nextOfKinName: document.getElementById('nextOfKinName').value,
-        nextOfKinPhone:document.getElementById('nextOfKinPhone').value
+    const message = document.getElementById('message');
+
+    try {
+        // ================= UPDATE TEXT PROFILE DETAILS =================
+
+        const data = {
+            addressLine1: document.getElementById('addressLine1').value,
+            city: document.getElementById('city').value,
+            province: document.getElementById('province').value,
+            postalCode: document.getElementById('postalCode').value,
+            nextOfKinName: document.getElementById('nextOfKinName').value,
+            nextOfKinPhone: document.getElementById('nextOfKinPhone').value
+        };
+
+        const res = await fetch('http://localhost:3000/api/users/update', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(data)
+        });
+
+        const result = await res.json();
+
+        if (!res.ok) {
+            message.textContent = result.message;
+            message.style.color = 'red';
+            return;
+        }
+
+        // ================= UPLOAD FILES =================
+
+        const formData = new FormData();
+
+        const profilePhoto = document.getElementById('profilePhoto').files[0];
+        const idDocument = document.getElementById('idDocument').files[0];
+        const bankingProof = document.getElementById('bankingProof').files[0];
+
+        if (profilePhoto) {
+            formData.append('profilePhoto', profilePhoto);
+        }
+
+        if (idDocument) {
+            formData.append('idDocument', idDocument);
+        }
+
+        if (bankingProof) {
+            formData.append('bankingProof', bankingProof);
+        }
+
+        const hasFiles =
+            profilePhoto || idDocument || bankingProof;
+
+        if (hasFiles) {
+            const uploadRes = await fetch(
+                'http://localhost:3000/api/users/upload-documents',
+                {
+                    method: 'PUT',
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    },
+                    body: formData
+                }
+            );
+
+            const uploadResult = await uploadRes.json();
+
+            if (!uploadRes.ok) {
+                message.textContent = uploadResult.message;
+                message.style.color = 'red';
+                return;
+            }
+
+            if (uploadResult.profilePhoto) {
+                document.querySelectorAll('.user-avatar').forEach(img => {
+                    img.src = `http://localhost:3000${uploadResult.profilePhoto}`;
+                });
+            }
+
+            message.textContent = uploadResult.message;
+            message.style.color = 'green';
+            return;
+        }
+
+        // ================= SUCCESS MESSAGE =================
+
+        message.textContent = result.message;
+        message.style.color = 'green';
+
+    } catch (error) {
+        console.log(error);
+
+        message.textContent = 'Something went wrong while updating profile';
+        message.style.color = 'red';
     }
-
-    const res = await fetch('http://localhost:3000/api/users/update', {
-        method: 'PUT',
-        headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify(data)
-    });
-
-    const result = await res.json();
-
-    if (res.ok) {
-        document.getElementById('message').textContent = result.message
-        document.getElementById('message').style.color = 'green';
-    }
-
-    if (!res.ok) {
-      document.getElementById('message').textContent = result.message;
-      document.getElementById('message').style.color = 'red';
-      return;
-    }
-
-})
+});
 
 cancel.onclick = () => {
   window.scrollTo(0, 0)
 };
 
 
-const loadUser = async () => {
-    const res = await fetch('http://localhost:3000/api/auth/profile', {
-        headers: {
-        Authorization: `Bearer ${token}`
-        }
-    });
+// const loadUser = async () => {
+//     const res = await fetch('http://localhost:3000/api/auth/profile', {
+//         headers: {
+//         Authorization: `Bearer ${token}`
+//         }
+//     });
 
-    const [user] = await res.json();
-    console.log(user)
-    document.getElementById('userName').innerText = user.first_name + ' ' + user.last_name;
-    document.getElementById('userEmail').innerText = user.email;
+//     const [user] = await res.json();
+//     console.log(user)
+//     document.getElementById('userName').innerText = user.first_name + ' ' + user.last_name;
+//     document.getElementById('userEmail').innerText = user.email;
 
-    document.getElementById('profileName').innerText = user.first_name + ' ' + user.last_name;
-    document.getElementById('profileEmail').innerText = user.email;
+//     document.getElementById('profileName').innerText = user.first_name + ' ' + user.last_name;
+//     document.getElementById('profileEmail').innerText = user.email;
     
-    const date = new Date()
-    document.getElementById('date').textContent = `${formatter.format(date)}`
+//     const date = new Date()
+//     document.getElementById('date').textContent = `${formatter.format(date)}`
+
+//     if (user.profile_photo) {
+//     document.querySelectorAll('.user-avatar').forEach(img => {
+//         img.src = `http://localhost:3000${user.profile_photo}`;
+//     });
+// }
     
-};
+// };
 
 const formatter = new Intl.DateTimeFormat('en-ZA', { 
         weekday: 'long',
@@ -118,40 +189,40 @@ const formatter = new Intl.DateTimeFormat('en-ZA', {
         year: 'numeric'
 });
 
-const loadSidebarSocieties = async () => {
-    const res = await fetch('http://localhost:3000/api/dashboard/societies', {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-    });
+// const loadSidebarSocieties = async () => {
+//     const res = await fetch('http://localhost:3000/api/dashboard/societies', {
+//         headers: {
+//           Authorization: `Bearer ${token}`
+//         }
+//     });
 
-    const societies = await res.json();
+//     const societies = await res.json();
 
-    const container = document.getElementById('sidebarSocieties');
-    container.innerHTML = '';
+//     const container = document.getElementById('sidebarSocieties');
+//     container.innerHTML = '';
 
-    societies.forEach(s => {
-      const isAdmin = s.role === 'admin';
+//     societies.forEach(s => {
+//       const isAdmin = s.role === 'admin';
 
-      const item = `
-        <div class="nav-item" onclick="openSociety(${s.id}, '${s.role}')">
-          <img src="../images/networking.png" alt="" />
-          <span>${s.society_name}</span>
-          ${isAdmin ? '<span class="admin-tag">Admin</span>' : ''}
-        </div>
-      `;
+//       const item = `
+//         <div class="nav-item" onclick="openSociety(${s.id}, '${s.role}')">
+//           <img src="../images/networking.png" alt="" />
+//           <span>${s.society_name}</span>
+//           ${isAdmin ? '<span class="admin-tag">Admin</span>' : ''}
+//         </div>
+//       `;
 
-      container.innerHTML += item;
-    });
-};
+//       container.innerHTML += item;
+//     });
+// };
 
-const openSociety = (id, role) => {
+// const openSociety = (id, role) => {
 
-  localStorage.setItem("society_id", id);
-  localStorage.setItem("role", role);
+//   localStorage.setItem("society_id", id);
+//   localStorage.setItem("role", role);
 
-  window.location.href = `society.html?id=${id}`;
-};
+//   window.location.href = `society.html?id=${id}`;
+// };
 
 //parse id number
 function parseIDNumber(id) {
@@ -307,6 +378,7 @@ async function loadNotifications() {
     }
 }
 
+// =================== MARK AS READ ====================
 async function markAsRead(notificationId) {
 
     try {
@@ -333,14 +405,8 @@ async function markAsRead(notificationId) {
     }
 }
 
-async function handleNotificationClick(
-    notificationId,
-    societyId,
-    type
-) {
-
+async function handleNotificationClick(notificationId, societyId, type) {
     try {
-
         await fetch(
             `http://localhost:3000/api/notifications/read/${notificationId}`,
             {
@@ -351,35 +417,35 @@ async function handleNotificationClick(
             }
         );
 
-        // ================= WELCOME =================
         if (type === 'welcome') {
-
-            window.location.href =
-                'browse.html';
-
+            window.location.href = 'browse.html';
             return;
         }
 
-        // ================= JOIN REQUEST SENT =================
-        if (type === 'join_request_sent') {
-
+        if (
+            type === 'join_request_sent' ||
+            type === 'rejected'
+        ) {
+            loadNotifications();
             return;
         }
 
-        // ================= SOCIETY RELATED =================
-        if (societyId) {
+        if (type === 'approved' && societyId) {
+            localStorage.setItem('society_id', societyId);
+            window.location.href = `society.html?id=${societyId}`;
+            return;
+        }
 
-            localStorage.setItem(
-                'society_id',
-                societyId
-            );
-
-            window.location.href =
-                `society.html?id=${societyId}`;
+        if (
+            type !== 'join_request_sent' &&
+            type !== 'rejected' &&
+            societyId
+        ) {
+            localStorage.setItem('society_id', societyId);
+            window.location.href = `society.html?id=${societyId}`;
         }
 
     } catch (err) {
-
         console.log(err);
     }
 }
