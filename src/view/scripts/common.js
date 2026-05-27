@@ -76,12 +76,9 @@ async function loadUser() {
 
         // avatars
         if (user.profile_photo) {
-
             document.querySelectorAll('.user-avatar')
                 .forEach(img => {
-
-                    img.src =
-                        `http://localhost:3000${user.profile_photo}`;
+                    img.src = img.src = user.profile_photo;
                 });
         }
 

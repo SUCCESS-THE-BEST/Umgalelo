@@ -1,16 +1,18 @@
 const multer = require('multer');
-const path = require('path');
+const cloudinary = require('../config/cloudinary');
+const cloudinaryStorage = require('multer-storage-cloudinary');
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'uploads/profile');
-    },
+const storage = cloudinaryStorage({
+    cloudinary: cloudinary,
+    folder: 'umgalelo/profile',
+    allowedFormats: ['jpg', 'jpeg', 'png', 'pdf'],
+    resource_type: 'auto',
 
-    filename: (req, file, cb) => {
+    filename: function (req, file, cb) {
         const uniqueName =
             Date.now() + '-' + Math.round(Math.random() * 1E9);
 
-        cb(null, uniqueName + path.extname(file.originalname));
+        cb(null, uniqueName);
     }
 });
 

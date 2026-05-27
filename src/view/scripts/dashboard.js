@@ -21,6 +21,7 @@ window.onload = async () => {
   await loadPayments();
   await loadUserEvents();
   await loadNotifications();
+  await renderDate();
 };
 
 // // ================= USER =================
@@ -90,6 +91,21 @@ window.onload = async () => {
 
 //   window.location.href = `society.html?id=${id}`;
 // };
+
+// ================== FORMAT DATE =========================
+function renderDate(){
+    const dateEl = document.querySelector('.page-title h3');
+    const date = new Date();
+
+    const formatter = new Intl.DateTimeFormat('en-ZA', { 
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+    });
+
+    dateEl.textContent = formatter.format(date);
+}
 
 // =================== LOAD SOCIETY CARDS ====================
 const loadSocieties = async () => {

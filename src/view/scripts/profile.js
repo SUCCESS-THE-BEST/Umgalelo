@@ -9,8 +9,26 @@ window.onload = async () => {
     await loadSidebarSocieties();
     await loadNotifications();
     await loadSocieties();
+    await renderDate();
 };
 
+// ============== RENDER DATE ================
+function renderDate(){
+    const dateEl = document.getElementById('date');
+    const date = new Date();
+
+    const formatter = new Intl.DateTimeFormat('en-ZA', { 
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+    });
+
+    dateEl.textContent = formatter.format(date);
+}
+
+
+// ============= LOAD USER DATA ========================
 const loadUserData = async () => {
     const res = await fetch('http://localhost:3000/api/auth/profile', {
         headers: {
@@ -129,7 +147,14 @@ update.addEventListener('click', async (e) => {
 
             if (uploadResult.profilePhoto) {
                 document.querySelectorAll('.user-avatar').forEach(img => {
-                    img.src = `http://localhost:3000${uploadResult.profilePhoto}`;
+                    if (uploadResult.profilePhoto) {
+
+                        document.querySelectorAll('.user-avatar')
+                            .forEach(img => {
+
+                                img.src = img.src = uploadResult.profilePhoto;
+                            });
+                    }
                 });
             }
 

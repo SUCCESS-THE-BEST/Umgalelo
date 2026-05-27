@@ -106,7 +106,12 @@ const updatePassword = async (userId, password) => {
     return result;
 };
 
-const updateUserDocuments = async (userId, profilePhoto, idDocument, bankingProof ) => {
+const updateUserDocuments = async (
+    userId,
+    profilePhoto = null,
+    idDocument = null,
+    bankingProof = null
+) => {
     const [result] = await db.execute(
         `
         UPDATE users
@@ -116,7 +121,12 @@ const updateUserDocuments = async (userId, profilePhoto, idDocument, bankingProo
             banking_proof = COALESCE(?, banking_proof)
         WHERE user_id = ?
         `,
-        [profilePhoto, idDocument, bankingProof, userId]
+        [
+            profilePhoto ?? null,
+            idDocument ?? null,
+            bankingProof ?? null,
+            userId
+        ]
     );
 
     return result;

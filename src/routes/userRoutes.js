@@ -17,10 +17,9 @@ router.put('/:id/kin', authMiddleware, updateNextOfKin);
 router.put('/update', authMiddleware, updateProfile);
 
 router.put('/upload-documents', authMiddleware, upload.fields([
-        { name: 'profilePhoto', maxCount: 1 },
-        { name: 'idDocument', maxCount: 1 },
-        { name: 'bankingProof', maxCount: 1 }
-    ]),uploadDocuments
-);
+    { name: 'profilePhoto', maxCount: 1 },
+    { name: 'idDocument', maxCount: 1 },
+    { name: 'bankingProof', maxCount: 1 }
+]), uploadDocuments);
 
 module.exports = router;

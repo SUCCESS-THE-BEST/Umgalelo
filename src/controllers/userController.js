@@ -81,17 +81,22 @@ const uploadDocuments = async (req, res) => {
     try {
         const userId = req.user.userId;
 
-        const profilePhoto = req.files.profilePhoto
-            ? `/uploads/profile/${req.files.profilePhoto[0].filename}`
-            : null;
+        console.log(req.files);
 
-        const idDocument = req.files.idDocument
-            ? `/uploads/profile/${req.files.idDocument[0].filename}`
-            : null;
+        const profilePhoto =
+            req.files && req.files.profilePhoto
+                ? req.files.profilePhoto[0].secure_url
+                : null;
 
-        const bankingProof = req.files.bankingProof
-            ? `/uploads/profile/${req.files.bankingProof[0].filename}`
-            : null;
+        const idDocument =
+            req.files && req.files.idDocument
+                ? req.files.idDocument[0].secure_url
+                : null;
+
+        const bankingProof =
+            req.files && req.files.bankingProof
+                ? req.files.bankingProof[0].secure_url
+                : null;
 
         await userModel.updateUserDocuments(
             userId,
@@ -109,8 +114,10 @@ const uploadDocuments = async (req, res) => {
 
     } catch (error) {
         console.log(error);
+
         res.status(500).json({
-            message: 'Upload failed'
+            message: 'Upload failed',
+            error: error.message
         });
     }
 };
