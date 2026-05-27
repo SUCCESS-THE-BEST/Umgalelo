@@ -106,6 +106,22 @@ const updatePassword = async (userId, password) => {
     return result;
 };
 
+const updateUserDocuments = async (userId, profilePhoto, idDocument, bankingProof ) => {
+    const [result] = await db.execute(
+        `
+        UPDATE users
+        SET
+            profile_photo = COALESCE(?, profile_photo),
+            id_document = COALESCE(?, id_document),
+            banking_proof = COALESCE(?, banking_proof)
+        WHERE user_id = ?
+        `,
+        [profilePhoto, idDocument, bankingProof, userId]
+    );
+
+    return result;
+};
+
 module.exports = {
     createUser,
     findUserByEmail,
@@ -115,5 +131,6 @@ module.exports = {
     markUserAsVerified,
     setResetToken,
     findByResetToken,
-    updatePassword
+    updatePassword,
+    updateUserDocuments
 }
