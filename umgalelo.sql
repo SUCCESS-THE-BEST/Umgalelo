@@ -1,7 +1,5 @@
 CREATE DATABASE umgalelo;
 USE umgalelo;
-
--- USERS
 CREATE TABLE users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(100) NOT NULL,
@@ -30,9 +28,12 @@ ALTER TABLE users
 ADD reset_token VARCHAR(255),
 ADD reset_token_expires DATETIME;
 
-SELECT * FROM users;
+ALTER TABLE users
+ADD profile_photo VARCHAR(255),
+ADD id_document VARCHAR(255),
+ADD banking_proof VARCHAR(255);
 
--- SOCIETIES
+SELECT * FROM users;
 
 CREATE TABLE societies (
     society_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -52,9 +53,6 @@ CREATE TABLE societies (
         ON DELETE SET NULL
 );
 
-SELECT * FROM societies;
-
--- JOIN REQUESTS
 CREATE TABLE join_requests (
     request_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
@@ -65,9 +63,6 @@ CREATE TABLE join_requests (
     FOREIGN KEY (society_id) REFERENCES societies(society_id)
 );
 
-SELECT * FROM join_requests;
-
--- SOCIETY MEMBERS
 CREATE TABLE society_members (
     member_id INT AUTO_INCREMENT PRIMARY KEY,
     society_id INT NOT NULL,
@@ -81,10 +76,6 @@ CREATE TABLE society_members (
     UNIQUE (society_id, user_id)
 );
 
-SELECT * FROM society_members;
-
-
--- CONTRIBUTIONS
 CREATE TABLE contributions (
     contribution_id INT AUTO_INCREMENT PRIMARY KEY,
     society_id INT NOT NULL,
@@ -101,9 +92,6 @@ CREATE TABLE contributions (
 ALTER TABLE contributions 
 ADD COLUMN payment_month VARCHAR(7) NOT NULL;
 
-SELECT * FROM contributions;
-
--- SOCIETY WALLET
 CREATE TABLE society_wallet (
     wallet_id INT AUTO_INCREMENT PRIMARY KEY,
     society_id INT NOT NULL UNIQUE,
@@ -112,10 +100,6 @@ CREATE TABLE society_wallet (
     FOREIGN KEY (society_id) REFERENCES societies(society_id)
         ON DELETE CASCADE
 );
-
-SELECT * FROM society_wallet;
-
-
 
 CREATE TABLE transactions (
     transaction_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -130,7 +114,6 @@ CREATE TABLE transactions (
         ON DELETE SET NULL
 );
 
--- CLAIMS
 CREATE TABLE claims (
     claim_id INT AUTO_INCREMENT PRIMARY KEY,
     society_id INT NOT NULL,
@@ -149,10 +132,6 @@ CREATE TABLE claims (
 ALTER TABLE claims 
 ADD COLUMN date_of_death VARCHAR(15) NOT NULL;
 
-SELECT * FROM claims;
-
-
--- NOTIFICATIONS
 CREATE TABLE notifications (
     notification_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -164,8 +143,6 @@ CREATE TABLE notifications (
 	FOREIGN KEY (society_id) REFERENCES societies(society_id)
         ON DELETE CASCADE
 );
-
-SELECT * FROM notifications;
 
 -- ALTER TABLE NOTIFICATIONS
 
@@ -198,3 +175,21 @@ CREATE TABLE events (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+SELECT * FROM events;
+
+-- MESSAGES
+CREATE TABLE Messages (
+    message_id INT AUTO_INCREMENT PRIMARY KEY,
+    society_id INT NOT NULL,
+    sender_id INT NOT NULL,
+    message_text text NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    is_deleted BIT,
+	message_type VARCHAR(20),
+	attachment_url VARCHAR(255),
+
+    FOREIGN KEY (society_id) REFERENCES societies(society_id),
+    FOREIGN KEY (sender_id) REFERENCES users(user_id)
+);
+
+select * from Messages;
