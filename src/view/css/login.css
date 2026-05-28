@@ -359,6 +359,47 @@ body {
 }
 
 .demo-button {
+    width: 100%;
+    max-width: 543px;
+    min-height: 54px;
+    margin: 28px auto 0;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+
+    background: white;
+    border: 1px solid rgb(214, 214, 214);
+    border-radius: 35px;
+
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+
+    cursor: pointer;
+    transition:
+        transform var(--transition),
+        border-color var(--transition),
+        box-shadow var(--transition),
+        background var(--transition);
+}
+
+.demo-button img {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+}
+
+.demo-button:hover {
+    transform: translateY(-3px);
+    border-color: rgba(169, 108, 65, 0.45);
+    background: #fffdfb;
+    box-shadow: var(--shadow-soft);
+}
+
+/* .demo-button {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -385,7 +426,7 @@ body {
 
 .demo-button:hover .google-img {
     transform: rotate(-6deg) scale(1.06);
-}
+} */
 
 .demo-info {
     text-align: center;

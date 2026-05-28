@@ -40,27 +40,9 @@
               <div class="form-field">
                 <label>Last Name</label>
                 <input type="text" placeholder="enter your last name" id="lastname"/>
-                <p id="lastname" style="padding: 5px;"></p>
+                <p id="lastname-error" style="padding: 5px;"></p>
               </div>
             </div>
-            <div class="form-row">
-              <!-- <div class="form-field">
-                <label>Are You South African?</label>
-                <select>
-                  <option>YES</option>
-                </select>
-              </div> -->
-              <div class="form-field">
-                <label>South African ID Number</label>
-                <input type="text" placeholder="13-digit ID number" id="idNumber"/>
-                <p id="idnumber-error" style="padding: 5px;"></p>
-              </div>
-            </div>
-          </section>
-
-
-          <section class="form-group">
-            <h2 class="section-title">Contact Details</h2>
             <div class="form-row">
               <div class="form-field">
                 <label>Email Address</label>
@@ -74,7 +56,6 @@
               </div>
             </div>
           </section>
-
 
           <section class="form-group">
             <h2 class="section-title">Secure Your Account</h2>
@@ -92,23 +73,18 @@
             </div>
           </section>
 
+          <button type="submit" class="btn submit-button" id="submit">Create Account</button>
 
-          <div class="progress-indicators">
-            <div class="progress-bar"></div>
-            <div class="progress-bar"></div>
-            <div class="progress-bar"></div>
-            <div class="progress-bar"></div>
+          <div class="auth-divider">
+              <span></span>
+              <p>OR</p>
+              <span></span>
           </div>
 
-
-          <div class="terms-section">
-            <input type="checkbox" id="terms" class="terms-checkbox" />
-            <label htmlFor="terms" class="terms-label" id="terms-label">
-              I agree to the <span class="highlight">Terms and Conditions</span> and <span class="highlight">Privacy Policy</span>. I confirm that the information provided is accurate and true.
-            </label>
-          </div>
-
-          <button type="submit" class="submit-button" id="submit">Create Account</button>
+          <button type="button" class="btn google-signup-btn" id="googleSignup">
+            <img src="../images/google.png" alt="Google logo">
+            Continue with Google
+          </button>
         </form>
       </div>
     </div>

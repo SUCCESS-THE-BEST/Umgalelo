@@ -2,102 +2,150 @@ const form = document.getElementById('registerForm');
 const submit = document.getElementById('submit');
 
 submit.addEventListener('click', async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const isValid = validate()
+    clearErrors();
 
-  if (!isValid) {
-    return;
-  }
+    const isValid = validate();
 
-  //validate password
-    if (document.getElementById('password').value != document.getElementById('confirmPassword').value) {
-        document.getElementById('confirmpassword-error').textContent = 'Passwords dont match';
-        document.getElementById('confirmpassword-error').style.color = 'red';
+    if (!isValid) return;
 
-        setTimeout(() => {
-            document.getElementById('confirmpassword-error').textContent = '';
-        }, 1000);
+    const password = document.getElementById('password').value;
+    const confirmPassword =
+        document.getElementById('confirmPassword').value;
 
+    if (password !== confirmPassword) {
+        showError('confirmPassword', 'Passwords do not match');
         return;
     }
 
-    //validate email
-    if (!document.getElementById('email').value.includes('@')) {
-        document.getElementById('email-error').textContent = 'Invalid email format';
-        document.getElementById('email-error').style.color = 'red';
+    const data = {
+        firstName: document.getElementById('firstname').value.trim(),
+        lastName: document.getElementById('lastname').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        password
+    };
 
-        setTimeout(() => {
-            document.getElementById('email-error').textContent = '';
-        }, 1000);
+    try {
+        const res = await fetch(
+            'http://localhost:3000/api/auth/register',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            }
+        );
 
-        return;
+        const result = await res.json();
+
+        if (!res.ok) {
+            if (result.errors) {
+                displayBackendErrors(result.errors);
+            } else {
+                alert(result.message);
+            }
+
+            return;
+        }
+
+        alert(result.message);
+        window.location.href = 'login.html';
+
+    } catch (error) {
+        console.log(error);
+        alert('Something went wrong. Please try again.');
     }
-
-    //check terms and conditions accepted
-    const terms = document.getElementById('terms');
-    if (!terms.checked) {
-        document.getElementById('terms-label').style.backgroundColor = 'lightgray'
-        
-        setTimeout(() => {
-            document.getElementById('terms-label').style.backgroundColor = 'white'
-          }, 1000);
-
-        return;
-    }
-
-  const data = {
-    firstName: document.getElementById('firstname').value,
-    lastName: document.getElementById('lastname').value,
-    email: document.getElementById('email').value,
-    phone: document.getElementById('phone').value,
-    idNumber: document.getElementById('idNumber').value,
-    password: document.getElementById('password').value
-  };
-
-  console.log(data)
-
-  const res = await fetch('http://localhost:3000/api/auth/register', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-  });
-
-
-  const result = await res.json();
-  console.log(result);
-
-
-  if (res.ok) {
-    window.location.href = 'login.html';
-  }
 });
 
-function validate(){
+function validate() {
+    let isValid = true;
 
-  let isValid;
+    document.querySelectorAll('.form-group input')
+        .forEach(input => {
 
-  document.querySelectorAll('.form-group input').forEach(input => {
-      if (input.value === '') {
-          input.style.borderColor = 'red'
-          input.nextElementSibling.textContent = 'Fill in field*'
-          input.nextElementSibling.style.color = 'red'
-          
-          isValid = false;
-      }
-      else{
-        isValid = true;
-      }
+            if (input.type === 'checkbox') return;
 
-      setTimeout(() => {
-            input.style.borderColor = 'rgb(214, 214, 214)'
-            input.nextElementSibling.textContent = ''
-          }, 1000);
-  })
+            if (input.value.trim() === '') {
+                showError(input.id, 'Fill in field*');
+                isValid = false;
+            }
+        });
 
-  return isValid
- 
+    return isValid;
 }
 
+function displayBackendErrors(errors) {
+    errors.forEach(error => {
+        showError(error.path, error.msg);
+    });
+}
+
+function showError(field, message) {
+    const fieldMap = {
+        firstName: 'firstname',
+        lastName: 'lastname',
+        email: 'email',
+        phone: 'phone',
+        password: 'password',
+        confirmPassword: 'confirmPassword'
+    };
+
+    const inputId = fieldMap[field] || field;
+    const input = document.getElementById(inputId);
+
+    if (!input) return;
+
+    const errorElement = getErrorElement(inputId);
+
+    input.style.borderColor = 'red';
+
+    if (errorElement) {
+        errorElement.textContent = message;
+        errorElement.style.color = 'red';
+    }
+
+    setTimeout(() => {
+        input.style.borderColor = 'rgb(214, 214, 214)';
+
+        if (errorElement) {
+            errorElement.textContent = '';
+        }
+    }, 2000);
+}
+
+function clearErrors() {
+    document.querySelectorAll('.form-group input')
+        .forEach(input => {
+            input.style.borderColor = 'rgb(214, 214, 214)';
+
+            const errorElement = getErrorElement(input.id);
+
+            if (errorElement) {
+                errorElement.textContent = '';
+            }
+        });
+}
+
+function getErrorElement(inputId) {
+    const errorMap = {
+        firstname: 'firstname-error',
+        lastname: 'lastname-error',
+        email: 'email-error',
+        phone: 'phone-error',
+        password: 'password-error',
+        confirmPassword: 'confirmpassword-error'
+    };
+
+    return document.getElementById(errorMap[inputId]);
+}
+
+const googleSignup = document.getElementById('googleSignup');
+
+if (googleSignup) {
+    googleSignup.addEventListener('click', () => {
+        window.location.href = 'http://localhost:3000/api/auth/google';
+    });
+}

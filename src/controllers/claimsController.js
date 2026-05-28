@@ -9,76 +9,54 @@ const submitClaim = async (req, res) => {
   try {
     const user_id = req.user.userId;
     const society_id = req.params.id;
-    const { deceased_name, relationship, claim_amount, date_of_passing } = req.body;
 
-    await claimModel.createClaim(user_id, society_id, deceased_name, relationship, claim_amount, date_of_passing);
+    const {
+      deceased_name,
+      relationship,
+      claim_amount,
+      date_of_passing
+    } = req.body;
 
-    res.json({ message: 'Claim request submitted' });
+    const eligibility =
+      await claimModel.checkClaimEligibility(user_id, society_id);
+
+    if (!eligibility) {
+      return res.status(403).json({
+        message: 'You are not a member of this society'
+      });
+    }
+
+    if (eligibility.months_joined < eligibility.waiting_period) {
+      return res.status(400).json({
+        message: `You cannot submit a claim yet. This society has a ${eligibility.waiting_period}-month waiting period.`
+      });
+    }
+
+    if (!eligibility.has_paid_this_month) {
+      return res.status(400).json({
+        message: 'You cannot submit a claim while your monthly payment is due.'
+      });
+    }
+
+    await claimModel.createClaim(
+      user_id,
+      society_id,
+      deceased_name,
+      relationship,
+      claim_amount,
+      date_of_passing
+    );
+
+    res.json({
+      message: 'Claim request submitted'
+    });
 
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      message: error.message
+    });
   }
 };
-
-// //approve claim
-// const approveClaim = async (req, res) => {
-//   const connection = await db.getConnection();
-
-//   try {
-//     const admin_id = req.user.userId;
-//     const claim_id = req.params.id;
-
-//     const claim = await claimModel.getById(claim_id);
-
-//     if (!claim || claim.status !== 'pending') {
-//       return res.status(400).json({ message: 'Invalid claim' });
-//     }
-
-//     const isAdmin = await membershipModel.isAdmin(admin_id, claim.society_id);
-//     if (!isAdmin) {
-//       return res.status(403).json({ message: 'Admins only' });
-//     }
-
-//     //CHECK BALANCE
-//     const totalContributions = await contributionModel.getTotalBySociety(claim.society_id);
-//     const totalClaims = await claimModel.getTotalClaims(claim.society_id);
-
-//     const balance = totalContributions - totalClaims;
-
-//     if (claim.claim_amount > balance) {
-//       return res.status(400).json({ message: 'Insufficient funds' });
-//     }
-
-//     await connection.beginTransaction();
-
-//     await claimModel.updateStatus(claim_id, 'approved', connection);
-
-//     await connection.commit();
-
-//     res.json({ message: 'Claim approved' });
-
-//   } catch (error) {
-//     await connection.rollback();
-//     res.status(500).json({ message: error.message });
-//   } finally {
-//     connection.release();
-//   }
-// };
-
-
-// //reject claim
-// const rejectClaim = async (req, res) => {
-//   try {
-//     const claim_id = req.params.id;
-
-//     await claimModel.updateStatus(claim_id, 'rejected');
-
-//     res.json({ message: 'Claim rejected' });
-
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// };
 
 // ======= GET CLAIMS =========
 const getClaims = async (req, res) => {

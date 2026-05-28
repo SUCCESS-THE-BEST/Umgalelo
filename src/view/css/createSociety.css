@@ -138,7 +138,7 @@ body {
 
 .admin-tag {
   position: absolute;
-  right: 10px;
+  right: 25px;
   border: 1px solid white;
   padding: 3px 10px;
   border-radius: 10px;
@@ -148,6 +148,8 @@ body {
 
 .sign-out {
   margin-top: auto;
+  position: absolute;
+  bottom: 0;
   padding-top: 20px;
   border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
@@ -345,13 +347,13 @@ label {
 
 .currency-symbol {
     position: absolute;
-    top: 32%;
+    top: 42%;
     transform: translateY(-50%);
     font-size: 24px;
     color: var(--bg-light);
     background-color: rgba(0, 0, 0, 0.25);
     width: 50px;
-    height: 65%;
+    height: 82%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -599,4 +601,27 @@ label {
     .input-currency .form-input {
         padding-left: 38px;
     }
+}
+
+
+.user-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #ddd;
+}
+
+.user-info h4 {
+    margin: 0;
+    font-size: 16px;
+    color: #3f3f3f;
+    font-weight: 600;
+}
+
+.user-info p {
+    margin: 0;
+    font-size: 14px;
+    color: #3f3f3f;
+    opacity: 0.7;
 }

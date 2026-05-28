@@ -7,7 +7,7 @@ const notificationModel = require('../models/notifications')
 
 const createSociety = async (req, res) => {
   try {
-    const { societyName, description, monthlyContribution, coverAmount,waitingPeriod,addtionalRules,province,city,maximumMembers,minimumAge } = req.body;
+    const { societyName, description, monthlyContribution, coverAmount,waitingPeriod,additionalRules,province,city,maximumMembers,minimumAge } = req.body;
     const user_id = req.user.userId;
 
     //remove code if cant add societies, it worked before i added this

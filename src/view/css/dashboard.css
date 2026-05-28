@@ -148,7 +148,7 @@ body {
 
 .admin-tag {
   position: absolute;
-  right: 10px;
+  right: 25px;
   border: 1px solid white;
   padding: 3px 10px;
   border-radius: 10px;
@@ -158,6 +158,8 @@ body {
 
 .sign-out {
   margin-top: auto;
+  position: absolute;
+  bottom: 0;
   padding-top: 20px;
   border-top: 1px solid rgba(255, 255, 255, 0.2);
 }

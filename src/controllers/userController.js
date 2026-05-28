@@ -11,71 +11,96 @@ const getUser = async (req, res) => {
     }
 };
 
-const updateContactDetails = async (req, res) => {
-    try {
-        const { email, phone } = req.body;
+// const updateContactDetails = async (req, res) => {
+//     try {
+//         const { email, phone } = req.body;
 
-        if (req.user.userId != req.params.id) {
-            return res.status(403).json({ message: 'Forbidden'});
-        }
+//         if (req.user.userId != req.params.id) {
+//             return res.status(403).json({ message: 'Forbidden'});
+//         }
 
-        await userModel.updateContactDetails(req.params.id, email, phone);
+//         await userModel.updateContactDetails(req.params.id, email, phone);
 
-        res.json({ message: 'contact details successfully updated' });
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
+//         res.json({ message: 'contact details successfully updated' });
+//     } catch (error) {
+//         res.status(500).json({ message: error.message });
+//     }
+// };
 
-const updateUserAddress = async (req, res) => {
-    try {
-         const { addressLine1, city, province, postalCode } = req.body;
+// const updateUserAddress = async (req, res) => {
+//     try {
+//          const { addressLine1, city, province, postalCode } = req.body;
 
-         if (req.user.userId != req.params.id) {
-            return res.status(403).json({ message: 'Forbidden' });
-         }
+//          if (req.user.userId != req.params.id) {
+//             return res.status(403).json({ message: 'Forbidden' });
+//          }
 
-         await userModel.updateUserAddress(req.params.id, addressLine1, city, province, postalCode);
+//          await userModel.updateUserAddress(req.params.id, addressLine1, city, province, postalCode);
 
-         res.json({ message: 'user address updated successfully' });
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-}
+//          res.json({ message: 'user address updated successfully' });
+//     } catch (error) {
+//         res.status(500).json({ message: error.message });
+//     }
+// }
 
-const updateNextOfKin =  async (req, res) => {
-    try {
-        const { nextOfKinName, nextOfKinPhone } = req.body;
-        console.log(req.user);
+// const updateNextOfKin =  async (req, res) => {
+//     try {
+//         const { nextOfKinName, nextOfKinPhone } = req.body;
+//         console.log(req.user);
 
-        if (req.user.userId != req.params.id) {
-            return res.status(403).json({ message: 'Forbidden' });
-        }
+//         if (req.user.userId != req.params.id) {
+//             return res.status(403).json({ message: 'Forbidden' });
+//         }
 
-        await userModel.updateNextOfKin(req.params.id, nextOfKinName, nextOfKinPhone);
+//         await userModel.updateNextOfKin(req.params.id, nextOfKinName, nextOfKinPhone);
 
-        res.json({ message: 'next of kin updated successfully' })
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-}
+//         res.json({ message: 'next of kin updated successfully' })
+//     } catch (error) {
+//         res.status(500).json({ message: error.message });
+//     }
+// }
 
 const updateProfile = async (req, res) => {
     try {
-        const { addressLine1, city, province, postalCode, nextOfKinName, nextOfKinPhone } = req.body;
-        const user_id = req.user.userId
+        const {
+            idNumber,
+            gender,
+            dob,
+            phone,
+            addressLine1,
+            city,
+            province,
+            postalCode,
+            nextOfKinName,
+            nextOfKinPhone
+        } = req.body;
 
-        // if (req.user.userId != req.params.id) {
-        //     return res.status(403).json({ message: 'Forbidden' });
-        // }
+        const user_id = req.user.userId;
 
-        await userModel.updateProfile(user_id, addressLine1, city, province, postalCode, nextOfKinName, nextOfKinPhone)
-        res.status(201).json({message: "Profile updated successfully!"})
+        await userModel.updateProfile(
+            user_id,
+            idNumber,
+            gender,
+            dob,
+            phone,
+            addressLine1,
+            city,
+            province,
+            postalCode,
+            nextOfKinName,
+            nextOfKinPhone
+        );
+
+        res.status(200).json({
+            message: "Profile updated successfully!"
+        });
 
     } catch (error) {
-        res.status(500).json({ message: error.message })
+        res.status(500).json({
+            message: error.message
+        });
     }
-}
+};
 
 const uploadDocuments = async (req, res) => {
     try {
@@ -124,9 +149,9 @@ const uploadDocuments = async (req, res) => {
 
 module.exports = {
     getUser,
-    updateContactDetails,
-    updateUserAddress,
-    updateNextOfKin,
+    // updateContactDetails,
+    // updateUserAddress,
+    // updateNextOfKin,
     updateProfile,
     uploadDocuments
 }

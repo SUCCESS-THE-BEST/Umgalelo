@@ -1,35 +1,97 @@
 const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const GoogleStrategy =
+    require('passport-google-oauth20').Strategy;
+
 const userModel = require('../models/user');
+const notificationModel = require('../models/notifications');
 
-passport.use(new GoogleStrategy({
-    clientID: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "http://localhost:3000/api/auth/google/callback"
-},
-async (accessToken, refreshToken, profile, done) => {
-    try {
-        const email = profile.emails[0].value;
+passport.use(
+    new GoogleStrategy(
+        {
+            clientID: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            callbackURL:
+                'http://localhost:3000/api/auth/google/callback'
+        },
 
-        let [user] = await userModel.findUserByEmail(email);
+        async (accessToken, refreshToken, profile, done) => {
+            try {
+                const googleId = profile.id;
 
-        if (!user) {
-            await userModel.createUser(
-                profile.name.givenName,
-                profile.name.familyName,
-                email,
-                null,
-                null,
-                null
-            );
+                const email =
+                    profile.emails && profile.emails[0]
+                        ? profile.emails[0].value
+                        : null;
 
-            [user] = await userModel.findUserByEmail(email);
+                const profilePhoto =
+                    profile.photos && profile.photos[0]
+                        ? profile.photos[0].value
+                        : null;
+
+                const firstName =
+                    profile.name && profile.name.givenName
+                        ? profile.name.givenName
+                        : 'Google';
+
+                const lastName =
+                    profile.name && profile.name.familyName
+                        ? profile.name.familyName
+                        : 'User';
+
+                if (!email) {
+                    return done(null, false, {
+                        message: 'Google account has no email'
+                    });
+                }
+
+                const existingGoogleUser =
+                    await userModel.findUserByGoogleId(googleId);
+
+                if (existingGoogleUser.length > 0) {
+                    return done(null, existingGoogleUser[0]);
+                }
+
+                const existingEmailUser =
+                    await userModel.findUserByEmail(email);
+
+                if (existingEmailUser.length > 0) {
+                    await userModel.linkGoogleToExistingUser(
+                        existingEmailUser[0].user_id,
+                        googleId,
+                        profilePhoto
+                    );
+
+                    const updatedUser =
+                        await userModel.findUserByEmail(email);
+
+                    return done(null, updatedUser[0]);
+                }
+
+                await userModel.createGoogleUser(
+                    firstName,
+                    lastName,
+                    email,
+                    googleId,
+                    profilePhoto
+                );
+
+                const newUser =
+                    await userModel.findUserByEmail(email);
+
+                await notificationModel.createNotification(
+                    newUser[0].user_id,
+                    null,
+                    'Welcome to Umgalelo, complete your profile to get started',
+                    'welcome'
+                );
+
+                return done(null, newUser[0]);
+
+            } catch (err) {
+                return done(err, null);
+            }
         }
-
-        return done(null, user);
-    } catch (err) {
-        return done(err, null);
-    }
-}));
+    )
+);
 
 module.exports = passport;

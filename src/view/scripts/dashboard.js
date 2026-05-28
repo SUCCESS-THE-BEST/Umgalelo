@@ -1,17 +1,3 @@
-// ================= TOKEN HANDLING =================
-// const params = new URLSearchParams(window.location.search);
-// let token = params.get('token');
-
-// if (token) {
-//     localStorage.setItem('token', token);
-//     window.history.replaceState({}, document.title, "dashboard.html");
-// } else {
-//     token = localStorage.getItem('token');
-// }
-
-// if (!token) {
-//     window.location.href = 'login.html';
-// }
 
 // ================= LOAD PAGE =================
 window.onload = async () => {
@@ -24,73 +10,6 @@ window.onload = async () => {
   await renderDate();
 };
 
-// // ================= USER =================
-// const loadUser = async () => {
-//     const res = await fetch('http://localhost:3000/api/auth/profile', {
-//         headers: { Authorization: `Bearer ${token}` }
-//     });
-
-//     const [user] = await res.json();
-
-//     // Update ALL user name/email occurrences
-//     document.querySelectorAll('.user-info h3').forEach(el => {
-//         el.innerText = user.first_name + ' ' + user.last_name;
-//     });
-
-//     document.querySelectorAll('.user-info p').forEach(el => {
-//         el.innerText = user.email;
-//     });
-
-//     // Update date
-//     const dateEl = document.querySelector('.page-title h3');
-//     const date = new Date();
-
-//     const formatter = new Intl.DateTimeFormat('en-ZA', { 
-//         weekday: 'long',
-//         day: 'numeric',
-//         month: 'long',
-//         year: 'numeric'
-//     });
-
-//     dateEl.textContent = formatter.format(date);
-// };
-
-// // ================= LOAD SIDEBAR SOCIETIES ========================
-// const loadSidebarSocieties = async () => {
-//   const res = await fetch('http://localhost:3000/api/dashboard/societies', {
-//     headers: {
-//       Authorization: `Bearer ${token}`
-//     }
-//   });
-
-//   const societies = await res.json();
-
-//   const container = document.getElementById('sidebarSocieties');
-//   container.innerHTML = '';
-
-//   societies.forEach(s => {
-//     const isAdmin = s.role === 'admin';
-    
-//     const item = `
-//       <div class="nav-item" onclick="openSociety(${s.id}, '${s.role}')">
-//         <img src="../images/networking.png" alt="" />
-//         <span>${s.society_name}</span>
-//         ${isAdmin ? '<span class="admin-tag">Admin</span>' : ''}
-//       </div>
-//     `;
-
-//     container.innerHTML += item;
-//   });
-// };
-
-// // ====================== OPEN SOCIETY ON CARD / SIDEBAR ===========================
-// const openSociety = (id, role) => {
-
-//   localStorage.setItem("society_id", id);
-//   localStorage.setItem("role", role);
-
-//   window.location.href = `society.html?id=${id}`;
-// };
 
 // ================== FORMAT DATE =========================
 function renderDate(){
@@ -205,49 +124,113 @@ const loadPayments = async () => {
   });
 };
 
-// ================= LOGOUT =================
-// const logout = () => {
-//   localStorage.removeItem('token');
-//   window.location.href = 'login.html';
-// };
-
 function toggleSidebar() {
   document.querySelector('.sidebar').classList.toggle('open');
 }
 
+// =============== LOAD UPCOMING EVENTS =================
 async function loadUserEvents() {
 
-    const res = await fetch(`http://localhost:3000/api/dashboard/events`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
+    const res = await fetch(
+        `http://localhost:3000/api/dashboard/events`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+
     const events = await res.json();
 
-    const container = document.querySelector(".calendar-section");
-    
-    // keep title
-    container.innerHTML = `<h2>My Calendar</h2>`;
+    const container =
+        document.querySelector(".calendar-section");
 
-    if (events.length === 0) {
-        container.innerHTML += `<p>No upcoming events</p>`;
+    container.innerHTML =
+        `<h2>Upcoming Events</h2>`;
+
+    const today = new Date();
+
+    today.setHours(0, 0, 0, 0);
+
+    const upcomingEvents = events.filter(event => {
+
+        const eventDate = new Date(event.date);
+
+        eventDate.setHours(0, 0, 0, 0);
+
+        return eventDate >= today;
+    });
+
+    upcomingEvents.sort((a, b) => {
+        return new Date(a.date) - new Date(b.date);
+    });
+
+    if (upcomingEvents.length === 0) {
+
+        container.innerHTML += `
+            <p>No upcoming events</p>
+        `;
+
         return;
     }
 
-    events.forEach(event => {
+    upcomingEvents.forEach(event => {
+
         const dateObj = new Date(event.date);
 
-        const day = dateObj.getDate();
-        const month = dateObj.toLocaleString("en", { month: "short" });
+        const day =
+            dateObj.getDate();
+
+        const month =
+            dateObj.toLocaleString(
+                "en",
+                { month: "short" }
+            );
+
+        const isToday =
+            dateObj.toDateString() ===
+            new Date().toDateString();
 
         container.innerHTML += `
+
             <div class="calendar-item">
+
                 <div class="calendar-date">
-                    <span class="day">${day}</span>
-                    <span class="month">${month}</span>
+                    <span class="day">
+                        ${day}
+                    </span>
+
+                    <span class="month">
+                        ${month}
+                    </span>
                 </div>
+
                 <div class="calendar-info">
-                    <h4>${event.title}</h4>
-                    <p>${event.society_name}: ${event.location}</p>
+
+                    <h4>
+                        ${
+                            event.type === 'funeral'
+                            ? 'Funeral'
+                            : 'Meeting'
+                        }
+                        - ${event.title}
+                    </h4>
+
+                    <p>
+                        ${event.society_name}: ${event.location}
+                    </p>
+
+                    <small class="event-time">
+                        ${event.time}
+                        ${
+                            isToday
+                            ? ' • Today'
+                            : ''
+                        }
+                    </small>
+
                 </div>
+
             </div>
         `;
     });

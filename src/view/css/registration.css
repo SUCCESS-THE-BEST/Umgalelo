@@ -320,6 +320,8 @@ button {
   font-size: 13px;
 }
 
+
+
 /* Progress Indicators */
 .progress-indicators {
   display: flex;
@@ -352,7 +354,7 @@ button {
   width: 100%;
 }
 
-/* Terms Section */
+/* Terms Section
 .terms-section {
   display: flex;
   align-items: flex-start;
@@ -391,7 +393,7 @@ button {
 
 .terms-label .highlight {
   color: var(--primary-light);
-}
+} */
 
 /* Submit Button */
 .submit-button {
@@ -419,6 +421,66 @@ button {
 
 .submit-button:active {
   transform: translateY(-1px) scale(0.99);
+}
+
+.google-signup-btn {
+    width: 100%;
+    max-width: 543px;
+    min-height: 54px;
+    margin: 28px auto 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+
+    background: white;
+    border: 1px solid rgb(214, 214, 214);
+    border-radius: 35px;
+
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+
+    cursor: pointer;
+    transition:
+        transform var(--transition),
+        border-color var(--transition),
+        box-shadow var(--transition),
+        background var(--transition);
+}
+
+.google-signup-btn img {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+}
+
+.google-signup-btn:hover {
+    transform: translateY(-3px);
+    border-color: rgba(169, 108, 65, 0.45);
+    background: #fffdfb;
+    box-shadow: var(--shadow-soft);
+}
+
+.auth-divider {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 28px 0 32px;
+}
+
+.auth-divider span {
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+}
+
+.auth-divider p {
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
 }
 
 @keyframes slideInLeft {

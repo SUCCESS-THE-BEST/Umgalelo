@@ -1,5 +1,34 @@
 const db = require('../config/db');
 
+const checkClaimEligibility = async (user_id, society_id) => {
+  const [rows] = await db.execute(
+    `
+    SELECT 
+      sm.joined_at,
+      s.waiting_period,
+      s.monthly_contribution,
+
+      TIMESTAMPDIFF(MONTH, sm.joined_at, CURDATE()) AS months_joined,
+
+      EXISTS (
+        SELECT 1
+        FROM contributions c
+        WHERE c.user_id = ?
+        AND c.society_id = ?
+        AND c.payment_month = DATE_FORMAT(CURDATE(), '%Y-%m')
+      ) AS has_paid_this_month
+
+    FROM society_members sm
+    JOIN societies s ON s.society_id = sm.society_id
+    WHERE sm.user_id = ?
+    AND sm.society_id = ?
+    `,
+    [user_id, society_id, user_id, society_id]
+  );
+
+  return rows[0];
+};
+
 const createClaim = async (user_id, society_id, deceased_name, relationship, claim_amount, date_of_passing) => {
   const [result] = await db.execute(
     `INSERT INTO claims (user_id, society_id, deceased_name, relationship, claim_amount, date_of_death)
@@ -121,5 +150,6 @@ module.exports = {
   updateStatus,
   getTotalClaims,
   getClaims,
-  getClaimsSummary
+  getClaimsSummary,
+  checkClaimEligibility
 };

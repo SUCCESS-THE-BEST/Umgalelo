@@ -158,7 +158,7 @@ body{
 
 .admin-tag {
   position: absolute;
-  right: 10px;
+  right: 25px;
   border: 1px solid white;
   padding: 3px 10px;
   border-radius: 10px;
@@ -168,6 +168,8 @@ body{
 
 .sign-out {
   margin-top: auto;
+  position: absolute;
+  bottom: 0;
   padding-top: 20px;
   border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
@@ -222,12 +224,6 @@ body{
     position: relative;
 }
 
-/* .notification-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    position: relative;
-} */
 
 .notification-dropdown {
     position: absolute;
@@ -528,6 +524,73 @@ select:focus {
   font-size: 14px;
   color: #777;
   margin-top: 0.25rem;
+}
+
+.profile-header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.section-edit-btn {
+    background: transparent;
+    color: #a96c41;
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+    border: none;
+}
+
+.section-edit-btn:hover {
+    background: #a96c41;
+    color: white;
+}
+
+.form-input.locked,
+.form-select.locked {
+    border: none;
+    background: transparent;
+    color: black;
+    padding-left: 0;
+}
+
+.form-input.missing,
+.form-select.missing {
+    border: 1px dashed #d99173;
+    background: #fff8f4;
+}
+
+.field-display {
+    width: 90%;
+    min-height: 45px;
+    padding: 0.75rem 0;
+    color: #333;
+    font-size: 16px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.field-display.empty {
+    color: #999;
+    font-style: italic;
+}
+
+.form-input.hidden,
+.form-select.hidden {
+    display: none;
+}
+
+.section-edit-btn.saving {
+    background: #a96c41;
+    color: white;
+}
+
+.section-message {
+    margin-top: 18px;
+    font-size: 14px;
+    font-weight: 600;
 }
 
 /* Upload Section */

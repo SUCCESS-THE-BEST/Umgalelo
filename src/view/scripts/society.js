@@ -24,7 +24,7 @@ async function loadSociety() {
     renderMembers(data.members);
     renderRequests(data.requests);
     //renderClaims(data.claims);
-    console.log(data.members)
+    console.log(data.society)
 }
 
 window.onload = async () => {
@@ -169,11 +169,16 @@ function renderSociety(s) {
         `<img src="../images/location.png" width="15px"> ${s.city}, ${s.province}`;
 
     document.getElementById("societyDescription").textContent = s.description;
-
+    document.getElementById("additionalRules").textContent = s.additional_rules;
+    
     document.getElementById("detailContribution").textContent = `R${s.monthly_contribution}/month`;
     document.getElementById("coverAmount").textContent = `R${s.cover_amount}`;
     document.getElementById("maxMembers").textContent = s.maximum_members;
     document.getElementById("adminName").textContent = s.first_name + ' ' + s.last_name;
+
+    document.getElementById("minimumAge").textContent = s.minimum_age;
+    document.getElementById("waitingPeriod").textContent = s.waiting_period;
+    document.getElementById("societyCity").textContent = s.city + ', ' + s.province;
 
     // ============ FILL PAYMENT CARD ==================
     document.getElementById('society-name').value = s.society_name;
@@ -187,66 +192,6 @@ function renderSociety(s) {
     `${now.getFullYear()}-${month}`;
     document.getElementById('claim_amount').value = s.cover_amount
 }
-
-// ======= LOAD SIDEBAR SOCIETIES ========
-// const loadSidebarSocieties = async () => {
-//   const res = await fetch('http://localhost:3000/api/dashboard/societies', {
-//     headers: {
-//       Authorization: `Bearer ${token}`
-//     }
-//   });
-
-//   const societies = await res.json();
-
-//   const container = document.getElementById('sidebarSocieties');
-//   container.innerHTML = '';
-
-//   societies.forEach(s => {
-//     const isAdmin = s.role === 'admin';
-
-//     const item = `
-//       <div class="nav-item" onclick="openSociety(${s.id}, '${s.role}')">
-//         <img src="../images/networking.png" alt="" />
-//         <span>${s.society_name}</span>
-//         ${isAdmin ? '<span class="admin-tag active">Admin</span>' : ''}
-//       </div>
-//     `;
-
-//     container.innerHTML += item;
-//   });
-// };
-
-// ===== OPEN SIDEBAR SOCIETY ========
-// const openSociety = (id, role) => {
-
-//   localStorage.setItem("society_id", id);
-//   localStorage.setItem("role", role);
-
-//   window.location.href = `society.html?id=${id}`;
-// };
-
-// let currentUser = {}
-// ========== LOAD USER INFO ON SIDEBAR ===========
-// const loadUser = async () => {
-//     const res = await fetch('http://localhost:3000/api/auth/profile', {
-//         headers: {
-//         Authorization: `Bearer ${token}`
-//         }
-//     });
-
-//     const [user] = await res.json();
-//     console.log(user)
-//     document.getElementById('userName').innerText = user.first_name + ' ' + user.last_name;
-//     document.getElementById('userEmail').innerText = user.email;
-//     document.getElementById('member').value = user.first_name + ' ' + user.last_name;
-//     document.getElementById('member-name').value = user.first_name + ' ' + user.last_name;
-
-//     currentUser = {
-//         user_id: user.user_id,
-//         firstName: user.first_name
-//     }
-    
-// };
 
 
 // =========== MAKE PAYMENT / SUBMIT CLAIM =========
@@ -331,41 +276,67 @@ btnClaim.addEventListener('click', async (e) => {
 
 // ================== LOAD AND RENDER EVENTS ===================
 async function loadEvents() {
-    const res = await fetch(`http://localhost:3000/api/events/${localStorage.getItem('society_id')}`,{
-        headers: { 
-            Authorization: `Bearer ${token}`
-         }
-    }); // societyId
+    const res = await fetch(
+        `http://localhost:3000/api/events/${localStorage.getItem('society_id')}`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+
     const events = await res.json();
-    console.log(events)
 
     const container = document.querySelector(".events-list");
     container.innerHTML = "";
 
-    if (events.length === 0) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const upcomingEvents = events.filter(event => {
+        const eventDate = new Date(event.date);
+        eventDate.setHours(0, 0, 0, 0);
+
+        return eventDate >= today;
+    });
+
+    document.getElementById('eventsCount').textContent =
+        `Upcoming Events (${upcomingEvents.length})`;
+
+    if (upcomingEvents.length === 0) {
         container.innerHTML = "<p>No upcoming events</p>";
         return;
     }
 
-    let eventsLength = events.length;
-    document.getElementById('eventsCount').textContent = `Events (${eventsLength})`;
-
-    events.forEach(event => {
+    upcomingEvents.forEach(event => {
         container.innerHTML += `
-        <div class="event-card" 
-             data-event-id="${event.id}" 
-             data-event-type="${event.type}">
-            <div class="event-date">
-                <div class="date-badge">
-                    <span class="day">${new Date(event.date).getDate()}</span>
-                    <span class="month">${new Date(event.date).toLocaleString('en', { month: 'short' }).toUpperCase()}</span>
+            <div class="event-card" 
+                 data-event-id="${event.id}" 
+                 data-event-type="${event.type}">
+
+                <div class="event-date">
+                    <div class="date-badge">
+                        <span class="day">
+                            ${new Date(event.date).getDate()}
+                        </span>
+
+                        <span class="month">
+                            ${new Date(event.date)
+                                .toLocaleString('en', { month: 'short' })
+                                .toUpperCase()}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="event-details">
+                    <h3>
+                        ${event.type === 'funeral' ? 'Funeral' : 'Meeting'} - ${event.title}
+                    </h3>
+
+                    <p>${event.time} · ${event.location}</p>
                 </div>
             </div>
-            <div class="event-details">
-                <h3>${event.title}</h3>
-                <p>${event.time} · ${event.location}</p>
-            </div>
-        </div>`;
+        `;
     });
 }
 

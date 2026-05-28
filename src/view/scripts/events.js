@@ -9,6 +9,21 @@ window.onload = async () => {
     await loadMessages();
 };
 
+let selectedEventType = 'meeting';
+
+document.querySelectorAll('.event-type-option').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.event-type-option')
+            .forEach(b => b.classList.remove('active'));
+
+        btn.classList.add('active');
+
+        selectedEventType = btn.dataset.type;
+
+        document.getElementById('eventTypeInput').value = selectedEventType;
+    });
+});
+
 const eventModal = document.getElementById("eventDetailsModal");
 const closeBtn = document.getElementById("closeEventDetails");
 
@@ -45,7 +60,7 @@ form.addEventListener("submit", async (e) => {
 
     const data = {
         societyId: localStorage.getItem('society_id'),
-        type: "meeting", // later connect to toggle
+        type: formData.get("type"),
         title: formData.get("title"),
         date: formData.get("date"),
         time: formData.get("time"),
@@ -71,38 +86,80 @@ form.addEventListener("submit", async (e) => {
 });
 
 async function loadEvents() {
-    const res = await fetch(`http://localhost:3000/api/events/${localStorage.getItem('society_id')}`,{
-        headers: { 
-            Authorization: `Bearer ${token}`
-         }
-    }); // societyId
+
+    const res = await fetch(
+        `http://localhost:3000/api/events/${localStorage.getItem('society_id')}`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+
     const events = await res.json();
-    console.log(events)
 
     const container = document.querySelector(".events-list");
+
     container.innerHTML = "";
 
-    if (events.length === 0) {
-        container.innerHTML = "<p>No upcoming events</p>";
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const upcomingEvents = events.filter(event => {
+
+        const eventDate = new Date(event.date);
+
+        eventDate.setHours(0, 0, 0, 0);
+
+        return eventDate >= today;
+    });
+
+    if (upcomingEvents.length === 0) {
+
+        container.innerHTML =
+            "<p>No upcoming events</p>";
+
         return;
     }
 
-    events.forEach(event => {
+    upcomingEvents.forEach(event => {
+
         container.innerHTML += `
-        <div class="event-card" 
-             data-event-id="${event.id}" 
+        <div class="event-card"
+             data-event-id="${event.id}"
              data-event-type="${event.type}">
+
             <div class="event-date">
                 <div class="date-badge">
-                    <span class="day">${new Date(event.date).getDate()}</span>
-                    <span class="month">${new Date(event.date).toLocaleString('en', { month: 'short' }).toUpperCase()}</span>
+                    <span class="day">
+                        ${new Date(event.date).getDate()}
+                    </span>
+
+                    <span class="month">
+                        ${new Date(event.date)
+                            .toLocaleString('en', {
+                                month: 'short'
+                            })
+                            .toUpperCase()}
+                    </span>
                 </div>
             </div>
+
             <div class="event-details">
-                <h3>${event.title}</h3>
-                <p>${event.time} · ${event.location}</p>
+                <h3>
+                    ${
+                        event.type === 'funeral'
+                        ? 'Funeral'
+                        : 'Meeting'
+                    } - ${event.title}
+                </h3>
+
+                <p>
+                    ${event.time} · ${event.location}
+                </p>
             </div>
-        </div>`;
+        </div>
+        `;
     });
 }
 
@@ -326,3 +383,24 @@ async function loadMessages() {
 
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn')
+            .forEach(b => b.classList.remove('active'));
+
+        btn.classList.add('active');
+
+        const filter = btn.dataset.filter;
+
+        document.querySelectorAll('.event-card').forEach(card => {
+            const type = card.dataset.eventType;
+
+            if (filter === 'all' || type === filter) {
+                card.classList.remove('hidden');
+            } else {
+                card.classList.add('hidden');
+            }
+        });
+    });
+});

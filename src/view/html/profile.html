@@ -29,10 +29,10 @@
         <hr class="sidebar-divider" />
 
         <div class="user-profile">
-          <img src='../images/profile-image.png' alt="User" class="user-avatar" />
+          <img src='../images/profile.webp' alt="User" class="user-avatar" />
           <div class="user-info">
-            <h3 id="userName">Sindi Gumede</h3>
-            <p id="userEmail" style="color: white;">sindi @example.com</p>
+            <h3 id="userName"></h3>
+            <p id="userEmail" style="color: white;"></p>
           </div>
         </div>
 
@@ -118,10 +118,10 @@
                             </div>
                         </div>
                     </div>
-                    <img src='../images/profile-image.png' alt="User" class="user-avatar" />
+                    <img src='../images/profile.webp' alt="User" class="user-avatar" />
                     <div class="user-info">
-                        <h3 id="profileName">Sindi Gumede</h3>
-                        <p id="profileEmail">sindi @example.com</p>
+                        <h3 id="profileName"></h3>
+                        <p id="profileEmail"></p>
                     </div>
                 </div>
         </header>
@@ -132,8 +132,14 @@
         <div class="profile-content">
           
           <!-- Personal Details -->
-          <section class="form-section">
-            <h3 class="section-title">Personal Details</h3>
+          <section class="form-section" data-section="personal">
+            <div class="profile-header-section">
+                <h3 class="section-title">Personal Details</h3>
+                <button type="button" class="section-edit-btn" onclick="enableSection('personal')">
+                Edit
+               </button>
+            </div>
+            
             <div class="section-divider"></div>
             <div class="form-grid">
               <div class="form-field">
@@ -154,7 +160,7 @@
               </div>
               <div class="form-field">
                 <label class="form-label">Date-Of-Birth</label>
-                <input type="text" placeholder="dd-mm-yyyy" class="form-input" id="dob"/>
+                <input type="date" placeholder="dd-mm-yyyy" class="form-input" id="dob"/>
               </div>
               <div class="form-field">
                 <label class="form-label">Age</label>
@@ -164,8 +170,14 @@
           </section>
 
           <!-- Contact Details -->
-          <section class="form-section">
-            <h3 class="section-title">Contact Details</h3>
+          <section class="form-section" data-section="contact">
+            <div class="profile-header-section">
+                <h3 class="section-title">Contact Details</h3>
+                <button type="button" class="section-edit-btn" onclick="enableSection('contact')">
+                Edit
+               </button>
+            </div>
+            
             <div class="section-divider"></div>
             <div class="form-grid">
               <div class="form-field">
@@ -180,8 +192,14 @@
           </section>
 
           <!-- Address Details -->
-          <section class="form-section">
-            <h3 class="section-title">Address Details</h3>
+          <section class="form-section" data-section="address">
+            <div class="profile-header-section">
+              <h3 class="section-title">Address Details</h3>
+              <button type="button" class="section-edit-btn" onclick="enableSection('address')">
+                Edit
+               </button>
+            </div>
+            
             <div class="section-divider"></div>
             <div class="form-grid">
               <div class="form-field">
@@ -215,8 +233,14 @@
           </section>
 
           <!-- Next Of Kin -->
-          <section class="form-section">
-            <h3 class="section-title">Next Of Kin</h3>
+          <section class="form-section" data-section="kin">
+            <div class="profile-header-section">
+              <h3 class="section-title">Next Of Kin</h3>
+              <button type="button" class="section-edit-btn" onclick="enableSection('kin')">
+                  Edit
+              </button>
+            </div>
+            
             <div class="section-divider"></div>
             <div class="form-grid">
               <div class="form-field">
@@ -230,33 +254,9 @@
             </div>
           </section>
 
-          <!-- Banking Details -->
-          <section class="form-section">
-            <h3 class="section-title">Banking details</h3>
-            <div class="section-divider"></div>
-            <div class="form-grid">
-              <div class="form-field">
-                <label class="form-label">Bank Name</label>
-                <input type="text" placeholder="Select your bank from the list." class="form-input text-small" />
-              </div>
-              <div class="form-field">
-                <label class="form-label">Account Holder</label>
-                <input type="text" placeholder="The name registered on the bank account." class="form-input text-small" />
-              </div>
-              <div class="form-field">
-                <label class="form-label">Account Number</label>
-                <input type="text" placeholder="Enter the society's account number." class="form-input text-small" />
-              </div>
-              <div className="form-field">
-                <label class="form-label">Account Type</label>
-                <input type="text" placeholder="Standard or universal branch code" class="form-input text-small" />
-              </div>
-            </div>
-          </section>
-
           <!-- Upload Documents -->
           <section class="form-section">
-            <h3 class="section-title">Upload documents</h3>
+            <h3 class="section-title">Upload Files</h3>
             <div class="section-divider"></div>
 
             <div class="form-grid">
@@ -271,10 +271,10 @@
 
                     <br><br>
 
-                    <label class="form-label">Proof of banking details</label>
+                    <!-- <label class="form-label">Proof of banking details</label>
                     <input type="file" class="file-input" id="bankingProof" accept=".pdf,image/*">
 
-                    <br><br>
+                    <br><br> -->
 
                     <p id="message"></p>
                 </div>

@@ -1,13 +1,24 @@
 const express = require('express');
 const router = express.Router();
-const { register, login, getProfile, verifyUser, forgotPassword, resetPassword } = require('../controllers/authController');
+
+const {
+    register,
+    login,
+    getProfile,
+    verifyUser,
+    forgotPassword,
+    resetPassword
+} = require('../controllers/authController');
+
 const authMiddleware = require('../middleware/authMiddleware');
+const { validateRegister } = require('../middleware/validator/authValidator');
+
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 
-router.post('/register', register);
+router.post('/register', validateRegister, register);
 
-router.get('/verify/:token', verifyUser)
+router.get('/verify/:token', verifyUser);
 
 router.post('/login', login);
 
@@ -25,19 +36,24 @@ router.get('/google',
 router.get('/google/callback',
     passport.authenticate('google', {
         session: false,
-        failureRedirect: '/login.html'
+        failureRedirect: 'http://127.0.0.1:5500/src/view/html/login.html'
     }),
     (req, res) => {
         const user = req.user;
 
         const token = jwt.sign(
-            { userId: user.user_id, role: user.role },
+            {
+                userId: user.user_id,
+                role: user.role
+            },
             process.env.JWT_SECRET,
-            { expiresIn: '1d' }
+            {
+                expiresIn: '1d'
+            }
         );
 
         res.redirect(
-            `http://127.0.0.1:5501/src/view/html/dashboard.html?token=${token}`
+            `http://127.0.0.1:5500/src/view/html/dashboard.html?token=${token}`
         );
     }
 );
@@ -46,7 +62,4 @@ router.post('/forgot-password', forgotPassword);
 
 router.post('/reset-password', resetPassword);
 
-
 module.exports = router;
-
-

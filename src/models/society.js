@@ -130,6 +130,18 @@ const getUserSocietyCards = async (user_id) => {
     return rows;
 };
 
+const getSocietyMembers = async (societyId) => {
+    const [rows] = await db.execute(
+        `
+        SELECT user_id
+        FROM society_members
+        WHERE society_id = ?
+        `,
+        [societyId]
+    );
+
+    return rows;
+};
 
 module.exports = {
   createSociety,
@@ -138,5 +150,6 @@ module.exports = {
   getAllSocieties,
   findSocietyByName,
   findSocietyById,
-  getUserSocietyCards
+  getUserSocietyCards,
+  getSocietyMembers
 };

@@ -9,37 +9,50 @@ const notificationModel = require('../models/notifications');
 // ================== REGISTER ACCOUNT =====================
 const register = async (req, res) => {
     try {
-        const { firstName, lastName, email, phone, idNumber, password } = req.body;
+        const {
+            firstName,
+            lastName,
+            email,
+            phone,
+            idNumber,
+            password
+        } = req.body;
 
-        // check if user exists
         const exists = await userModel.findUserByEmail(email);
+
         if (exists.length > 0) {
-            return res.status(400).json({message: 'user already exists'});
+            return res.status(400).json({
+                message: 'User already exists'
+            });
         }
 
-        //hash passowrd
-        const hashedPassowrd = await bcrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(password, 10);
 
-        //google OAuth token
         const token = crypto.randomBytes(32).toString('hex');
 
-        const result = await userModel.createUser(firstName, lastName, email, phone, idNumber, hashedPassowrd, token);
-
-        //Build verification link
-        const verifyLink = `http://127.0.0.1:3000/api/auth/verify/${token}`;
-
-        //Send email
-        await sendEmail(
-        email,
-        'Verify your Umgalelo account',
-        `
-            <h2>Welcome to Umgalelo</h2>
-            <p>Click below to verify your account:</p>
-            <a href="${verifyLink}">Verify Account</a>
-        `
+        await userModel.createUser(
+            firstName,
+            lastName,
+            email,
+            phone,
+            idNumber,
+            hashedPassword,
+            token
         );
 
-        //send welcome notification
+        const verifyLink =
+            `http://127.0.0.1:3000/api/auth/verify/${token}`;
+
+        await sendEmail(
+            email,
+            'Verify your Umgalelo account',
+            `
+                <h2>Welcome to Umgalelo</h2>
+                <p>Click below to verify your account:</p>
+                <a href="${verifyLink}">Verify Account</a>
+            `
+        );
+
         const user = await userModel.findUserByEmail(email);
 
         await notificationModel.createNotification(
@@ -50,27 +63,31 @@ const register = async (req, res) => {
         );
 
         res.status(201).json({
-        message: 'User registered. Please check your email to verify your account.'
+            message:
+                'User registered. Please check your email to verify your account.'
         });
-        // res.status(200).json({ message: 'user registered successfully' });
 
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            message: error.message
+        });
     }
-}
+};
 
 const verifyUser = async (req, res) => {
-  const { token } = req.params;
+    const { token } = req.params;
 
-  const [user] = await userModel.findByVerificationToken(token);
+    const [user] = await userModel.findByVerificationToken(token);
 
-  if (!user) {
-    return res.send('Invalid or expired token');
-  }
+    if (!user) {
+        return res.send('Invalid or expired token');
+    }
 
-  await userModel.markUserAsVerified(token);
+    await userModel.markUserAsVerified(token);
 
-  res.redirect('http://127.0.0.1:5501/src/view/html/login.html');
+    res.redirect(
+        'http://127.0.0.1:5500/src/view/html/login.html'
+    );
 };
 
 

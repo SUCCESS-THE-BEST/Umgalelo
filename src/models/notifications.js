@@ -28,10 +28,10 @@ const getUserNotifications = async (userId) => {
             s.society_name,
             s.society_id
         FROM notifications n
-        JOIN societies s ON s.society_id = n.society_id
-        WHERE user_id = ?
-        AND expires_at > NOW()
-        ORDER BY created_at DESC
+        LEFT JOIN societies s ON s.society_id = n.society_id
+        WHERE n.user_id = ?
+        AND n.expires_at > NOW()
+        ORDER BY n.created_at DESC
         LIMIT 10
     `, [userId]);
 

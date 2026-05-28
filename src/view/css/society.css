@@ -170,7 +170,7 @@ body {
 
 .admin-tag {
   position: absolute;
-  right: 10px;
+  right: 25px;
   border: 1px solid white;
   padding: 3px 10px;
   border-radius: 10px;
@@ -180,6 +180,8 @@ body {
 
 .sign-out {
   margin-top: auto;
+  position: absolute;
+  bottom: 0;
   padding-top: 20px;
   border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
@@ -1509,4 +1511,25 @@ html, body {
         top: 16px;
         right: 16px;
     }
+}
+.user-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #ddd;
+}
+
+.user-info h4 {
+    margin: 0;
+    font-size: 16px;
+    color: #3f3f3f;
+    font-weight: 600;
+}
+
+.user-info p {
+    margin: 0;
+    font-size: 14px;
+    color: #3f3f3f;
+    opacity: 0.7;
 }

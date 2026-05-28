@@ -34,11 +34,23 @@ function logout() {
 function openSociety(id, role) {
 
     localStorage.setItem('society_id', id);
-
     localStorage.setItem('role', role);
 
-    window.location.href =
-        `society.html?id=${id}`;
+    const currentPage =
+        window.location.pathname.split('/').pop();
+
+    const societyPages = [
+        'society.html',
+        'payments.html',
+        'claims.html',
+        'events.html'
+    ];
+
+    if (societyPages.includes(currentPage)) {
+        window.location.href = `${currentPage}?id=${id}`;
+    } else {
+        window.location.href = `society.html?id=${id}`;
+    }
 }
 
 let currentUser = {}
@@ -91,6 +103,7 @@ async function loadUser() {
 }
 
 // ================= LOAD SIDEBAR =================
+// ================= LOAD SIDEBAR SOCIETIES =================
 async function loadSidebarSocieties() {
 
     try {
@@ -113,26 +126,66 @@ async function loadSidebarSocieties() {
 
         container.innerHTML = '';
 
+        // current page
+        const currentPage =
+            window.location.pathname
+                .split('/')
+                .pop();
+
+        // pages that belong to a society
+        const societyPages = [
+            'society.html',
+            'payments.html',
+            'claims.html',
+            'events.html',
+            'members.html',
+            'chat.html'
+        ];
+
+        // only highlight on society-related pages
+        const shouldHighlightSociety =
+            societyPages.includes(currentPage);
+
+        const currentSocietyId =
+            shouldHighlightSociety
+                ? localStorage.getItem('society_id')
+                : null;
+
         societies.forEach(s => {
 
-            const isAdmin = s.role === 'admin';
+            const isAdmin =
+                s.role === 'admin';
+
+            const isActive =
+                Number(currentSocietyId) === Number(s.id);
+
+            const shortenedName =
+                s.society_name.length > 25
+                    ? s.society_name.substring(0, 25) + '...'
+                    : s.society_name;
 
             container.innerHTML += `
                 <div
-                    class="nav-item"
+                    class="nav-item ${isActive ? 'active' : ''}"
                     onclick="openSociety(${s.id}, '${s.role}')"
                 >
 
                     <img
-                        src="../images/networking.png"
+                        src="${isActive ? '../images/networking (3).png' : '../images/networking.png'}"
                         alt=""
                     />
 
-                    <span>${s.society_name}</span>
+                    <span title="${s.society_name}">
+                        ${shortenedName}
+                    </span>
 
                     ${
                         isAdmin
-                        ? `<span class="admin-tag">Admin</span>`
+                        ? `
+                            <span class="admin-tag">
+                                Admin
+                            </span>
+                        `
                         : ''
                     }
 

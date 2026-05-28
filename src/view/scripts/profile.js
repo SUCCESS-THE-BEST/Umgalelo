@@ -4,11 +4,11 @@ const update = document.getElementById('update');
 const cancel = document.getElementById('cancel');
 
 window.onload = async () => {
-    await loadUserData();
     await loadUser();
     await loadSidebarSocieties();
     await loadNotifications();
     await loadSocieties();
+    await loadUserData();
     await renderDate();
 };
 
@@ -29,44 +29,230 @@ function renderDate(){
 
 
 // ============= LOAD USER DATA ========================
+let currentProfileUser = null;
+
+const editableSections = {
+    personal: ['idNumber', 'gender', 'dob'],
+    contact: ['phone'],
+    address: ['addressLine1', 'city', 'province', 'postalCode'],
+    kin: ['nextOfKinName', 'nextOfKinPhone']
+};
+
 const loadUserData = async () => {
     const res = await fetch('http://localhost:3000/api/auth/profile', {
         headers: {
-        Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`
         }
     });
-     
+
     const [user] = await res.json();
-    console.log(user);
-    document.getElementById('firstName').value = user.first_name
-    document.getElementById('firstName').disabled = true
-    document.getElementById('firstName').style.background = 'none'
-    document.getElementById('firstName').style.border = 'none'
+    currentProfileUser = user;
 
-    document.getElementById('lastName').value = user.last_name
-    document.getElementById('lastName').disabled = true
-    document.getElementById('lastName').style.background = 'none'
-    document.getElementById('lastName').style.border = 'none'
+    setDisplayField('firstName', user.first_name);
+    setDisplayField('lastName', user.last_name);
+    setDisplayField('idNumber', user.id_number);
+    setDisplayField('gender', user.gender);
+    setDisplayField('dob', formatDate(user.date_of_birth));
+    setDisplayField('age', calculateAge(user.date_of_birth));
 
-    document.getElementById('idNumber').value = user.id_number
-    document.getElementById('idNumber').disabled = true
-    document.getElementById('idNumber').style.background = 'none'
-    document.getElementById('idNumber').style.border = 'none'
+    setDisplayField('email', user.email);
+    setDisplayField('phone', user.phone);
 
-    document.getElementById('email').value = user.email
-    document.getElementById('email').disabled = true
-    document.getElementById('email').style.background = 'none'
-    document.getElementById('email').style.border = 'none'
+    setDisplayField('addressLine1', user.address_line1);
+    setDisplayField('city', user.city);
+    setDisplayField('province', user.province);
+    setDisplayField('postalCode', user.postal_code);
 
-    document.getElementById('phone').value = user.phone
-    document.getElementById('phone').disabled = true
-    document.getElementById('phone').style.background = 'none'
-    document.getElementById('phone').style.border = 'none'
+    setDisplayField('nextOfKinName', user.next_of_kin_name);
+    setDisplayField('nextOfKinPhone', user.next_of_kin_phone);
 
-    parseIDNumber(user.id_number)
-
+    setupSectionButtons();
 };
 
+function formatDate(dateString) {
+    if (!dateString) return '';
+
+    const date = new Date(dateString);
+
+    return date.toLocaleDateString('en-ZA');
+}
+
+function setDisplayField(inputId, value) {
+    const input = document.getElementById(inputId);
+
+    if (!input) return;
+
+    input.value = value || '';
+    input.classList.add('hidden');
+
+    let display = document.getElementById(`${inputId}-display`);
+
+    if (!display) {
+        display = document.createElement('div');
+        display.id = `${inputId}-display`;
+        display.className = 'field-display';
+
+        input.parentNode.insertBefore(display, input);
+    }
+
+    display.textContent = value || 'Not added yet';
+
+    if (!value) {
+        display.classList.add('empty');
+    } else {
+        display.classList.remove('empty');
+    }
+
+    input.disabled = true;
+}
+
+function lockAllSections() {
+    document.querySelectorAll('.form-section').forEach(section => {
+        const inputs = section.querySelectorAll('input, select');
+
+        inputs.forEach(input => {
+            if (input.type !== 'file') {
+                input.disabled = true;
+
+                if (input.value) {
+                    input.classList.add('locked');
+                }
+            }
+        });
+    });
+}
+
+function setupSectionButtons() {
+    document.querySelectorAll('.section-edit-btn').forEach(button => {
+        button.onclick = async () => {
+            const section = button.closest('.form-section');
+            const sectionName = section.dataset.section;
+
+            if (!sectionName) return;
+
+            if (button.textContent.trim() === 'Edit') {
+                enableSection(sectionName, button);
+            } else {
+                await saveSection(sectionName, button);
+            }
+        };
+    });
+}
+
+function enableSection(sectionName, button) {
+    const fields = editableSections[sectionName];
+
+    fields.forEach(id => {
+        const input = document.getElementById(id);
+        const display = document.getElementById(`${id}-display`);
+
+        if (!input) return;
+
+        if (id === 'idNumber' && currentProfileUser.id_number) {
+            return;
+        }
+
+        if (id === 'age') {
+            return;
+        }
+
+        input.classList.remove('hidden');
+        input.disabled = false;
+
+        if (display) {
+            display.style.display = 'none';
+        }
+    });
+
+    button.textContent = 'Save';
+    button.classList.add('saving');
+}
+
+async function saveSection(sectionName, button) {
+    const message = getSectionMessage(button);
+
+    const data = buildSectionData(sectionName);
+
+    try {
+        const res = await fetch('http://localhost:3000/api/users/update', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(data)
+        });
+
+        const result = await res.json();
+
+        if (!res.ok) {
+            message.textContent = result.message;
+            message.style.color = 'red';
+            return;
+        }
+
+        message.textContent = `${sectionName} details saved`;
+        message.style.color = 'green';
+
+        button.textContent = 'Edit';
+        button.classList.remove('saving');
+
+        await loadUserData();
+
+    } catch (error) {
+        console.log(error);
+        message.textContent = 'Failed to save details';
+        message.style.color = 'red';
+    }
+}
+
+function buildSectionData(sectionName) {
+    if (sectionName === 'personal') {
+        return {
+            idNumber: document.getElementById('idNumber').value || undefined,
+            gender: document.getElementById('gender').value || undefined,
+            dob: document.getElementById('dob').value || undefined
+        };
+    }
+
+    if (sectionName === 'contact') {
+        return {
+            phone: document.getElementById('phone').value || undefined
+        };
+    }
+
+    if (sectionName === 'address') {
+        return {
+            addressLine1: document.getElementById('addressLine1').value || undefined,
+            city: document.getElementById('city').value || undefined,
+            province: document.getElementById('province').value || undefined,
+            postalCode: document.getElementById('postalCode').value || undefined
+        };
+    }
+
+    if (sectionName === 'kin') {
+        return {
+            nextOfKinName: document.getElementById('nextOfKinName').value || undefined,
+            nextOfKinPhone: document.getElementById('nextOfKinPhone').value || undefined
+        };
+    }
+
+    return {};
+}
+
+function getSectionMessage(button) {
+    const section = button.closest('.form-section');
+
+    let message = section.querySelector('.section-message');
+
+    if (!message) {
+        message = document.createElement('p');
+        message.className = 'section-message';
+        section.appendChild(message);
+    }
+
+    return message;
+}
 
 update.addEventListener('click', async (e) => {
     e.preventDefault();
@@ -77,6 +263,11 @@ update.addEventListener('click', async (e) => {
         // ================= UPDATE TEXT PROFILE DETAILS =================
 
         const data = {
+            idNumber: document.getElementById('idNumber').value || null,
+            gender: document.getElementById('gender').value || null,
+            dob: document.getElementById('dob').value || null,
+            phone: document.getElementById('phone').value || null,
+
             addressLine1: document.getElementById('addressLine1').value,
             city: document.getElementById('city').value,
             province: document.getElementById('province').value,
@@ -176,6 +367,25 @@ update.addEventListener('click', async (e) => {
     }
 });
 
+function calculateAge(dob) {
+    if (!dob) return '';
+
+    const birthDate = new Date(dob);
+    const today = new Date();
+
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+
+    if (
+        monthDiff < 0 ||
+        (monthDiff === 0 && today.getDate() < birthDate.getDate())
+    ) {
+        age--;
+    }
+
+    return age;
+}
+
 cancel.onclick = () => {
   window.scrollTo(0, 0)
 };
@@ -251,55 +461,49 @@ const formatter = new Intl.DateTimeFormat('en-ZA', {
 
 //parse id number
 function parseIDNumber(id) {
-    // Extract parts
-    const yy = id.slice(0, 2); //year
-    const mm = id.slice(2, 4); //month
-    const dd = id.slice(4, 6); //day
-    const genderDigits = parseInt(id.slice(6, 10)); //gender
+    if (!id || id.length !== 13) {
+        return;
+    }
 
-    // Determine century
+    const yy = id.slice(0, 2);
+    const mm = id.slice(2, 4);
+    const dd = id.slice(4, 6);
+    const genderDigits = parseInt(id.slice(6, 10));
+
     const currentYY = new Date().getFullYear() % 100;
     const year = parseInt(yy) <= currentYY ? `20${yy}` : `19${yy}`;
 
-    // Validate month and day ranges
     const month = parseInt(mm);
     const day = parseInt(dd);
 
-    if (month < 1 || month > 12) throw new Error('Invalid month in ID number');
-    if (day < 1 || day > 31)     throw new Error('Invalid day in ID number');
+    if (month < 1 || month > 12) return;
+    if (day < 1 || day > 31) return;
 
-    // Build DOB as a proper Date object + formatted string
     const dob = new Date(`${year}-${mm}-${dd}`);
-    if (isNaN(dob.getTime())) throw new Error('Invalid date in ID number');
+    if (isNaN(dob.getTime())) return;
 
-    // Determine gender
     const gender = genderDigits >= 5000 ? 'Male' : 'Female';
 
-      // Age
     const today = new Date();
     let age = today.getFullYear() - dob.getFullYear();
     const monthDiff = today.getMonth() - dob.getMonth();
-    // Subtract 1 if birthday hasn't happened yet this year
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
-      age--;
+
+    if (
+        monthDiff < 0 ||
+        (monthDiff === 0 && today.getDate() < dob.getDate())
+    ) {
+        age--;
     }
 
-    document.getElementById('gender').value = gender
-    document.getElementById('gender').disabled = true
-    document.getElementById('gender').style.background = 'none'
-    document.getElementById('gender').style.border = 'none'
-
+    document.getElementById('gender').value = gender;
     document.getElementById('dob').value = dob.toISOString().split('T')[0];
-    document.getElementById('dob').disabled = true
-    document.getElementById('dob').style.background = 'none'
-    document.getElementById('dob').style.border = 'none'
+    document.getElementById('age').value = age;
 
-
-    document.getElementById('age').value = age
-    document.getElementById('age').disabled = true
-    document.getElementById('age').style.background = 'none'
-    document.getElementById('age').style.border = 'none'
-  
+    ['gender', 'dob', 'age'].forEach(id => {
+        document.getElementById(id).disabled = true;
+        document.getElementById(id).style.background = 'none';
+        document.getElementById(id).style.border = 'none';
+    });
 }
 
 // =============== NOTIFICATIONS ==================

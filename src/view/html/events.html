@@ -28,10 +28,10 @@
             <hr class="sidebar-divider" />
 
                 <div class="user-profile" onclick="window.location.href='profile.html'">
-                    <img src='../images/profile-image.png' alt="User" class="user-avatar" />
+                    <img src='../images/profile.webp' alt="User" class="user-avatar" />
                     <div class="user-info">
-                        <h3 id="userName">Sindi Gumede</h3>
-                        <p id="userEmail">sindi @example.com</p>
+                        <h3 id="userName"></h3>
+                        <p id="userEmail" style="color: white;"></p>
                     </div>
             </div>
 
@@ -125,8 +125,8 @@
                 <!-- <h2>Events</h2> -->
                 <div class="filter-buttons">
                     <button class="filter-btn active" data-filter="all">All</button>
-                    <button class="filter-btn" data-filter="meetings">Meetings</button>
-                    <button class="filter-btn" data-filter="funerals">Funerals</button>
+                    <button class="filter-btn" data-filter="meeting">Meetings</button>
+                    <button class="filter-btn" data-filter="funeral">Funerals</button>
                 </div>
                 <button class="btn btn-primary" id="addEventBtn">
                     <img src="../images/more (1).png" width="20px" alt="" class="btn-icon">
@@ -135,44 +135,6 @@
             </div>
 
             <div class="events-list">
-                <!-- <div class="event-card" data-event-type="funeral" data-event-id="1">
-                    <div class="event-date">
-                        <div class="date-badge">
-                            <span class="day">22</span>
-                            <span class="month">MAR</span>
-                        </div>
-                    </div>
-                    <div class="event-details">
-                        <h3>Funeral - Mama Dube</h3>
-                        <p>08:00 · Orlando East Community Hall</p>
-                    </div>
-                </div>
-
-                <div class="event-card" data-event-type="meeting" data-event-id="2">
-                    <div class="event-date">
-                        <div class="date-badge">
-                            <span class="day">5</span>
-                            <span class="month">APR</span>
-                        </div>
-                    </div>
-                    <div class="event-details">
-                        <h3>April Monthly Meeting</h3>
-                        <p>14:00 · 12 Vilakazi Street, Orlando East · Thabo Nkosi</p>
-                    </div>
-                </div>
-
-                <div class="event-card" data-event-type="meeting" data-event-id="3">
-                    <div class="event-date">
-                        <div class="date-badge">
-                            <span class="day">23</span>
-                            <span class="month">MAY</span>
-                        </div>
-                    </div>
-                    <div class="event-details">
-                        <h3>May Monthly Meeting</h3>
-                        <p>14:00 · 47 Moema Street, Meadowlands · Nomsa Mthembu</p>
-                    </div>
-                </div> -->
             </div>
         </section>
     </main>
@@ -242,26 +204,29 @@
         <div class="modal-content modal-large">
             <h2 class="modal-title">Add To Calendar</h2>
             <form class="event-form" id="eventForm">
+
                 <div class="form-row">
                     <div class="form-group">
                         <label>Event Type</label>
                         <div class="form-group-event-type">
-                            <span class="btn btn-outline" id="eventTypeBadge" name="eventType1">
-                            <p>Funeral</p>
-                        </span>
-                        <span class="btn btn-outline" id="eventTypeBadge">
-                            <p>Meeting</p>
-                        </span>
+                            <button type="button" class="event-type-option active" data-type="meeting">
+                                Meeting
+                            </button>
+
+                            <button type="button" class="event-type-option" data-type="funeral">
+                                Funeral
+                            </button>
                         </div>
-                        
+
+                        <input type="hidden" name="type" id="eventTypeInput" value="meeting">     
                     </div>
                 </div>
-
+                <br>
                 <div class="form-group">
                     <label>Title</label>
                     <input type="text" class="form-control" name="title" placeholder="e.g. April Monthly Meeting" required>
                 </div>
-
+                <br>
                 <div class="form-row">
                     <div class="form-group">
                         <label>Date</label>
@@ -272,22 +237,22 @@
                         <input type="time" class="form-control" name="time" value="14:00" required>
                     </div>
                 </div>
-
+                <br>
                 <div class="form-group">
                     <label>Location / Venue</label>
                     <input type="text" class="form-control" name="location" placeholder="e.g. 28 member street" required>
                 </div>
-
+                <br>
                 <div class="form-group">
                     <label>Member's Name</label>
                     <input type="text" class="form-control" name="member" placeholder="e.g. Thabo Khoza">
                 </div>
-
+                <br>
                 <div class="form-group">
                     <label>Additional Information</label>
                     <textarea class="form-control" name="notes" rows="3"></textarea>
                 </div>
-
+                <br>
                 <div class="form-actions">
                     <button type="button" class="btn modal-btn btn-outline" id="cancelAddEvent">Cancel</button>
                     <button type="submit" class="btn modal-btn btn-primary">Add to Calendar</button>
