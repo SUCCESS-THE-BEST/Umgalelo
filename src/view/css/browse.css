@@ -261,6 +261,32 @@ body {
     outline: none;
 }
 
+.no-search-results {
+    grid-column: 1 / -1; /* span across all grid columns */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    animation: fadeInUp 0.6s ease-out;
+    min-height: calc(100vh - 260px);
+    width: 100%;
+}
+
+.no-search-results p {
+    font-size: 30px;
+    font-weight: 700;
+    color: #777;
+    margin-bottom: 20px;
+}
+
+.no-search-results img {
+    max-width: 400px;
+    width: 100%;
+    height: auto;
+}
+
 .create-btn {
     position: absolute;
     top: 66px;
@@ -763,4 +789,16 @@ h2{
 
     font-size: 24px;
     cursor: pointer;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

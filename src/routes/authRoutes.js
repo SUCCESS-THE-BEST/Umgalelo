@@ -16,19 +16,27 @@ const {
 const authMiddleware = require('../middleware/authMiddleware');
 const { validateRegister } = require('../middleware/validator/authValidator');
 
+const {
+    loginLimiter,
+    registerLimiter,
+    forgotPasswordLimiter,
+    googleLimiter
+} = require('../middleware/rateLimiter');
+
 const FRONTEND_URL =
     process.env.FRONTEND_URL || 'http://127.0.0.1:5501';
 
-router.post('/register', validateRegister, register);
+router.post('/register', registerLimiter, validateRegister, register);
 
 router.get('/verify/:token', verifyUser);
 
-router.post('/login', login);
+router.post('/login', loginLimiter, login);
 
 router.get('/profile', authMiddleware, getProfile);
 
 router.get(
     '/google',
+    googleLimiter,
     passport.authenticate('google', {
         scope: ['profile', 'email'],
         session: false
@@ -61,7 +69,7 @@ router.get(
     }
 );
 
-router.post('/forgot-password', forgotPassword);
+router.post('/forgot-password', forgotPasswordLimiter, forgotPassword);
 
 router.post('/reset-password', resetPassword);
 

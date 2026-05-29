@@ -104,18 +104,13 @@ body {
 .sidebar {
     width: 400px;
     height: 100vh;
-
     position: fixed;
     top: 0;
     left: 0;
     z-index: 1000;
-
     padding: 30px 20px;
-
     background: url(../images/community.jpg);
     color: white;
-
-    overflow: auto;
     transition: transform 0.3s ease;
 }
 

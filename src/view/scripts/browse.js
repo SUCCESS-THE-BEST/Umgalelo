@@ -36,7 +36,6 @@ async function loadSocieties() {
         );
 
         const data = await res.json();
-        console.log(data)
         renderSocieties(data);
 
     } catch (err) {
@@ -50,7 +49,12 @@ function renderSocieties(societies) {
     container.innerHTML = "";
 
     if (societies.length === 0){
-        container.innerHTML = "No societies found";
+        container.innerHTML = `
+        <div class="no-search-results">
+            <p>Sorry, no societies found</p>
+            <img src="../images/no-results.png">
+        </div>
+        `;
     }
     societies.forEach(s => {
         const initials = s.society_name
