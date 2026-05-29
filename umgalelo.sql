@@ -33,7 +33,12 @@ ADD profile_photo VARCHAR(255),
 ADD id_document VARCHAR(255),
 ADD banking_proof VARCHAR(255);
 
-SELECT * FROM users;
+ALTER TABLE users
+ADD COLUMN google_id VARCHAR(255) NULL,
+ADD COLUMN auth_provider VARCHAR(20) DEFAULT 'local',
+MODIFY password VARCHAR(255) NULL,
+MODIFY phone VARCHAR(20) NULL,
+MODIFY id_number VARCHAR(13) NULL;
 
 CREATE TABLE societies (
     society_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -52,6 +57,9 @@ CREATE TABLE societies (
     FOREIGN KEY (admin_id) REFERENCES users(user_id)
         ON DELETE SET NULL
 );
+
+ALTER TABLE societies
+MODIFY waiting_period INT DEFAULT 6;
 
 CREATE TABLE join_requests (
     request_id INT AUTO_INCREMENT PRIMARY KEY,

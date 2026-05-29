@@ -13,12 +13,12 @@
  
     <div class="profile-container">
 
-      <button
-        class="mobile-menu-toggle"
-        onClick='{() => setSidebarOpen(!sidebarOpen)}'
-      >
-        ☰
-      </button>
+        <button class="mobile-menu-toggle" id="mobileMenuToggle">
+            ☰
+        </button>
+        <button id="sidebarToggle" class="sidebar-toggle">
+            ☰
+        </button>
 
       <aside class='sidebar'>
         <!-- <img src='images/community.jpg' alt="" class="sidebar-bg" /> -->
@@ -52,20 +52,6 @@
             <div id="sidebarSocieties">
 
             </div>
-            <!-- <div class="nav-item">
-              <img src='../images/networking.png' alt="" />
-              <span>Soweto Solidarity</span>
-            </div>
-            <div class="nav-item admin-badge">
-              <img src='../images/networking.png' alt="" />
-              <span>Gumede Family</span>
-              <span class="admin-tag">Admin</span>
-            </div>
-            <div class="nav-item">
-              <img src='../images/networking.png' alt="" />
-              <span>Jozi Workers</span>
-            </div>
-          </div> -->
 
           <div class="nav-section">
             <h4>Discover</h4>
@@ -256,7 +242,11 @@
 
           <!-- Upload Documents -->
           <section class="form-section">
-            <h3 class="section-title">Upload Files</h3>
+            <div class="profile-header-section">
+              <h3 class="section-title">Upload Files</h3>
+              <button class="section-edit-btn" id="update">Upload Files</button>
+            </div>
+            
             <div class="section-divider"></div>
 
             <div class="form-grid">
@@ -270,12 +260,6 @@
                     <input type="file" class="file-input" id="idDocument" accept=".pdf,image/*">
 
                     <br><br>
-
-                    <!-- <label class="form-label">Proof of banking details</label>
-                    <input type="file" class="file-input" id="bankingProof" accept=".pdf,image/*">
-
-                    <br><br> -->
-
                     <p id="message"></p>
                 </div>
             </div>
@@ -292,7 +276,6 @@
 
           <div class="action-buttons">
             <button class="btn btn-cancel" id="cancel">Cancel</button>
-            <button class="btn btn-update" id="update">Update Profile</button>
           </div>
         </div>
         </div>
@@ -302,6 +285,7 @@
     </div>
 
     <script src="../scripts/common.js"></script>
+    <script src="../scripts/notifications.js"></script>
     <script src="../scripts/profile.js"></script>
     
 </body>

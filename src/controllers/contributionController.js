@@ -54,6 +54,108 @@ const makeContribution = async (req, res) => {
   }
 };
 
+// =========== PAYFAST API ==============
+
+const {
+    createPayfastPayment
+} = require('../services/payfastService');
+
+const initiatePayfastPayment = async (req, res) => {
+    try {
+        const user_id = req.user.userId;
+        const society_id = req.params.id;
+
+        const { amount, month } = req.body;
+
+        const exists =
+            await contributionModel.checkMonthlyContributionExists(
+                user_id,
+                society_id,
+                month
+            );
+
+        if (exists.length > 0) {
+            return res.status(400).json({
+                message: 'Payment already exists for this month'
+            });
+        }
+
+        const [society] =
+            await societyModel.findSocietyById(society_id);
+
+        const payment =
+            createPayfastPayment({
+                userId: user_id,
+                societyId: society_id,
+                amount,
+                month,
+                itemName: `${society.society_name} contribution - ${month}`
+            });
+
+        res.json({
+            paymentUrl: payment.paymentUrl,
+            paymentId: payment.paymentId
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+};
+
+// ============= ITN HANDLER =================
+const payfastITN = async (req, res) => {
+    try {
+
+        console.log('========== PAYFAST ITN ==========');
+        const {
+            payment_status,
+            custom_int1,
+            custom_int2,
+            custom_str1,
+            amount_gross
+        } = req.body;
+
+        if (payment_status !== 'COMPLETE') {
+            return res.status(200).send('Ignored');
+        }
+
+        const user_id = custom_int1;
+        const society_id = custom_int2;
+        const month = custom_str1;
+        const amount = amount_gross;
+
+        const exists =
+            await contributionModel.checkMonthlyContributionExists(
+                user_id,
+                society_id,
+                month
+            );
+
+        if (exists.length > 0) {
+            return res.status(200).send('Already recorded');
+        }
+
+        await contributionModel.createContribution(
+            user_id,
+            society_id,
+            amount,
+            month
+        );
+
+        await contributionModel.UpdateSocietyWallet(
+            society_id,
+            amount
+        );
+
+        res.status(200).send('OK');
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('ITN failed');
+    }
+};
 
 // ======== USER SPECIFIC CONTRIBUTION HISTORY ===========
 const getUserContributionHistory = async (req, res) => {
@@ -170,4 +272,6 @@ module.exports = {
   getUserContributionHistory,
   getSocietyContributionHistory,
   sendPaymentReminders,
-}
+  initiatePayfastPayment,
+  payfastITN
+};

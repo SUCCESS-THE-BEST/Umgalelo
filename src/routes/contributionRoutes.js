@@ -6,7 +6,12 @@ const {
   getUserContributionHistory,
   getSocietyContributionHistory,
   sendPaymentReminders,
+  initiatePayfastPayment,
+  payfastITN
 } = require('../controllers/contributionController');
+
+router.post('/payfast/initiate/:id', authMiddleware, initiatePayfastPayment);
+router.post('/payfast/itn', payfastITN);
 
 router.post('/contribute/:id', authMiddleware, makeContribution);
 router.get('/my-history', authMiddleware, getUserContributionHistory);

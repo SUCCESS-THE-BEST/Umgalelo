@@ -28,7 +28,7 @@ function renderDate(){
 
 // =================== LOAD SOCIETY CARDS ====================
 const loadSocieties = async () => {
-  const res = await fetch('http://localhost:3000/api/dashboard/societies', {
+  const res = await fetch(`${API_BASE}/api/dashboard/societies`, {
     headers: { Authorization: `Bearer ${token}` }
   });
 
@@ -37,7 +37,6 @@ const loadSocieties = async () => {
   const container = document.querySelector('.society-cards');
   container.innerHTML = '';
 
-  console.log(societies)
   // Update summary count
   document.getElementById('society-count').innerText = societies.length;
   let payments_due = 0;
@@ -89,7 +88,7 @@ const loadSocieties = async () => {
 
 // ================= LOAD PAYMENT HISTORY SECTION =======================
 const loadPayments = async () => {
-  const res = await fetch('http://localhost:3000/api/contributions/my-history', {
+  const res = await fetch(`${API_BASE}/api/contributions/my-history`, {
     headers: { Authorization: `Bearer ${token}` }
   });
 
@@ -124,15 +123,11 @@ const loadPayments = async () => {
   });
 };
 
-function toggleSidebar() {
-  document.querySelector('.sidebar').classList.toggle('open');
-}
-
 // =============== LOAD UPCOMING EVENTS =================
 async function loadUserEvents() {
 
     const res = await fetch(
-        `http://localhost:3000/api/dashboard/events`,
+        `${API_BASE}/api/dashboard/events`,
         {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -234,175 +229,4 @@ async function loadUserEvents() {
             </div>
         `;
     });
-}
-
-async function loadNotifications() {
-
-    try {
-
-        const res = await fetch(
-            'http://localhost:3000/api/notifications',
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
-        );
-
-       
-
-        const notifications = await res.json();
-        console.log(notifications)
-
-        const count = notifications.filter(n => !n.is_read).length;
-
-        document.getElementById('notificationCount').textContent = count;
-
-        // hide badge if no unread notifications
-        const badge = document.getElementById('notificationCount');
-
-        if (count === 0) {
-            badge.style.display = 'none';
-        } else {
-            badge.style.display = 'flex';
-            badge.textContent = count;
-        }
-
-        const container =
-            document.getElementById('notificationList');
-
-        container.innerHTML = '';
-
-        if (notifications.length === 0) {
-
-            container.innerHTML = `
-                <div class="empty-notifications">
-                    No notifications
-                </div>
-            `;
-
-            return;
-        }
-
-        notifications.forEach(n => {
-
-        const notificationClass = n.is_read
-            ? 'notification-item read'
-            : 'notification-item unread';
-
-        container.innerHTML += `
-
-            <div 
-                class="${notificationClass}"
-                onclick="handleNotificationClick(
-                    ${n.notification_id},
-                    ${n.society_id || null},
-                    '${n.type}'
-                )"
-            >
-
-                <p>${n.message}</p>
-
-                <div class="notification-time">
-                    <p>${n.society_name || 'Umgalelo'}</p>
-                    <p>
-                        ${new Date(n.created_at)
-                            .toLocaleDateString()}
-                    </p>
-                </div>
-
-                ${
-                    !n.is_read
-                    ? `
-                        <button
-                            class="mark-read-btn"
-                            onclick="
-                                event.stopPropagation();
-                                markAsRead(${n.notification_id})
-                            "
-                        >
-                            Mark as read
-                        </button>
-                    `
-                    : ''
-                }
-
-            </div>
-        `;
-    });
-
-    } catch (err) {
-        console.log(err);
-    }
-}
-
-async function markAsRead(notificationId) {
-
-    try {
-
-        const res = await fetch(
-            `http://localhost:3000/api/notifications/read/${notificationId}`,
-            {
-                method: 'PUT',
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
-        );
-
-        const data = await res.json();
-
-        console.log(data);
-
-        // reload notifications
-        loadNotifications();
-
-    } catch (err) {
-        console.log(err);
-    }
-}
-
-async function handleNotificationClick(notificationId, societyId, type) {
-    try {
-        await fetch(
-            `http://localhost:3000/api/notifications/read/${notificationId}`,
-            {
-                method: 'PUT',
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
-        );
-
-        if (type === 'welcome') {
-            window.location.href = 'browse.html';
-            return;
-        }
-
-        if (
-            type === 'join_request_sent' ||
-            type === 'rejected'
-        ) {
-            loadNotifications();
-            return;
-        }
-
-        if (type === 'approved' && societyId) {
-            localStorage.setItem('society_id', societyId);
-            window.location.href = `society.html?id=${societyId}`;
-            return;
-        }
-
-        if (
-            type !== 'join_request_sent' &&
-            type !== 'rejected' &&
-            societyId
-        ) {
-            localStorage.setItem('society_id', societyId);
-            window.location.href = `society.html?id=${societyId}`;
-        }
-
-    } catch (err) {
-        console.log(err);
-    }
 }

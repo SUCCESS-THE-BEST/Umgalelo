@@ -245,8 +245,6 @@ const getSocietyDetails = async (req, res) => {
             WHERE jr.society_id = ? AND jr.status = 'pending'
         `, [id]);
 
-        console.log(requests)
-
         // 4. Contributions (recent)
         // Current month
         const now = new Date();
@@ -377,6 +375,7 @@ const handleJoinRequest = async (req, res) => {
     }
 };
 
+
 module.exports = {
   createSociety,
   requestToJoin,
@@ -387,5 +386,5 @@ module.exports = {
   getSocietyMembers,
   getAllSocieties,
   getSocietyDetails,
-  handleJoinRequest
+  handleJoinRequest,
 };

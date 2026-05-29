@@ -1,4 +1,7 @@
 const userModel = require('../models/user');
+const membershipModel = require('../models/membership');
+const societyModel = require('../models/society');
+const notificationModel = require('../models/notifications')
 
 //profile page
 
@@ -10,55 +13,6 @@ const getUser = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
-
-// const updateContactDetails = async (req, res) => {
-//     try {
-//         const { email, phone } = req.body;
-
-//         if (req.user.userId != req.params.id) {
-//             return res.status(403).json({ message: 'Forbidden'});
-//         }
-
-//         await userModel.updateContactDetails(req.params.id, email, phone);
-
-//         res.json({ message: 'contact details successfully updated' });
-//     } catch (error) {
-//         res.status(500).json({ message: error.message });
-//     }
-// };
-
-// const updateUserAddress = async (req, res) => {
-//     try {
-//          const { addressLine1, city, province, postalCode } = req.body;
-
-//          if (req.user.userId != req.params.id) {
-//             return res.status(403).json({ message: 'Forbidden' });
-//          }
-
-//          await userModel.updateUserAddress(req.params.id, addressLine1, city, province, postalCode);
-
-//          res.json({ message: 'user address updated successfully' });
-//     } catch (error) {
-//         res.status(500).json({ message: error.message });
-//     }
-// }
-
-// const updateNextOfKin =  async (req, res) => {
-//     try {
-//         const { nextOfKinName, nextOfKinPhone } = req.body;
-//         console.log(req.user);
-
-//         if (req.user.userId != req.params.id) {
-//             return res.status(403).json({ message: 'Forbidden' });
-//         }
-
-//         await userModel.updateNextOfKin(req.params.id, nextOfKinName, nextOfKinPhone);
-
-//         res.json({ message: 'next of kin updated successfully' })
-//     } catch (error) {
-//         res.status(500).json({ message: error.message });
-//     }
-// }
 
 const updateProfile = async (req, res) => {
     try {
@@ -147,11 +101,72 @@ const uploadDocuments = async (req, res) => {
     }
 };
 
+const leaveSociety = async (req, res) => {
+
+    try {
+
+        const userId = req.user.userId;
+        const { societyId } = req.params;
+
+        // prevent admin from leaving
+        const isAdmin = await membershipModel.isAdmin(
+            userId,
+            societyId
+        );
+
+        if (isAdmin) {
+            return res.status(400).json({
+                message: 'Admins cannot leave their own society'
+            });
+        }
+
+        // get society before removing member
+        const society = await societyModel.findSocietyById(societyId);
+        const societyName = society[0].society_name;
+        const adminId = society[0].admin_id;
+
+        // get user before removing member
+        const user = await userModel.findUserById(userId);
+        const fullName = `${user[0].first_name} ${user[0].last_name}`;
+
+        await societyModel.leaveSociety(
+            userId,
+            societyId
+        );
+
+        // notify user
+        await notificationModel.createNotification(
+            userId,
+            societyId,
+            `You have left ${societyName}`,
+            'left_society'
+        );
+
+        // notify admin
+        await notificationModel.createNotification(
+            adminId,
+            societyId,
+            `${fullName} has left ${societyName}`,
+            'member_left'
+        );
+
+        res.json({
+            message: 'You left the society'
+        });
+
+    } catch (err) {
+
+        console.log(err);
+
+        res.status(500).json({
+            message: 'Server error'
+        });
+    }
+};
+
 module.exports = {
     getUser,
-    // updateContactDetails,
-    // updateUserAddress,
-    // updateNextOfKin,
     updateProfile,
-    uploadDocuments
+    uploadDocuments,
+    leaveSociety
 }

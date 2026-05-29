@@ -14,7 +14,7 @@
   padding: 30px 20px;
   position: fixed;
   height: 100vh;
-
+  /* overflow-y: auto; */
   transition: transform 0.3s ease;
 }
 
@@ -31,7 +31,7 @@
 .sidebar-divider {
   border: none;
   border-top: 1px solid rgba(255, 255, 255, 0.3);
-  margin: 20px 0;
+  margin: 10px 0;
 }
 
 .user-profile {
@@ -120,12 +120,21 @@
   opacity: 0.8;
 }
 
+.nav-item span:first-of-type {
+    flex: 1;
+}
+
+.admin-tag {
+    position: static;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
 .sign-out {
-  margin-top: auto;
-  position: absolute;
-  bottom: 0;
-  padding-top: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
+    margin-top: 40px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 /* Payments Page Specific Styles */

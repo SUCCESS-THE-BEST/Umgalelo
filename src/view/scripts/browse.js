@@ -1,67 +1,9 @@
-// let token = localStorage.getItem('token')
-
 window.onload = async () => {
   await loadUser();
   await loadSocieties();
   await loadSidebarSocieties();
 };
 
-// ========================= LOAD SIDEBAR USER INFO =============================
-// const loadUser = async () => {
-//     const res = await fetch('http://localhost:3000/api/auth/profile', {
-//         headers: {
-//         Authorization: `Bearer ${token}`
-//         }
-//     });
-
-//     const [user] = await res.json();
-//     console.log(user)
-//     document.getElementById('userName').innerText = user.first_name + ' ' + user.last_name;
-//     document.getElementById('userEmail').innerText = user.email;
-    
-// };
-
-
-// =========================== LOAD SIDEBAR SOCIETIES ==============================
-// const loadSidebarSocieties = async () => {
-//   const res = await fetch('http://localhost:3000/api/dashboard/societies', {
-//     headers: {
-//       Authorization: `Bearer ${token}`
-//     }
-//   });
-
-//   const societies = await res.json();
-
-//   const container = document.getElementById('sidebarSocieties');
-//   container.innerHTML = '';
-
-//   societies.forEach(s => {
-//     const isAdmin = s.role === 'admin';
-
-//     const item = `
-//       <div class="nav-item" onclick="openSociety(${s.id}, '${s.role}')">
-//         <img src="../images/networking.png" alt="" />
-//         <span>${s.society_name}</span>
-//         ${isAdmin ? '<span class="admin-tag">Admin</span>' : ''}
-//       </div>
-//     `;
-
-//     container.innerHTML += item;
-//   });
-// };
-
-
-// ================= OPEN SOCIETY ON SIDEBAR ============================
-// const openSociety = (id, role) => {
-
-//   localStorage.setItem("society_id", id);
-//   localStorage.setItem("role", role);
-
-//   window.location.href = `society.html?id=${id}`;
-// };
-
-
-const API = "http://localhost:3000/api/societies/browse";
 
 const searchInput = document.getElementById("searchInput");
 const provinceFilter = document.getElementById("provinceFilter");
@@ -76,6 +18,8 @@ searchInput.addEventListener("input", () => {
 
 // ================== PROVINCE FILTER ==================================
 provinceFilter.addEventListener("change", loadSocieties);
+
+const API = `${API_BASE}/api/societies/browse`;
 
 async function loadSocieties() {
     try {
@@ -162,7 +106,9 @@ function renderSocieties(societies) {
                     onclick="requestJoin(${s.society_id})" ${disabled}>
                     ${buttonText}
                 </button>
-                <button class="btn-outline">View</button>
+                <button class="btn-outline" onclick="openSocietyModal(${s.society_id})">
+                    View
+                </button>
             </div>
         </article>
         `;
@@ -175,7 +121,7 @@ function renderSocieties(societies) {
 // ===================== SUBMIT JOIN REQUEST =======================
 async function requestJoin(societyId) {
     try {
-        const res = await fetch("http://localhost:3000/api/joinRequest/request", {
+        const res = await fetch(`${API_BASE}/api/joinRequest/request`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -193,4 +139,49 @@ async function requestJoin(societyId) {
     } catch (err) {
         console.error(err);
     }
+}
+
+// ============== VIEW BUTTON CLICK =================
+async function openSocietyModal(societyId) {
+    try {
+        const res = await fetch(`${API_BASE}/api/societies/society/${societyId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        const data = await res.json();
+        const s = data.society;
+
+        document.getElementById("modalSocietyName").textContent = s.society_name;
+        document.getElementById("modalSocietyLocation").textContent = `${s.city}, ${s.province}`;
+        document.getElementById("modalSocietyDescription").textContent = s.description || "No description available";
+
+        document.getElementById("modalContribution").textContent = `R${s.monthly_contribution}`;
+        document.getElementById("modalCover").textContent = `R${s.cover_amount}`;
+        document.getElementById("modalMaxMembers").textContent = s.maximum_members;
+        document.getElementById("modalWaitingPeriod").textContent = s.waiting_period || "Not specified";
+        document.getElementById("modalAdmin").textContent = `${s.first_name} ${s.last_name}`;
+        document.getElementById("modalFounded").textContent = formatDate(s.created_at);
+        document.getElementById("modalAdditionalRules").textContent = s.additional_rules || "No additional rules provided.";
+        document.getElementById("societyViewModal").classList.add("active");
+
+    } catch (err) {
+        console.error(err);
+        alert("Could not load society details");
+    }
+}
+
+function closeSocietyModal() {
+    document.getElementById("societyViewModal").classList.remove("active");
+}
+
+function formatDate(dateString) {
+    if (!dateString) return "Not specified";
+
+    return new Date(dateString).toLocaleDateString("en-ZA", {
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+    });
 }

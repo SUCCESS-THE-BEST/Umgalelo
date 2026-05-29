@@ -14,9 +14,12 @@
 
     <div class="society-container">
         <!-- Mobile Menu Toggle -->
-    <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
-        ☰
-    </button>
+        <button class="mobile-menu-toggle" id="mobileMenuToggle">
+            ☰
+        </button>
+        <button id="sidebarToggle" class="sidebar-toggle">
+            ☰
+        </button>
 
     <!-- Sidebar -->
 
@@ -113,7 +116,7 @@
                 </div>
             </section>
             <nav class="tabs">
-                <a href="society.html" class="tab">Overview</a>
+                <a href="society.html" class="tab" id="overview">Overview</a>
                 <a href="payments.html" class="tab">Payments</a>
                 <a href="claims.html" class="tab">Claims</a>
                 <a href="events.html" class="tab active">Events</a>
@@ -144,6 +147,7 @@
         <div id="paymentModal" class="modal">
         <div class="modal-content">
             <h2 class="modal-title">Make Payment</h2>
+            <button class="modal-close" onclick="closePayModal()">×</button>
             <form class="form">
                 <div class="form-group"><label>Member</label><input type="text" value="Sindi Gumede" id="member" readonly></div>
                 <div class="form-group"><label>Society</label>
@@ -165,6 +169,7 @@
     <div id="claimModal" class="modal">
         <div class="modal-content modal-large">
             <h2 class="modal-title">Submit a Claim</h2>
+            <button class="modal-close" onclick="closeClaiModal()">×</button>
             <form class="form">
                 <div class="form-group"><label>Member</label><input type="text" value="Sindi Gumede" id="member-name" readonly></div>
                 <div class="form-group"><label>Society</label>
@@ -203,6 +208,7 @@
         <div class="modal-overlay"></div>
         <div class="modal-content modal-large">
             <h2 class="modal-title">Add To Calendar</h2>
+            <button class="modal-close" onclick="closeEveModal()">×</button>
             <form class="event-form" id="eventForm">
 
                 <div class="form-row">
@@ -324,25 +330,55 @@
     </div>
 
     <script>
-const paymentModal=document.getElementById('paymentModal');
-const claimModal=document.getElementById('claimModal');
-const payNowBtn=document.getElementById('payNowBtn');
-const submitClaimBtn=document.getElementById('submitClaimBtn');
-const closePaymentModal=document.getElementById('closePaymentModal');
-const closeClaimModal=document.getElementById('closeClaimModal');
-payNowBtn.addEventListener('click',()=>{paymentModal.classList.add('active');});
-submitClaimBtn.addEventListener('click',()=>{claimModal.classList.add('active');});
-closePaymentModal.addEventListener('click',()=>{paymentModal.classList.remove('active');});
-closeClaimModal.addEventListener('click',()=>{claimModal.classList.remove('active');});
-paymentModal.addEventListener('click',(e)=>{if(e.target===paymentModal){paymentModal.classList.remove('active');}});
-claimModal.addEventListener('click',(e)=>{if(e.target===claimModal){claimModal.classList.remove('active');}});
-//document.addEventListener('keydown',(e)=>{if(e.key==='Escape'){paymentModal.classList.remove('active');claimModal.classList.remove('active');}});
+    const paymentModal = document.getElementById('paymentModal');
+    const claimModal = document.getElementById('claimModal');
 
+    const payNowBtn = document.getElementById('payNowBtn');
+    const submitClaimBtn = document.getElementById('submitClaimBtn');
+
+    const closePaymentModal = document.getElementById('closePaymentModal');
+    const closeClaimModal = document.getElementById('closeClaimModal');
+
+    payNowBtn.addEventListener('click', () => {
+        paymentModal.classList.add('active');
+    });
+
+    submitClaimBtn.addEventListener('click', () => {
+        claimModal.classList.add('active');
+    });
+
+    closePaymentModal.addEventListener('click', () => {
+        paymentModal.classList.remove('active');
+    });
+
+    closeClaimModal.addEventListener('click', () => {
+        claimModal.classList.remove('active');
+    });
+
+    paymentModal.addEventListener('click', (e) => {
+        if (e.target === paymentModal) {
+            paymentModal.classList.remove('active');
+        }
+    });
+
+    claimModal.addEventListener('click', (e) => {
+        if (e.target === claimModal) {
+            claimModal.classList.remove('active');
+        }
+    });
+
+    function closePayModal() {
+        document.getElementById("paymentModal").classList.remove("active");
+    }
+
+    function closeClaiModal() {
+        document.getElementById("claimModal").classList.remove("active");
+    }
+
+    function closeEveModal() {
+        document.getElementById("addEventModal").classList.remove("active");
+    }
     </script>
-
-    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
-    <script src="../scripts/common.js"></script>
-    <script src="../scripts/events.js"></script>
 
     <script>
 // Modal elements
@@ -353,10 +389,6 @@ const cancelAddEvent = document.getElementById('cancelAddEvent');
 const closeEventDetails = document.getElementById('closeEventDetails');
 const eventForm = document.getElementById('eventForm');
 
-// Sidebar elements
-const sidebar = document.getElementById('sidebar');
-const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-const mainContent = document.getElementById('mainContent');
 
 // Open Add Event Modal
 if (addEventBtn) {
@@ -402,29 +434,6 @@ eventCards.forEach(card => {
     });
 });
 
-// Mobile sidebar toggle
-if (mobileMenuToggle) {
-    mobileMenuToggle.addEventListener('click', () => {
-        sidebar.classList.toggle('open');
-    });
-}
-
-// Close sidebar when clicking on main content (mobile)
-if (mainContent) {
-    mainContent.addEventListener('click', () => {
-        if (window.innerWidth <= 968 && sidebar.classList.contains('open')) {
-            sidebar.classList.remove('open');
-        }
-    });
-}
-
-// Close sidebar on window resize
-window.addEventListener('resize', () => {
-    if (window.innerWidth > 968 && sidebar) {
-        sidebar.classList.remove('open');
-    }
-});
-
 // Close modal with Escape key
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
@@ -436,6 +445,9 @@ document.addEventListener('keydown', (e) => {
 
     </script>
 
-
+    <script src="../scripts/common.js"></script>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script src="../scripts/societyCommon.js"></script>
+    <script src="../scripts/events.js"></script>
 </body>
 </html>

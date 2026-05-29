@@ -143,6 +143,20 @@ const getSocietyMembers = async (societyId) => {
     return rows;
 };
 
+const leaveSociety = async (user_id, society_id) => {
+
+    const [result] = await db.execute(
+        `
+        DELETE FROM society_members
+        WHERE user_id = ?
+        AND society_id = ?
+        `,
+        [user_id, society_id]
+    );
+
+    return result;
+};
+
 module.exports = {
   createSociety,
   findSocietyByName,
@@ -151,5 +165,6 @@ module.exports = {
   findSocietyByName,
   findSocietyById,
   getUserSocietyCards,
-  getSocietyMembers
+  getSocietyMembers,
+  leaveSociety
 };

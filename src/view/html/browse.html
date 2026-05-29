@@ -12,12 +12,12 @@
 <body>
     <!-- Sidebar -->
     <div class="browse-container">
-      <button
-        class="mobile-menu-toggle"
-        onClick='{() => setSidebarOpen(!sidebarOpen)}'
-      >
-        ☰
-      </button>
+        <button class="mobile-menu-toggle" id="mobileMenuToggle">
+            ☰
+        </button>
+        <button id="sidebarToggle" class="sidebar-toggle">
+            ☰
+        </button>
 
       <aside class='sidebar'>
         <!-- <img src='images/community.jpg' alt="" class="sidebar-bg" /> -->
@@ -96,11 +96,11 @@
                     <option>Northern Cape</option>
                     <option>Western Cape</option>
                 </select>
-                <select class="filter-select" id="sortFilter">
+                <!-- <select class="filter-select" id="sortFilter">
                     <option>Default</option>
                     <option>Name</option>
                     <option>Contribution</option>
-                </select>
+                </select> -->
             </div>
 
             <button class="create-btn">
@@ -113,6 +113,34 @@
             
         </div>
     </main>
+    </div>
+
+    <div id="societyViewModal" class="modal">
+      <div class="modal-content society-view-modal">
+        <button class="modal-close" onclick="closeSocietyModal()">×</button>
+
+        <div class="rules-header">
+          <h2 id="modalSocietyName"></h2>
+          <div class="rulesLocation">
+            <img src="../images/location.png" alt="location">
+            <p id="modalSocietyLocation"></p>
+          </div>
+        </div><hr style="margin-bottom: 20px; margin-top: 20px;">
+
+        <div class="modal-rules">
+          <h3>About The Society</h3>
+          <p id="modalSocietyDescription"></p>
+          <p><strong>Monthly Contribution:</strong> <span id="modalContribution"></span></p>
+          <p><strong>Cover Amount:</strong> <span id="modalCover"></span></p>
+          <p><strong>Maximum Members:</strong> <span id="modalMaxMembers"></span></p>
+          <p><strong>Waiting Period:</strong> <span id="modalWaitingPeriod"></span></p>
+          <p><strong>Admin:</strong> <span id="modalAdmin"></span></p>
+          <p><strong>Founded:</strong> <span id="modalFounded"></span></p>
+
+          <h4>Additional Rules</h4>
+          <p id="modalAdditionalRules"></p>
+        </div>
+      </div>
     </div>
 
     <script src="../scripts/common.js"></script>

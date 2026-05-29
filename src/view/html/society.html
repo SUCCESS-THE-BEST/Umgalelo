@@ -9,10 +9,10 @@
 </head>
 <body>
     <div class="society-container">
-        <button
-        class="mobile-menu-toggle"
-        onClick='{() => setSidebarOpen(!sidebarOpen)}'
-        >
+        <button class="mobile-menu-toggle" id="mobileMenuToggle">
+            ☰
+        </button>
+        <button id="sidebarToggle" class="sidebar-toggle">
             ☰
         </button>
 
@@ -124,12 +124,20 @@
                 <p class="society-description" id="additionalRules"></p>
                 <div class="society-details">
                     <div class="detail-item">
-                        <p class="detail-label">Contribution</p>
+                        <p class="detail-label">Monthly Contribution</p>
                         <p class="detail-value" id="detailContribution"></p>
                     </div>
                     <div class="detail-item">
                         <p class="detail-label">Cover Amount</p>
                         <p class="detail-value" id="coverAmount"></p>
+                    </div>
+                    <div class="detail-item">
+                        <p class="detail-label">Who Is Covered</p>
+                        <p class="detail-value" id="">Member + immediate family</p>
+                    </div>
+                    <div class="detail-item">
+                        <p class="detail-label">Waiting Period(months)</p>
+                        <p class="detail-value" id="waitingPeriod"></p>
                     </div>
                     <div class="detail-item">
                         <p class="detail-label">Max Members</p>
@@ -140,16 +148,12 @@
                         <p class="detail-value" id="adminName"></p>
                     </div>
                     <div class="detail-item">
-                        <p class="detail-label">Minimum Age</p>
-                        <p class="detail-value" id="minimumAge"></p>
-                    </div>
-                    <div class="detail-item">
-                        <p class="detail-label">Waiting Period(months)</p>
-                        <p class="detail-value" id="waitingPeriod"></p>
-                    </div>
-                    <div class="detail-item">
                         <p class="detail-label">Location</p>
                         <p class="detail-value" id="societyCity"></p>
+                    </div>
+                    <div class="detail-item">
+                        <p class="detail-label">Founded</p>
+                        <p class="detail-value" id="founded"></p>
                     </div>
                 </div>
             </section>
@@ -190,6 +194,7 @@
     <div id="paymentModal" class="modal">
         <div class="modal-content">
             <h2 class="modal-title">Make Payment</h2>
+            <button class="modal-close" onclick="closePayModal()">×</button>
             <form class="form">
                 <div class="form-group"><label>Member</label><input type="text" value="Sindi Gumede" id="member" readonly></div>
                 <div class="form-group"><label>Society</label>
@@ -211,6 +216,7 @@
     <div id="claimModal" class="modal">
         <div class="modal-content modal-large">
             <h2 class="modal-title">Submit a Claim</h2>
+            <button class="modal-close" onclick="closeClaiModal()">×</button>
             <form class="form">
                 <div class="form-group"><label>Member</label><input type="text" value="Sindi Gumede" id="member-name" readonly></div>
                 <div class="form-group"><label>Society</label>
@@ -275,24 +281,55 @@
     </div>
 
     <script>
-const paymentModal=document.getElementById('paymentModal');
-const claimModal=document.getElementById('claimModal');
-const payNowBtn=document.getElementById('payNowBtn');
-const submitClaimBtn=document.getElementById('submitClaimBtn');
-const closePaymentModal=document.getElementById('closePaymentModal');
-const closeClaimModal=document.getElementById('closeClaimModal');
-payNowBtn.addEventListener('click',()=>{paymentModal.classList.add('active');});
-submitClaimBtn.addEventListener('click',()=>{claimModal.classList.add('active');});
-closePaymentModal.addEventListener('click',()=>{paymentModal.classList.remove('active');});
-closeClaimModal.addEventListener('click',()=>{claimModal.classList.remove('active');});
-paymentModal.addEventListener('click',(e)=>{if(e.target===paymentModal){paymentModal.classList.remove('active');}});
-claimModal.addEventListener('click',(e)=>{if(e.target===claimModal){claimModal.classList.remove('active');}});
-//document.addEventListener('keydown',(e)=>{if(e.key==='Escape'){paymentModal.classList.remove('active');claimModal.classList.remove('active');}});
+    const paymentModal = document.getElementById('paymentModal');
+    const claimModal = document.getElementById('claimModal');
 
+    const payNowBtn = document.getElementById('payNowBtn');
+    const submitClaimBtn = document.getElementById('submitClaimBtn');
+
+    const closePaymentModal = document.getElementById('closePaymentModal');
+    const closeClaimModal = document.getElementById('closeClaimModal');
+
+    payNowBtn.addEventListener('click', () => {
+        paymentModal.classList.add('active');
+    });
+
+    submitClaimBtn.addEventListener('click', () => {
+        claimModal.classList.add('active');
+    });
+
+    closePaymentModal.addEventListener('click', () => {
+        paymentModal.classList.remove('active');
+    });
+
+    closeClaimModal.addEventListener('click', () => {
+        claimModal.classList.remove('active');
+    });
+
+    paymentModal.addEventListener('click', (e) => {
+        if (e.target === paymentModal) {
+            paymentModal.classList.remove('active');
+        }
+    });
+
+    claimModal.addEventListener('click', (e) => {
+        if (e.target === claimModal) {
+            claimModal.classList.remove('active');
+        }
+    });
+
+    function closePayModal() {
+        document.getElementById("paymentModal").classList.remove("active");
+    }
+
+    function closeClaiModal() {
+        document.getElementById("claimModal").classList.remove("active");
+    }
     </script>
 
-    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
     <script src="../scripts/common.js"></script>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script src="../scripts/societyCommon.js"></script>
     <script src="../scripts/society.js"></script>
 </body>
 </html>

@@ -1,64 +1,14 @@
-// let token = localStorage.getItem('token')
-const societyId = localStorage.getItem('society_id')
+let allClaims = [];
 
 window.onload = async () => {
-    await loadUser();
-    await loadSidebarSocieties();
-    await loadSociety();
-    // await loadClaimsSummary();
-    //await loadClaims();
-    await loadMessages();
+    const data = await initSocietyPage();
+
+    allClaims = data.claims || [];
+
+    renderClaims(allClaims);
 };
 
-
-let allClaims = [];
-//load society
-async function loadSociety() {
-    const res = await fetch(`http://localhost:3000/api/societies/society/${localStorage.getItem('society_id')}`, {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    });
-
-    const data = await res.json();
-
-    renderStats(data.total_contributions, data.total_claims, data.months_contributions)
-    renderSociety(data.society, data.members);
-    allClaims = data.claims;
-    renderClaims(allClaims);
-}
-
-function renderStats(contributions, claims, this_month) {
-    document.getElementById('totalCollected').textContent = `R${contributions.total}`
-    document.getElementById('totalClaims').textContent = `${claims.count}`
-    document.getElementById('collectedThisMonth').textContent = `R${this_month.total}`
-}
-
-function renderSociety(s, m) {
-
-    const initials = s.society_name
-            .split(" ")
-            .map(w => w[0])
-            .join("")
-            .slice(0, 2);
-    document.getElementById("societyLogo").textContent = initials;
-
-    document.getElementById("societyName").textContent = s.society_name;
-    document.getElementById("memberCount").textContent = `${m.length} members`;
-    document.getElementById("monthlyContribution").textContent = `R${s.monthly_contribution}/month`;
-    document.getElementById("locationText").innerHTML =
-        `<img src="../images/location.png" width="15px"> ${s.city}, ${s.province}`;
-
-
-    //payment card
-    document.getElementById('society-name').value = s.society_name;
-    document.getElementById('societyname').value = s.society_name;
-    document.getElementById('amount').value = s.monthly_contribution
-    document.getElementById('month').value = `${new Date().getFullYear()}-0${new Date().getMonth()}`
-    document.getElementById('claim_amount').value = s.cover_amount
-}
-
-
+// ================ RENDER/DISPLAY CLAIMS ==================
 function renderClaims(claims) {
     const container = document.getElementById("claimsContainer");
 
@@ -115,6 +65,7 @@ function renderClaims(claims) {
 
 }
 
+// ===============ADMIN ONLY (APPROVE/REJECT CLAIM) =====================
 function renderClaimActions(c) {
 
     const userRole = localStorage.getItem("role");
@@ -173,7 +124,7 @@ async function handleClaim(claimId, action) {
   if (!confirm(`Are you sure you want to ${action} this claim?`)) return;
 
   try {
-    const res = await fetch(`http://localhost:3000/api/claims/handle/${claimId}`, {
+    const res = await fetch(`${API_BASE}/api/claims/handle/${claimId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -215,7 +166,7 @@ async function cancelClaim(claimId) {
     try {
 
         const res = await fetch(
-            `http://localhost:3000/api/claims/${claimId}`,
+            `${API_BASE}/api/claims/${claimId}`,
             {
                 method: 'DELETE',
                 headers: {
@@ -243,7 +194,7 @@ async function loadClaimsSummary() {
 
     const societyId = localStorage.getItem("society_id");
 
-    const res = await fetch(`http://localhost:3000/api/claims/summary/${societyId}`,
+    const res = await fetch(`${API_BASE}/api/claims/summary/${societyId}`,
         {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -334,172 +285,3 @@ filterButtons.forEach(btn => {
     });
 
 });
-
-// =============== SOCIETY CHAT ====================
-
-const chatToggle = document.getElementById('chatToggle');
-const chatPopup = document.getElementById('chatPopup');
-const closeChat = document.getElementById('closeChat');
-const chatMessages = document.getElementById('chatMessages');
-const chatInput = document.getElementById('chatInput');
-const sendMessageBtn = document.getElementById('sendMessageBtn');
-
-let unreadCount = 0;
-let typingTimeout;
-
-const socket = io('http://localhost:3000');
-
-// ========= SOCKET CONNECTION ===============
-socket.on('connect', () => {
-    console.log('Socket connected:', socket.id);
-    socket.emit('join_society', societyId);
-});
-
-// ============ RESET UNREAD WHEN OPENING CHAT ===========
-chatToggle.addEventListener('click', () => {
-    chatPopup.classList.toggle('active');
-
-    if (chatPopup.classList.contains('active')) {
-        unreadCount = 0;
-        localStorage.setItem(`lastRead_${societyId}`, new Date().toISOString());
-        updateUnreadBadge();
-    }
-});
-
-// ============= CLOSE CHAT POPUP
-closeChat.addEventListener('click', () => {
-    chatPopup.classList.remove('active');
-});
-
-// =========== FORMAT DATE
-function formatTime(dateValue) {
-    return new Date(dateValue).toLocaleTimeString([], {
-        hour: '2-digit',
-        minute: '2-digit'
-    });
-}
-
-//  =========== RENDER/DISPLAY MESSAGES ===============
-function renderMessage(data) {
-    const isMine = Number(data.sender_id) === Number(currentUser.user_id);
-
-    // ========== DISPLAY MESSAGE TO LEFT/RIGHT ACCORDING TO OWNER =========
-    chatMessages.innerHTML += `
-        <div class="message ${isMine ? 'my-message' : 'other-message'}">
-            ${!isMine ? `<strong>${data.first_name}</strong>` : ''}
-            <p>${data.message_text}</p>
-            <small class="message-time">${formatTime(data.created_at)}</small>
-        </div>
-    `;
-
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-}
-
-// ============ SEND MESSAGE ============
-sendMessageBtn.addEventListener('click', () => {
-    const message = chatInput.value.trim();
-
-    if (!message) return;
-
-    socket.emit('send_message', {
-        societyId,
-        senderId: currentUser.user_id,
-        sender: currentUser.firstName,
-        message
-    });
-
-    chatInput.value = '';
-});
-
-chatInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-        sendMessageBtn.click();
-    }
-});
-
-// ==============  PERSON TYPING.... MESSAGE ===========
-chatInput.addEventListener('input', () => {
-    socket.emit('typing', {
-        societyId,
-        name: currentUser.firstName
-    });
-});
-
-// ========== UPDATE UNREAD MESSAGES COUNTER BADGE ======================
-function updateUnreadBadge() {
-    chatToggle.innerHTML = `
-        <img src="../images/chat.png" alt="chat-icon" class="chat-icon" width="30px">
-
-        ${
-            unreadCount > 0
-            ? `<span class="chat-badge">${unreadCount}</span>`
-            : ''
-        }
-    `;
-}
-
-// ============ RECIEVE MESSAGES =================
-socket.on('receive_message', (data) => {
-    const isMine = Number(data.senderId) === Number(currentUser.user_id);
-
-    renderMessage({
-        sender_id: data.senderId,
-        first_name: data.sender,
-        message_text: data.message,
-        created_at: data.createdAt
-    });
-
-    /*======== UPATE UNREAD MESSAGES COUNTER IF 
-    DOES NOT BELONG TO YOU ==========*/
-    if (!isMine && !chatPopup.classList.contains('active')) {
-        unreadCount++;
-        updateUnreadBadge();
-    }
-});
-
-// ============ TYING INDICATOR ===========
-socket.on('user_typing', (name) => {
-    const typingIndicator = document.getElementById('typingIndicator');
-
-    typingIndicator.textContent = `${name} is typing...`;
-
-    clearTimeout(typingTimeout);
-
-    typingTimeout = setTimeout(() => {
-        typingIndicator.textContent = '';
-    }, 1500);
-});
-
-
-// ========== LOAD SOCIETY CHAT MESSAGES ===============
-async function loadMessages() {
-    const response = await fetch(
-        `http://localhost:3000/api/messages/${societyId}`
-    );
-
-    const messages = await response.json();
-
-    chatMessages.innerHTML = '';
-
-    const lastRead =
-        localStorage.getItem(`lastRead_${societyId}`);
-
-    unreadCount = 0;
-
-    messages.forEach((msg) => {
-        renderMessage(msg);
-
-        const isMine =
-            Number(msg.sender_id) === Number(currentUser.user_id);
-
-        const isUnread = !lastRead || new Date(msg.created_at) > new Date(lastRead);
-
-        if (!isMine && isUnread) {
-            unreadCount++;
-        }
-    });
-
-    updateUnreadBadge();
-
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-}

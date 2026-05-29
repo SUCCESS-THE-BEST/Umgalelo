@@ -1,3 +1,5 @@
+// ===================== API BASE ===================
+const API_BASE = 'http://localhost:3000';
 // ================= TOKEN =================
 const params = new URLSearchParams(window.location.search);
 
@@ -60,7 +62,7 @@ async function loadUser() {
     try {
 
         const res = await fetch(
-            'http://localhost:3000/api/auth/profile',
+            `${API_BASE}/api/auth/profile`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -109,7 +111,7 @@ async function loadSidebarSocieties() {
     try {
 
         const res = await fetch(
-            'http://localhost:3000/api/dashboard/societies',
+            `${API_BASE}/api/dashboard/societies`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -198,3 +200,51 @@ async function loadSidebarSocieties() {
         console.log(err);
     }
 }
+
+const mobileMenuToggle = document.getElementById("mobileMenuToggle");
+// ================= SIDEBAR TOGGLE =================
+document.addEventListener("DOMContentLoaded", () => {
+    const sidebar = document.querySelector(".sidebar");
+    const mainContent = document.querySelector(".main-content");
+    const toggleBtn =
+        document.getElementById("sidebarToggle") ||
+        document.getElementById("mobileMenuToggle");
+
+    if (!sidebar || !toggleBtn) return;
+
+    // Keep sidebar closed/open after navigating between tabs/pages
+    const sidebarCollapsed = localStorage.getItem("sidebarCollapsed");
+
+    if (sidebarCollapsed === "true") {
+        sidebar.classList.add("collapsed");
+
+        if (mainContent) {
+            mainContent.classList.add("expanded");
+        }
+    }
+
+    toggleBtn.addEventListener("click", () => {
+        if (window.innerWidth <= 768) {
+            sidebar.classList.toggle("open");
+
+            toggleBtn.textContent = sidebar.classList.contains("open")
+                ? "☰"
+                : "☰";
+        } else {
+            sidebar.classList.toggle("collapsed");
+
+            if (mainContent) {
+                mainContent.classList.toggle("expanded");
+            }
+
+            localStorage.setItem(
+                "sidebarCollapsed",
+                sidebar.classList.contains("collapsed")
+            );
+
+            toggleBtn.textContent = sidebar.classList.contains("collapsed")
+                ? "☰"
+                : "☰";
+        }
+    });
+});

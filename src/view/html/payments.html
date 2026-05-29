@@ -11,12 +11,12 @@
 <body>
 
     <div class="society-container">
-        <button
-        class="mobile-menu-toggle"
-        onClick='{() => setSidebarOpen(!sidebarOpen)}'
-      >
-        ☰
-      </button>
+        <button class="mobile-menu-toggle" id="mobileMenuToggle">
+            ☰
+        </button>
+        <button id="sidebarToggle" class="sidebar-toggle">
+            ☰
+        </button>
 
       <aside class='sidebar'>
         <div class="sidebar-logo">
@@ -168,6 +168,7 @@
      <div id="paymentModal" class="modal">
         <div class="modal-content">
             <h2 class="modal-title">Make Payment</h2>
+            <button class="modal-close" onclick="closePayModal()">×</button>
             <form class="form">
                 <div class="form-group"><label>Member</label><input type="text" value="Sindi Gumede" id="member" readonly></div>
                 <div class="form-group"><label>Society</label>
@@ -189,6 +190,7 @@
     <div id="claimModal" class="modal">
         <div class="modal-content modal-large">
             <h2 class="modal-title">Submit a Claim</h2>
+            <button class="modal-close" onclick="closeClaiModal()">×</button>
             <form class="form">
                 <div class="form-group"><label>Member</label><input type="text" value="Sindi Gumede" id="member-name" readonly></div>
                 <div class="form-group"><label>Society</label>
@@ -254,26 +256,57 @@
     </div>
 
     <script>
-const paymentModal=document.getElementById('paymentModal');
-const claimModal=document.getElementById('claimModal');
-const payNowBtn=document.getElementById('payNowBtn');
-const submitClaimBtn=document.getElementById('submitClaimBtn');
-const closePaymentModal=document.getElementById('closePaymentModal');
-const closeClaimModal=document.getElementById('closeClaimModal');
-payNowBtn.addEventListener('click',()=>{paymentModal.classList.add('active');});
-submitClaimBtn.addEventListener('click',()=>{claimModal.classList.add('active');});
-closePaymentModal.addEventListener('click',()=>{paymentModal.classList.remove('active');});
-closeClaimModal.addEventListener('click',()=>{claimModal.classList.remove('active');});
-paymentModal.addEventListener('click',(e)=>{if(e.target===paymentModal){paymentModal.classList.remove('active');}});
-claimModal.addEventListener('click',(e)=>{if(e.target===claimModal){claimModal.classList.remove('active');}});
-//document.addEventListener('keydown',(e)=>{if(e.key==='Escape'){paymentModal.classList.remove('active');claimModal.classList.remove('active');}});
+    const paymentModal = document.getElementById('paymentModal');
+    const claimModal = document.getElementById('claimModal');
 
+    const payNowBtn = document.getElementById('payNowBtn');
+    const submitClaimBtn = document.getElementById('submitClaimBtn');
+
+    const closePaymentModal = document.getElementById('closePaymentModal');
+    const closeClaimModal = document.getElementById('closeClaimModal');
+
+    payNowBtn.addEventListener('click', () => {
+        paymentModal.classList.add('active');
+    });
+
+    submitClaimBtn.addEventListener('click', () => {
+        claimModal.classList.add('active');
+    });
+
+    closePaymentModal.addEventListener('click', () => {
+        paymentModal.classList.remove('active');
+    });
+
+    closeClaimModal.addEventListener('click', () => {
+        claimModal.classList.remove('active');
+    });
+
+    paymentModal.addEventListener('click', (e) => {
+        if (e.target === paymentModal) {
+            paymentModal.classList.remove('active');
+        }
+    });
+
+    claimModal.addEventListener('click', (e) => {
+        if (e.target === claimModal) {
+            claimModal.classList.remove('active');
+        }
+    });
+
+    function closePayModal() {
+        document.getElementById("paymentModal").classList.remove("active");
+    }
+
+    function closeClaiModal() {
+        document.getElementById("claimModal").classList.remove("active");
+    }
     </script>
 
+    <script src="../scripts/common.js"></script>
     <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
-    <script src="../scripts/common.js"></script>
+    <script src="../scripts/societyCommon.js"></script>
     <script src="../scripts/payments.js"></script>
 </body>
 </html>
