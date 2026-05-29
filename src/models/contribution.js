@@ -37,7 +37,9 @@ const getUserContributionHistory = async (user_id) => {
      FROM contributions c
      JOIN societies s ON c.society_id = s.society_id
      WHERE c.user_id = ?
-     ORDER BY c.payment_date DESC`,
+     ORDER BY c.payment_date DESC
+     LIMIT 5
+     `,
     [user_id]
   );
 

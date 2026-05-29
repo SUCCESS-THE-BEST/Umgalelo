@@ -1,64 +1,82 @@
+require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
 const passport = require('./config/passport');
+
 const app = express();
-const path = require('path')
 
-
-app.use(cors({
-  origin: [
+const allowedOrigins = [
     'http://127.0.0.1:5500',
     'http://localhost:5500',
     'http://127.0.0.1:5501',
-    'http://localhost:5501'
-  ],
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+    'http://localhost:5501',
+    process.env.FRONTEND_URL
+].filter(Boolean);
 
+app.use(cors({
+    origin: allowedOrigins,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+}));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(passport.initialize());
 
+app.get('/', (req, res) => {
+    res.json({
+        message: 'Umgalelo API is running'
+    });
+});
+
+app.get('/health', (req, res) => {
+    res.json({
+        status: 'OK',
+        environment: process.env.NODE_ENV || 'development'
+    });
+});
+
 const authRoutes = require('./routes/authRoutes');
-app.use('/api/auth', authRoutes);
-
 const userRoutes = require('./routes/userRoutes');
-app.use('/api/users', userRoutes);
-
 const societyRoutes = require('./routes/societyRoutes');
-app.use('/api/societies', societyRoutes);
-
 const dashboardRoutes = require('./routes/dashboardRoutes');
-app.use('/api/dashboard', dashboardRoutes);
-
-// const financeRoutes = require('./routes/financeRoutes');
-// app.use('/api/finance', financeRoutes);
-
 const joinReqRoutes = require('./routes/joinRequestRoutes');
-app.use('/api/joinRequest', joinReqRoutes);
-
 const contributionRoutes = require('./routes/contributionRoutes');
-app.use('/api/contributions', contributionRoutes);
-
 const claimsRoutes = require('./routes/claimRoutes');
-app.use('/api/claims', claimsRoutes);
-
 const eventsRoutes = require('./routes/eventsRoutes');
-app.use('/api/events', eventsRoutes);
-
-const notificationRoutes = require('./routes/notificationRoutes')
-app.use('/api/notifications', notificationRoutes)
-
+const notificationRoutes = require('./routes/notificationRoutes');
 const messageRoutes = require('./routes/messageRoutes');
+
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/societies', societyRoutes);
+app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/joinRequest', joinReqRoutes);
+app.use('/api/contributions', contributionRoutes);
+app.use('/api/claims', claimsRoutes);
+app.use('/api/events', eventsRoutes);
+app.use('/api/notifications', notificationRoutes);
 app.use('/api/messages', messageRoutes);
 
 app.use('/uploads', express.static('uploads'));
 
-// app.get('/', (req, res) => {
-//   res.sendFile(path.join(__dirname, './view/html/login.html'));
-// });
+// 404 handler
+app.use((req, res) => {
+    res.status(404).json({
+        message: 'Route not found'
+    });
+});
+
+// Global error handler
+app.use((err, req, res, next) => {
+    console.error(err);
+
+    res.status(err.status || 500).json({
+        message: err.message || 'Server error'
+    });
+});
 
 module.exports = app;

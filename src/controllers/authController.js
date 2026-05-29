@@ -6,6 +6,10 @@ const crypto = require('crypto');
 const { sendEmail } = require('../services/emailServices');
 const notificationModel = require('../models/notifications');
 
+// ============ URLs ===================
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://127.0.0.1:5501';
+const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:3000';
+
 // ================== REGISTER ACCOUNT =====================
 const register = async (req, res) => {
     try {
@@ -40,8 +44,7 @@ const register = async (req, res) => {
             token
         );
 
-        const verifyLink =
-            `http://127.0.0.1:3000/api/auth/verify/${token}`;
+        const verifyLink = `${BACKEND_URL}/api/auth/verify/${token}`;
 
         await sendEmail(
             email,
@@ -86,7 +89,7 @@ const verifyUser = async (req, res) => {
     await userModel.markUserAsVerified(token);
 
     res.redirect(
-        'http://127.0.0.1:5500/src/view/html/login.html'
+        `${FRONTEND_URL}/src/view/html/login.html`
     );
 };
 
@@ -112,6 +115,12 @@ const login = async (req, res) => {
 
         if (!isMatch) {
             return res.status(400).json({ message: 'invalid credentials' });
+        }
+
+        if (!user.is_verified) {
+            return res.status(403).json({
+                message: 'Please verify your email before logging in'
+            });
         }
 
         //web token
@@ -167,8 +176,7 @@ const forgotPassword = async (req, res) => {
             expiry
         );
 
-        const resetLink =
-        `http://127.0.0.1:5501/src/view/html/resetPassword.html?token=${resetToken}`;
+        const resetLink = `${FRONTEND_URL}/src/view/html/resetPassword.html?token=${resetToken}`;
 
         await sendEmail(
             email,

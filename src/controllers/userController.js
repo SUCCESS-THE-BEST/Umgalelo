@@ -60,8 +60,6 @@ const uploadDocuments = async (req, res) => {
     try {
         const userId = req.user.userId;
 
-        console.log(req.files);
-
         const profilePhoto =
             req.files && req.files.profilePhoto
                 ? req.files.profilePhoto[0].secure_url

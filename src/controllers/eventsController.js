@@ -2,9 +2,11 @@
 const eventModels = require("../models/events");
 const notificationModel = require("../models/notifications");
 const societyModel = require("../models/society");
+const membershipModel = require('../models/membership');
 
 exports.createEvent = async (req, res) => {
     try {
+
         const result = await eventModels.createEvent(req.body);
 
         const {
@@ -15,6 +17,16 @@ exports.createEvent = async (req, res) => {
             time,
             location
         } = req.body;
+
+        const userId = req.user.userId;
+
+        const member = await membershipModel.findMember(userId, societyId);
+
+        if (!member || member.role !== 'admin') {
+            return res.status(403).json({
+                message: 'Only admins can create events'
+            });
+        }
 
         const members = await societyModel.getSocietyMembers(societyId);
 

@@ -5,9 +5,6 @@ const claimController = require('../controllers/claimsController');
 
 router.post('/claim/:id', authMiddleware, claimController.submitClaim);
 
-// router.put('/claims/:id/approve', authMiddleware, approveClaim);
-// router.put('/claims/:id/reject', authMiddleware, rejectClaim);
-
 router.get('/fetch/:id', authMiddleware, claimController.getClaims)
 
 router.put("/handle/:id", authMiddleware, claimController.updateClaimStatus);

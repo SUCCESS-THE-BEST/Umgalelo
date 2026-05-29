@@ -1,6 +1,7 @@
+require('dotenv').config();
+
 const passport = require('passport');
-const GoogleStrategy =
-    require('passport-google-oauth20').Strategy;
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 const userModel = require('../models/user');
 const notificationModel = require('../models/notifications');
@@ -10,8 +11,7 @@ passport.use(
         {
             clientID: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-            callbackURL:
-                'http://localhost:3000/api/auth/google/callback'
+            callbackURL: `${process.env.BACKEND_URL}/api/auth/google/callback`
         },
 
         async (accessToken, refreshToken, profile, done) => {
@@ -19,24 +19,16 @@ passport.use(
                 const googleId = profile.id;
 
                 const email =
-                    profile.emails && profile.emails[0]
-                        ? profile.emails[0].value
-                        : null;
+                    profile.emails?.[0]?.value || null;
 
                 const profilePhoto =
-                    profile.photos && profile.photos[0]
-                        ? profile.photos[0].value
-                        : null;
+                    profile.photos?.[0]?.value || null;
 
                 const firstName =
-                    profile.name && profile.name.givenName
-                        ? profile.name.givenName
-                        : 'Google';
+                    profile.name?.givenName || 'Google';
 
                 const lastName =
-                    profile.name && profile.name.familyName
-                        ? profile.name.familyName
-                        : 'User';
+                    profile.name?.familyName || 'User';
 
                 if (!email) {
                     return done(null, false, {

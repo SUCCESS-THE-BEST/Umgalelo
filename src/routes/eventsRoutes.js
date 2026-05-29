@@ -2,8 +2,9 @@
 const express = require("express");
 const router = express.Router();
 const controller = require("../controllers/eventsController");
+const authMiddleware = require('../middleware/authMiddleware')
 
-router.post("/create", controller.createEvent);
+router.post("/create", authMiddleware ,controller.createEvent);
 router.get("/:societyId", controller.getEvents);
 router.get("/single/:id", controller.getEventById);
 

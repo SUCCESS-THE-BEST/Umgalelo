@@ -1,11 +1,51 @@
 const db = require('../config/db');
 
-const createSociety = async (societyName, description, monthlyContribution, coverAmount,waitingPeriod,addtionalRules,province,city,maximumMembers,minimumAge,adminID) => {
-  const [result] = await db.execute(
-    `INSERT INTO societies (society_name, description, monthly_contribution,cover_amount,waiting_period,additional_rules,province,city,maximum_members,minimum_age,admin_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [societyName, description, monthlyContribution,coverAmount,waitingPeriod,addtionalRules || null,province,city,maximumMembers,minimumAge, adminID]
-  );
-  return result;
+const createSociety = async (
+    societyName,
+    description,
+    monthlyContribution,
+    coverAmount,
+    waitingPeriod,
+    additionalRules,
+    province,
+    city,
+    maximumMembers,
+    minimumAge,
+    adminID
+) => {
+    const [result] = await db.execute(
+        `
+        INSERT INTO societies (
+            society_name,
+            description,
+            monthly_contribution,
+            cover_amount,
+            waiting_period,
+            additional_rules,
+            province,
+            city,
+            maximum_members,
+            minimum_age,
+            admin_id
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `,
+        [
+            societyName,
+            description,
+            monthlyContribution,
+            coverAmount,
+            waitingPeriod,
+            additionalRules || null,
+            province,
+            city,
+            maximumMembers,
+            minimumAge || null,
+            adminID
+        ]
+    );
+
+    return result;
 };
 
 const findSocietyByName = async (societyName) => {
@@ -162,7 +202,6 @@ module.exports = {
   findSocietyByName,
   getSocietiesByUser,
   getAllSocieties,
-  findSocietyByName,
   findSocietyById,
   getUserSocietyCards,
   getSocietyMembers,

@@ -23,7 +23,7 @@ const createSociety = async (req, res) => {
 
     const result = await societyModel.createSociety(
       societyName, description, monthlyContribution, coverAmount,waitingPeriod,
-      addtionalRules,province,city,maximumMembers,minimumAge, user_id);
+      additionalRules,province,city,maximumMembers,minimumAge, user_id);
       
     const society_id = result.insertId;
 

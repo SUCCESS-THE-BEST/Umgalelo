@@ -30,13 +30,6 @@ const validateRegister = [
         .matches(/^(\+27|0)[6-8][0-9]{8}$/)
         .withMessage('Please enter a valid South African phone number'),
 
-    // body('idNumber')
-    //     .trim()
-    //     .notEmpty()
-    //     .withMessage('ID number is required')
-    //     .matches(/^[0-9]{13}$/)
-    //     .withMessage('South African ID number must be 13 digits'),
-
     body('password')
         .notEmpty()
         .withMessage('Password is required')
