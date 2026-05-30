@@ -92,6 +92,13 @@ async function loadUser() {
                 el.innerText = user.email;
             });
 
+        if (document.getElementById('user-page-title')) {
+            document.getElementById('user-page-title').textContent = 
+            `${user.first_name} ${user.last_name} - ${document.getElementById('user-page-title').textContent}`
+        }
+        
+        
+
         // avatars
         if (user.profile_photo) {
             document.querySelectorAll('.user-avatar')

@@ -73,6 +73,7 @@ function renderSociety(s, members = []) {
         .slice(0, 2)
         .toUpperCase();
 
+    setText("page-title", s.society_name + ' - ' + document.getElementById('page-title').textContent);
     setText("societyLogo", initials);
     setText("societyName", s.society_name);
     setText("memberCount", `${members.length} members`);
