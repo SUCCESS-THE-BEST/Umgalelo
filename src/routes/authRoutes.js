@@ -64,7 +64,7 @@ router.get(
         );
 
         res.redirect(
-            `${FRONTEND_URL}/src/view/html/dashboard.html?token=${token}`
+            `${FRONTEND_URL}/src/view/html/dashboard.html?token=${token}&user_id=${user.user_id}`
         );
     }
 );

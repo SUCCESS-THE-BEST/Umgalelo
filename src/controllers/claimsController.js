@@ -74,6 +74,7 @@ const getClaims = async (req, res) => {
 
     const formatted = claims.map(c => ({
       id: c.claim_id,
+      user_id: c.user_id,
       name: `${c.first_name} ${c.last_name}`,
       relationship: c.relationship,
       amount: c.claim_amount,

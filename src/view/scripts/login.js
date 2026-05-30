@@ -44,6 +44,7 @@ login.addEventListener('click', async (e) => {
 
     // Save token
     localStorage.setItem('token', result.token);
+    localStorage.setItem('user_id', result.user.user_id)
 
     // Redirect to dashboard
     window.location.href = '/src/view/html/dashboard.html';

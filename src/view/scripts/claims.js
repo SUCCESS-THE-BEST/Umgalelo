@@ -70,8 +70,10 @@ function renderClaimActions(c) {
 
     const userRole = localStorage.getItem("role");
 
-    const currentUserId =
-        Number(localStorage.getItem("user_id"));
+    const currentUserId = Number(localStorage.getItem("user_id"));
+    console.log(currentUserId)
+    const claimOwnerId = Number(c.user_id);
+    console.log(claimOwnerId)
 
     let buttons = '';
 
@@ -100,10 +102,9 @@ function renderClaimActions(c) {
 
     // ================= MEMBER CANCEL =================
     if (
-        c.status === "pending" &&
-        c.user_id === currentUserId
+    c.status === "pending" &&
+    claimOwnerId === currentUserId
     ) {
-
         buttons += `
             <button
                 class="btn btn-outline btn-sm"

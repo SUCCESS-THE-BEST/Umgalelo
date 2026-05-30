@@ -78,6 +78,7 @@ const getClaims = async (society_id) => {
   const [rows] = await db.execute(
     `SELECT 
         c.claim_id,
+        c.user_id,
         c.claim_amount,
         c.relationship,
         c.status,

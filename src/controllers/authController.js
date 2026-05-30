@@ -122,7 +122,7 @@ const login = async (req, res) => {
                 message: 'Please verify your email before logging in'
             });
         }
-
+        
         //web token
         const token = jwt.sign(
             { userId: user.user_id, role: user.role },
@@ -130,7 +130,12 @@ const login = async (req, res) => {
             { expiresIn: '1d' }
         )
 
-        res.json({ token });
+        res.json({
+            token,
+            user: {
+                user_id: user.user_id,
+            }
+        });
 
     } catch (error) {
         res.status(500).json({ message: error.message });

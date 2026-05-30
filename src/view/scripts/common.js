@@ -6,6 +6,8 @@ const params = new URLSearchParams(window.location.search);
 let token = params.get('token');
 
 if (token) {
+    // Google login: remove old manual-login data first
+    localStorage.clear();
 
     localStorage.setItem('token', token);
 
@@ -14,9 +16,7 @@ if (token) {
         document.title,
         window.location.pathname
     );
-
 } else {
-
     token = localStorage.getItem('token');
 }
 
@@ -76,6 +76,10 @@ async function loadUser() {
             user_id: user.user_id,
             firstName: user.first_name
         }
+
+        window.currentUser = currentUser;
+        localStorage.setItem('user_id', user.user_id);
+
         // sidebar/header names
         document.querySelectorAll('.user-info h3')
             .forEach(el => {

@@ -107,7 +107,7 @@ function renderRequests(requests) {
 
 // ============= ACCEPT/REJECT JOIN REQUEST(ADMIN ONLY) ====================
 async function handleRequest(id, action) {
-    console.log(action)
+
     await fetch(`${API_BASE}/api/joinRequest/${id}/requests`, {
         method: "PUT",
         headers: {
@@ -117,7 +117,8 @@ async function handleRequest(id, action) {
         body: JSON.stringify({ action })
     });
 
-    loadSociety(); // refresh
+    alert(`Join request ${action === 'approve'? 'approved' : 'rejected'}`);
+    location.reload()
 }
 
 // // ================== LOAD AND RENDER EVENTS ===================
