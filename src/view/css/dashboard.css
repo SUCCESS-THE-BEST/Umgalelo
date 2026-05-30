@@ -276,27 +276,40 @@ body {
 
 /* ================= CONTENT LAYOUT ================= */
 
-.content-area {
-    padding: 2rem;
-    max-width: 1600px;
+/* Main content */
+.main-content {
+    margin-left: 400px;
+    width: calc(100% - 400px);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: margin-left 0.3s ease, width 0.3s ease;
+}
+
+ .main-content.expanded {
+    margin-left: 0;
     width: 100%;
 }
 
+.content-area {
+    padding: 2rem;
+    width: 100%;
+    max-width: 1700px;
+    margin: 0 auto;
+}
+
 .content-wrapper {
-    display: flex;
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(420px, 1fr);
     gap: 2rem;
-    position: relative;
 }
 
-.left-column {
-    flex: 1;
-    max-width: 900px;
-}
-
+.left-column,
 .right-column {
-    width: 560px;
-    flex-shrink: 0;
-}
+    width: 100%;
+    max-width: none;
+} 
 
 
 /* ================= PERSONAL SUMMARY ================= */
@@ -398,6 +411,7 @@ body {
 .society-card:hover {
     transform: translateY(-3px);
     cursor: pointer;
+    box-shadow: 0 10px 10px rgba(101, 101, 101, 0.068);
 }
 
 .society-header {
@@ -808,52 +822,10 @@ body {
     border-radius: 4px;
 }
 
-/* Main content */
-.main-content {
-    margin-left: 400px;
-    width: calc(100% - 400px);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    transition: margin-left 0.3s ease, width 0.3s ease;
-}
-
-.main-content.expanded {
-    margin-left: 0;
-    width: 100%;
-}
-
-.content-area {
-    padding: 2rem;
-    width: 100%;
-    max-width: none;
-}
-
-.content-wrapper {
-    width: 100%;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 560px;
-    gap: 2rem;
-}
-
-.left-column,
-.right-column {
-    width: 100%;
-    max-width: none;
-}
-
 /* ================= RESPONSIVE DESIGN ================= */
 
 /* Medium screens */
-@media (max-width: 1600px) {
-    .content-wrapper {
-        grid-template-columns: 1fr;
-    }
 
-    .right-column {
-        width: 100%;
-    }
-}
 
 @media (max-width: 1200px) {
     .sidebar {
@@ -867,6 +839,14 @@ body {
 
     .main-content.expanded {
         margin-left: 0;
+        width: 100%;
+    }
+
+    .content-wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    .right-column {
         width: 100%;
     }
 

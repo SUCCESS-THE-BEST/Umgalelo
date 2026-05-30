@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Societies</title>
+    <link rel="stylesheet" href="../css/global.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&family=Inknut+Antiqua:wght@800&family=Josefin+Sans:wght@600&display=swap" rel="stylesheet">
@@ -105,7 +106,7 @@
                         </div>
                     </div>
                     <img src='../images/profile.webp' alt="User" class="user-avatar" />
-                    <div class="user-info">
+                    <div class="user-info" onclick="window.location.href='profile.html'">
                         <h3></h3>
                         <p></p>
                     </div>
@@ -128,14 +129,14 @@
                                         <img src="../images/networking.png" alt="" width="30px">
                                         <h3>My Societies</h3>
                                     </div>
-                                    <div class="number" id="society-count">3</div>
+                                    <div class="number" id="society-count"></div>
                                 </div>
                                 <div class="summary-card">
                                     <div>
                                         <img src="../images/credit-card (1).png" alt="" width="30px">
                                         <h3>Payments Due</h3>
                                     </div>
-                                    <div class="number" id="payments-due">1</div>
+                                    <div class="number" id="payments-due"></div>
                                 </div>
                                 <div class="summary-card">
                                     <div>
@@ -154,71 +155,7 @@
                             </div>
 
                             <div class="society-cards">
-                                <!-- Society Card 1 -->
-                                <div class="society-card">
-                                    <div class="society-header">
-                                        <div class="society-avatar">SS</div>
-                                        <div class="society-info">
-                                            <h3>Soweto Solidarity Circle</h3>
-                                            <p>Joined Jan 2026</p>
-                                        </div>
-                                    </div>
-                                    <div class="society-details">
-                                        <div class="detail-item">
-                                            <h4>Contribution</h4>
-                                            <div class="amount">R150/pm</div>
-                                        </div>
-                                        <div class="divider"></div>
-                                        <div class="detail-item">
-                                            <h4>This month</h4>
-                                            <div class="status due">Due</div>
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <!-- Society Card 2 -->
-                                <div class="society-card">
-                                    <div class="society-header">
-                                        <div class="society-avatar">GF</div>
-                                        <div class="society-info">
-                                            <h3>Gumede Family Society</h3>
-                                            <p>Joined Jan 2026</p>
-                                        </div>
-                                    </div>
-                                    <div class="society-details">
-                                        <div class="detail-item">
-                                            <h4>Contribution</h4>
-                                            <div class="amount">R200/pm</div>
-                                        </div>
-                                        <div class="divider"></div>
-                                        <div class="detail-item">
-                                            <h4>This month</h4>
-                                            <div class="status paid">Paid</div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Society Card 3 -->
-                                <div class="society-card">
-                                    <div class="society-header">
-                                        <div class="society-avatar">JW</div>
-                                        <div class="society-info">
-                                            <h3>Jozi Workers Fund</h3>
-                                            <p>Joined Jan 2026</p>
-                                        </div>
-                                    </div>
-                                    <div class="society-details">
-                                        <div class="detail-item">
-                                            <h4>Contribution</h4>
-                                            <div class="amount">R100/pm</div>
-                                        </div>
-                                        <div class="divider"></div>
-                                        <div class="detail-item">
-                                            <h4>This month</h4>
-                                            <div class="status paid">Paid</div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
 
                             <!-- Action Buttons -->
@@ -240,76 +177,11 @@
                         <!-- Payment History -->
                         <section class="payment-history">
                             <h2>Payment History</h2>
-
-                            <div class="payment-item">
-                                <div class="payment-info">
-                                    <h4>Soweto Solidarity Circle</h4>
-                                    <p>March 2026</p>
-                                </div>
-                                <div class="payment-amount">R150.00</div>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-info">
-                                    <h4>Gumede Family Society</h4>
-                                    <p>March 2026</p>
-                                </div>
-                                <div class="payment-amount">R200.00</div>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-info">
-                                    <h4>Jozi Workers Fund</h4>
-                                    <p>March 2026</p>
-                                </div>
-                                <div class="payment-amount">R100.00</div>
-                            </div>
-
-                            <div class="payment-item">
-                                <div class="payment-info">
-                                    <h4>Jozi Workers Fund</h4>
-                                    <p>March 2026</p>
-                                </div>
-                                <div class="payment-amount">R100.00</div>
-                            </div>
                         </section>
 
                         <!-- Calendar -->
                         <section class="calendar-section">
                             <h2>My Calendar</h2>
-
-                            <div class="calendar-item">
-                                <div class="calendar-date">
-                                    <span class="day">22</span>
-                                    <span class="month">Mar</span>
-                                </div>
-                                <div class="calendar-info">
-                                    <h4>Funeral - Mama Dube</h4>
-                                    <p>Soweto Solidarity Circle: Orlando East</p>
-                                </div>
-                            </div>
-
-                            <div class="calendar-item">
-                                <div class="calendar-date">
-                                    <span class="day">23</span>
-                                    <span class="month">Apr</span>
-                                </div>
-                                <div class="calendar-info">
-                                    <h4>Monthly Meeting</h4>
-                                    <p>Soweto Solidarity Circle: Thabo's home</p>
-                                </div>
-                            </div>
-
-                            <div class="calendar-item">
-                                <div class="calendar-date">
-                                    <span class="day">5</span>
-                                    <span class="month">Apr</span>
-                                </div>
-                                <div class="calendar-info">
-                                    <h4>Funeral - Mama Dube</h4>
-                                    <p>Gumede Family Society: Your home (hosting)</p>
-                                </div>
-                            </div>
                         </section>
                     </div>
                 </div>
