@@ -77,10 +77,10 @@ The platform allows society admins to manage members, track monthly contribution
 |---|---|
 | Runtime | Node.js |
 | Framework | Express.js |
-| Database | MySQL (XAMPP recommended for local) |
+| Database | MySQL |
 | Auth | JWT + Passport.js (Google OAuth) |
 | Real-time | Socket.IO |
-| Email | Nodemailer |
+| Email | Brevo SMTP |
 | PDF Export | jsPDF + jsPDF AutoTable |
 | Frontend | Vanilla HTML, CSS, JavaScript |
 | Fonts | Google Fonts (Poppins, DM Sans, Inknut Antiqua) |
@@ -135,7 +135,6 @@ DB_NAME=umgalelo
 DB_PORT=3306
  
 JWT_SECRET=your_jwt_secret_here
- 
 
 # Brevo (formerly Sendinblue) SMTP credentials
 # Get yours at https://app.brevo.com → SMTP & API
