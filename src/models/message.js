@@ -3,7 +3,7 @@ const db = require('../config/db');
 const saveMessage = async (societyId,senderId,message) => {
 
     const [res] = await db.execute(
-        `INSERT INTO Messages (society_id,sender_id,message_text) 
+        `INSERT INTO messages (society_id,sender_id,message_text) 
         VALUES ( ?, ?, ? )`,
         [societyId, senderId, message]
     )
@@ -21,7 +21,7 @@ const getMessagesBySociety = async (societyId) => {
             m.created_at,
             u.first_name,
             u.last_name
-        FROM Messages m
+        FROM messages m
         JOIN users u
             ON m.sender_id = u.user_id
         WHERE m.society_id = ?
