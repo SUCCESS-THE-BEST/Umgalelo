@@ -283,20 +283,19 @@ p {
     align-items: center;
     width: fit-content;
     padding: 9px 14px;
-    border-radius: 999px;
-    background: rgba(147, 144, 142, 0.16);
-    color: var(--primary-2);
+    color: var(--cream);
     font-size: 0.8rem;
     font-weight: 900;
     text-transform: uppercase;
     letter-spacing: 0.14em;
     margin-bottom: 18px;
+    border-bottom: 3px solid var(--cream);
 }
 
 .eyebrow.dark,
 .pill {
     color: var(--primary);
-    background: rgba(165, 94, 29, 0.1);
+    border-bottom: 3px solid var(--primary);
 }
 
 .hero-description {
@@ -457,7 +456,7 @@ p {
     border-radius: var(--radius);
     border: 1px solid var(--line);
     background: var(--white);
-    box-shadow: 0 10px 30px rgba(53, 28, 18, 0.06);
+    /* box-shadow: 0 10px 30px rgba(53, 28, 18, 0.06); */
 }
 
 .feature-card:hover,
