@@ -25,8 +25,6 @@ async function resetPassword() {
 
     alert(data.message);
 
-    alert(data.message);
-
     if (res.ok) {
         window.location.href = 'login.html';
     }
