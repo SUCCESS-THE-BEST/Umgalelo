@@ -18,7 +18,6 @@ const register = async (req, res) => {
             lastName,
             email,
             phone,
-            idNumber,
             password
         } = req.body;
 
@@ -39,7 +38,6 @@ const register = async (req, res) => {
             lastName,
             email,
             phone,
-            idNumber,
             hashedPassword,
             token
         );
