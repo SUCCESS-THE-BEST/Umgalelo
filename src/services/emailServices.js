@@ -1,31 +1,38 @@
-require('dotenv').config();
-
-const transporter = require('../config/email');
+const axios = require('axios');
 
 const sendEmail = async (to, subject, html) => {
     try {
-
-        const info = await transporter.sendMail({
-            from: `"Umgalelo" <${process.env.EMAIL_FROM}>`,
-            to,
-            subject,
-            html
-        });
-
-        console.log(
-            `Email sent: ${info.messageId}`
+        const response = await axios.post(
+            'https://api.brevo.com/v3/smtp/email',
+            {
+                sender: {
+                    name: 'Umgalelo',
+                    email: process.env.EMAIL_FROM
+                },
+                to: [
+                    {
+                        email: to
+                    }
+                ],
+                subject,
+                htmlContent: html
+            },
+            {
+                headers: {
+                    'api-key': process.env.BREVO_API_KEY,
+                    'Content-Type': 'application/json'
+                }
+            }
         );
 
-        return true;
+        console.log('Email sent:', response.data);
+        return response.data;
 
     } catch (error) {
-
         console.error(
-            'Email error:',
-            error.message
+            'Email API error:',
+            error.response?.data || error.message
         );
-
-        return false;
     }
 };
 
