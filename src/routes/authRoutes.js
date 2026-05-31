@@ -26,17 +26,16 @@ const {
 const FRONTEND_URL =
     process.env.FRONTEND_URL || 'http://127.0.0.1:5501';
 
-router.post('/register', registerLimiter, validateRegister, register);
+router.post('/register', validateRegister, register);
 
 router.get('/verify/:token', verifyUser);
 
-router.post('/login', loginLimiter, login);
+router.post('/login', login);
 
 router.get('/profile', authMiddleware, getProfile);
 
 router.get(
     '/google',
-    googleLimiter,
     passport.authenticate('google', {
         scope: ['profile', 'email'],
         session: false
