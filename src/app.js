@@ -2,11 +2,18 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
+const helmet = require('helmet');
 const passport = require('./config/passport');
 
 const app = express();
 
 app.set('trust proxy', 1);
+
+app.use(
+    helmet({
+        contentSecurityPolicy: false
+    })
+);
 
 const allowedOrigins = [
     'http://127.0.0.1:5500',

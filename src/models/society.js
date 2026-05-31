@@ -132,6 +132,12 @@ const getAllSocieties = async (userId, search = "", province = "") => {
 };
 
 const getUserSocietyCards = async (user_id) => {
+    const now = new Date();
+
+    const currentMonth =
+        `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+
+    console.log("Dashboard currentMonth:", currentMonth);
 
     const [rows] = await db.execute(
         `
@@ -154,7 +160,7 @@ const getUserSocietyCards = async (user_id) => {
                 WHERE c.user_id = sm.user_id
                 AND c.society_id = s.society_id
                 AND c.status = 'paid'
-                AND c.payment_month = DATE_FORMAT(NOW(), '%Y-%m')
+                AND c.payment_month = ?
             ) AS has_paid
 
         FROM societies s
@@ -164,7 +170,7 @@ const getUserSocietyCards = async (user_id) => {
 
         WHERE sm.user_id = ?
         `,
-        [user_id]
+        [currentMonth, user_id]
     );
 
     return rows;
