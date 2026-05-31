@@ -1,5 +1,20 @@
 const db = require('../config/db');
 
+const getCurrentPaymentMonth = () => {
+    const formatter = new Intl.DateTimeFormat('en-ZA', {
+        timeZone: 'Africa/Johannesburg',
+        year: 'numeric',
+        month: '2-digit'
+    });
+
+    const parts = formatter.formatToParts(new Date());
+
+    const year = parts.find(p => p.type === 'year').value;
+    const month = parts.find(p => p.type === 'month').value;
+
+    return `${year}-${month}`;
+};
+
 const createContribution = async (user_id, society_id, amount, month, connection = db) => {
   const [result] = await connection.execute(
     `INSERT INTO contributions (user_id, society_id, amount, payment_month, status)
@@ -47,79 +62,71 @@ const getUserContributionHistory = async (user_id) => {
 };
 
 const getSocietyPaymentHistory = async (society_id) => {
-
-    const now = new Date();
-
-    const currentMonth =
-    `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+    const currentMonth = getCurrentPaymentMonth();
 
     const [rows] = await db.execute(
-    `
-    -- CURRENT MONTH (all members)
-    SELECT
-        u.user_id,
-        u.first_name,
-        u.last_name,
+        `
+        -- CURRENT MONTH (all members)
+        SELECT
+            u.user_id,
+            u.first_name,
+            u.last_name,
 
-        COALESCE(c.payment_month, ?) AS payment_month,
+            COALESCE(c.payment_month, ?) AS payment_month,
 
-        c.amount,
+            c.amount,
+            c.payment_date,
 
-        c.payment_date,
+            CASE
+                WHEN c.status = 'paid' THEN 'paid'
+                ELSE 'due'
+            END AS status
 
-        CASE
-            WHEN c.status = 'paid' THEN 'paid'
-            ELSE 'due'
-        END AS status
+        FROM society_members sm
 
-    FROM society_members sm
+        JOIN users u
+            ON sm.user_id = u.user_id
 
-    JOIN users u
-        ON sm.user_id = u.user_id
+        LEFT JOIN contributions c
+            ON c.user_id = sm.user_id
+            AND c.society_id = sm.society_id
+            AND c.payment_month = ?
 
-    LEFT JOIN contributions c
-        ON c.user_id = sm.user_id
-        AND c.society_id = sm.society_id
-        AND c.payment_month = ?
+        WHERE sm.society_id = ?
 
-    WHERE sm.society_id = ?
+        UNION ALL
 
-    UNION ALL
+        -- PREVIOUS MONTHS (paid only)
+        SELECT
+            u.user_id,
+            u.first_name,
+            u.last_name,
 
-    -- PREVIOUS MONTHS (paid only)
-    SELECT
-        u.user_id,
-        u.first_name,
-        u.last_name,
+            c.payment_month,
+            c.amount,
+            c.payment_date,
 
-        c.payment_month,
+            'paid' AS status
 
-        c.amount,
+        FROM contributions c
 
-        c.payment_date,
+        JOIN users u
+            ON c.user_id = u.user_id
 
-        'paid' AS status
+        WHERE c.society_id = ?
+        AND c.payment_month <> ?
 
-    FROM contributions c
-
-    JOIN users u
-        ON c.user_id = u.user_id
-
-    WHERE c.society_id = ?
-    AND c.payment_month <> ?
-
-    ORDER BY payment_month DESC,
-             status ASC,
-             payment_date DESC
-    `,
-    [
-        currentMonth,
-        currentMonth,
-        society_id,
-
-        society_id,
-        currentMonth
-    ]
+        ORDER BY payment_month DESC,
+                 status ASC,
+                 payment_date DESC
+        `,
+        [
+            currentMonth,
+            currentMonth,
+            society_id,
+            society_id,
+            currentMonth
+        ]
     );
 
     return rows;

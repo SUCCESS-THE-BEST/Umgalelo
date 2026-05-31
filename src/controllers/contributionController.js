@@ -7,6 +7,20 @@ const userModel = require('../models/user');
 const societyModel = require('../models/society');
 const notificationModel = require('../models/notifications')
 
+const getCurrentPaymentMonth = () => {
+    const formatter = new Intl.DateTimeFormat('en-ZA', {
+        timeZone: 'Africa/Johannesburg',
+        year: 'numeric',
+        month: '2-digit'
+    });
+
+    const parts = formatter.formatToParts(new Date());
+
+    const year = parts.find(p => p.type === 'year').value;
+    const month = parts.find(p => p.type === 'month').value;
+
+    return `${year}-${month}`;
+};
 
 // ========= MAKE CONTRIBUTION ==========
 const makeContribution = async (req, res) => {
@@ -260,7 +274,7 @@ const sendPaymentReminders = async (req, res) => {
         }
 
         // ======== CURRENT MONTH ==========
-        const payment_month = new Date().toISOString().slice(0, 7);
+        const payment_month = getCurrentPaymentMonth();
 
         // ======== GET UNPAID MEMBERS ============
         const unpaidMembers =

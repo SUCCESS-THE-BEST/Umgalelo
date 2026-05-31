@@ -5,6 +5,20 @@ const joinRequestModel = require('../models/joinRequest');
 const notificationModel = require('../models/notifications');
 const userModel = require('../models/user');
 
+const getCurrentPaymentMonth = () => {
+    const formatter = new Intl.DateTimeFormat('en-ZA', {
+        timeZone: 'Africa/Johannesburg',
+        year: 'numeric',
+        month: '2-digit'
+    });
+
+    const parts = formatter.formatToParts(new Date());
+
+    const year = parts.find(p => p.type === 'year').value;
+    const month = parts.find(p => p.type === 'month').value;
+
+    return `${year}-${month}`;
+};
 
 const createSociety = async (req, res) => {
   try {
@@ -251,10 +265,9 @@ const getSocietyDetails = async (req, res) => {
 
         // 4. Contributions (recent)
         // Current month
-        const now = new Date();
+        
 
-        const currentMonth =
-        `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+        const currentMonth = getCurrentPaymentMonth();
 
 
         // Contributions + due members for current month
@@ -314,10 +327,13 @@ const getSocietyDetails = async (req, res) => {
         // Total contributions this month
 
         const [months_contributions] = await db.execute(
-          `SELECT IFNULL(SUM(amount), 0) AS total
+          `
+          SELECT IFNULL(SUM(amount), 0) AS total
           FROM contributions c
-          WHERE c.society_id = ? AND payment_month = '${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}'`,
-          [id]
+          WHERE c.society_id = ?
+          AND payment_month = ?
+          `,
+          [id, currentMonth]
         );
 
         //count claims
