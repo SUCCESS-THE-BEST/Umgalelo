@@ -47,7 +47,7 @@ login.addEventListener('click', async (e) => {
     localStorage.setItem('user_id', result.user.user_id)
 
     // Redirect to dashboard
-    window.location.href = '/src/view/html/dashboard.html';
+    window.location.href = 'dashboard.html';
 });
 
 document.getElementById('demo').addEventListener('click', (e) => {
