@@ -66,13 +66,25 @@ const getSocietyPaymentHistory = async (society_id) => {
 
     const [rows] = await db.execute(
         `
-        -- CURRENT MONTH (all members)
+        WITH RECURSIVE months AS (
+            SELECT 
+                DATE_FORMAT(MIN(joined_at), '%Y-%m-01') AS month_date
+            FROM society_members
+            WHERE society_id = ?
+
+            UNION ALL
+
+            SELECT DATE_ADD(month_date, INTERVAL 1 MONTH)
+            FROM months
+            WHERE month_date < STR_TO_DATE(CONCAT(?, '-01'), '%Y-%m-%d')
+        )
+
         SELECT
             u.user_id,
             u.first_name,
             u.last_name,
 
-            COALESCE(c.payment_month, ?) AS payment_month,
+            DATE_FORMAT(m.month_date, '%Y-%m') AS payment_month,
 
             c.amount,
             c.payment_date,
@@ -87,46 +99,22 @@ const getSocietyPaymentHistory = async (society_id) => {
         JOIN users u
             ON sm.user_id = u.user_id
 
+        JOIN months m
+            ON m.month_date >= DATE_FORMAT(sm.joined_at, '%Y-%m-01')
+
         LEFT JOIN contributions c
             ON c.user_id = sm.user_id
             AND c.society_id = sm.society_id
-            AND c.payment_month = ?
+            AND c.payment_month = DATE_FORMAT(m.month_date, '%Y-%m')
 
         WHERE sm.society_id = ?
 
-        UNION ALL
-
-        -- PREVIOUS MONTHS (paid only)
-        SELECT
-            u.user_id,
-            u.first_name,
-            u.last_name,
-
-            c.payment_month,
-            c.amount,
-            c.payment_date,
-
-            'paid' AS status
-
-        FROM contributions c
-
-        JOIN users u
-            ON c.user_id = u.user_id
-
-        WHERE c.society_id = ?
-        AND c.payment_month <> ?
-
-        ORDER BY payment_month DESC,
-                 status ASC,
-                 payment_date DESC
+        ORDER BY 
+            payment_month DESC,
+            status ASC,
+            u.first_name ASC
         `,
-        [
-            currentMonth,
-            currentMonth,
-            society_id,
-            society_id,
-            currentMonth
-        ]
+        [society_id, currentMonth, society_id]
     );
 
     return rows;
