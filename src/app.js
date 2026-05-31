@@ -6,6 +6,8 @@ const passport = require('./config/passport');
 
 const app = express();
 
+app.set('trust proxy', 1);
+
 const allowedOrigins = [
     'http://127.0.0.1:5500',
     'http://localhost:5500',
