@@ -149,6 +149,33 @@ const payfastITN = async (req, res) => {
             amount
         );
 
+        // ========= EMAIL RECEIPT AFTER PAYFAST PAYMENT =========
+        const [user] = await userModel.findUserById(user_id);
+
+        const [society] = await societyModel.findSocietyById(society_id);
+
+        await sendEmail(
+            user.email,
+            'Payment Receipt - Umgalelo',
+            `
+                <h2>Payment Successful</h2>
+
+                <p>Hi ${user.first_name},</p>
+
+                <p>
+                    Your PayFast payment of
+                    <strong>R${amount}</strong>
+                    was received successfully.
+                </p>
+
+                <p><strong>Society:</strong> ${society.society_name}</p>
+                <p><strong>Month:</strong> ${month}</p>
+                <p><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
+
+                <p>Thank you for your contribution.</p>
+            `
+        );
+
         res.status(200).send('OK');
 
     } catch (error) {
