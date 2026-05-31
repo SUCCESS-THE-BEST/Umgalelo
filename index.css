@@ -252,7 +252,7 @@ p {
     background:
         /* linear-gradient(90deg, rgba(43, 24, 19, 0.93), rgba(43, 24, 19, 0.62), rgba(43, 24, 19, 0.2)), */
         linear-gradient(90deg, rgba(0, 0, 0, 0.52), rgba(0, 0, 0, 0.52)),
-        url('../images/community.jpg') center/cover no-repeat;
+        url('src/view/images/community.jpg') center/cover no-repeat;
     transform: scale(1.04);
     animation: slowZoom 16s ease-in-out infinite alternate;
 }
@@ -510,7 +510,7 @@ p {
 .image-section {
     position: relative;
     overflow: hidden;
-    background: url('../images/holding hands.jpg') center/cover fixed no-repeat;
+    background: url('src/view/images/holding hands.jpg') center/cover fixed no-repeat;
     color: var(--white);
 }
 
