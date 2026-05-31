@@ -105,6 +105,7 @@ function fillPaymentAndClaimForms(s, u) {
     const now = new Date();
     const month = String(now.getMonth() + 1).padStart(2, "0");
 
+    setInputValue("member", u.first_name + ' ' + u.last_name)
     setInputValue("member-name", u.first_name + ' ' + u.last_name)
     setInputValue("society-name", s.society_name);
     setInputValue("societyname", s.society_name);
