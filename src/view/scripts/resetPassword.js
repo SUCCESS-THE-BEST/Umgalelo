@@ -1,4 +1,4 @@
-const API_BASE = 'http://localhost:3000'
+const API_BASE = 'https://umgalelo-production.up.railway.app'
 const params = new URLSearchParams(window.location.search);
 
 const token = params.get('token');

@@ -29,7 +29,7 @@ submit.addEventListener('click', async (e) => {
 
     try {
         const res = await fetch(
-            'http://localhost:3000/api/auth/register',
+            'https://umgalelo-production.up.railway.app/api/auth/register',
             {
                 method: 'POST',
                 headers: {
@@ -146,6 +146,6 @@ const googleSignup = document.getElementById('googleSignup');
 
 if (googleSignup) {
     googleSignup.addEventListener('click', () => {
-        window.location.href = 'http://localhost:3000/api/auth/google';
+        window.location.href = 'https://umgalelo-production.up.railway.app/api/auth/google';
     });
 }

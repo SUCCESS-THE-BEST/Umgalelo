@@ -27,7 +27,7 @@ login.addEventListener('click', async (e) => {
         return;
     }
 
-    const res = await fetch('http://localhost:3000/api/auth/login', {
+    const res = await fetch('https://umgalelo-production.up.railway.app/api/auth/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -52,7 +52,7 @@ login.addEventListener('click', async (e) => {
 
 document.getElementById('demo').addEventListener('click', (e) => {
     e.preventDefault()
-    window.location.href = 'http://localhost:3000/api/auth/google';
+    window.location.href = 'https://umgalelo-production.up.railway.app/api/auth/google';
 });
 
 function validate(){
