@@ -43,7 +43,8 @@ async function loadSocietyShell() {
 
         renderSociety(
             data.society,
-            data.members
+            data.members,
+            data.user
         );
 
         return data;
@@ -63,7 +64,7 @@ function renderStats(contributions, claims, thisMonth) {
 }
 
 // ================= RENDER SOCIETY HEADER =================
-function renderSociety(s, members = []) {
+function renderSociety(s, members = [], u) {
     if (!s) return;
 
     const initials = s.society_name
@@ -96,14 +97,15 @@ function renderSociety(s, members = []) {
     setText("societyCity", `${s.city}, ${s.province}`)
     setText("founded", formatDate(s.created_at))
 
-    fillPaymentAndClaimForms(s);
+    fillPaymentAndClaimForms(s, u);
 }
 
 // ================= FILL PAYMENT / CLAIM MODALS =================
-function fillPaymentAndClaimForms(s) {
+function fillPaymentAndClaimForms(s, u) {
     const now = new Date();
     const month = String(now.getMonth() + 1).padStart(2, "0");
 
+    setInputValue("member-name", u.first_name + ' ' + u.last_name)
     setInputValue("society-name", s.society_name);
     setInputValue("societyname", s.society_name);
     setInputValue("amount", s.monthly_contribution);

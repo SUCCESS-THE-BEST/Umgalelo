@@ -2,7 +2,8 @@ const db = require('../config/db');
 const societyModel = require('../models/society');
 const membershipModel = require('../models/membership');
 const joinRequestModel = require('../models/joinRequest');
-const notificationModel = require('../models/notifications')
+const notificationModel = require('../models/notifications');
+const userModel = require('../models/user');
 
 
 const createSociety = async (req, res) => {
@@ -221,6 +222,9 @@ const getSocietyDetails = async (req, res) => {
     const userId = req.user.userId; // from auth middleware
 
     try {
+        // Logged In user Info
+        const user = await userModel.findUserById(userId);
+
         // 1. Society info
         const [society] = await db.query(`
             SELECT s.*, u.first_name, u.last_name
@@ -325,6 +329,7 @@ const getSocietyDetails = async (req, res) => {
         );
 
         res.json({
+            user: user[0],
             society: society[0],
             members,
             requests,
