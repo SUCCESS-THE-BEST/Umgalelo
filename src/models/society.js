@@ -134,8 +134,7 @@ const getAllSocieties = async (userId, search = "", province = "") => {
 const getUserSocietyCards = async (user_id) => {
     const now = new Date();
 
-    const currentMonth =
-        `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+    const currentMonth = getCurrentPaymentMonth();
 
     console.log("Dashboard currentMonth:", currentMonth);
 
@@ -174,6 +173,21 @@ const getUserSocietyCards = async (user_id) => {
     );
 
     return rows;
+};
+
+const getCurrentPaymentMonth = () => {
+    const formatter = new Intl.DateTimeFormat('en-ZA', {
+        timeZone: 'Africa/Johannesburg',
+        year: 'numeric',
+        month: '2-digit'
+    });
+
+    const parts = formatter.formatToParts(new Date());
+
+    const year = parts.find(p => p.type === 'year').value;
+    const month = parts.find(p => p.type === 'month').value;
+
+    return `${year}-${month}`;
 };
 
 const getSocietyMembers = async (societyId) => {
