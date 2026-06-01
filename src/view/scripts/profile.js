@@ -24,9 +24,9 @@ window.addEventListener('DOMContentLoaded', async () => {
     try {
         await Promise.all([
             loadSidebarSocieties(),
-            loadNotifications(),
             loadSocieties(),
-            loadUserData()
+            loadUserData(),
+            loadNotifications()
         ]);
     } catch (err) {
         console.log(err);
