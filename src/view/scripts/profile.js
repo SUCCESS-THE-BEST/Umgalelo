@@ -22,21 +22,18 @@ window.addEventListener('DOMContentLoaded', async () => {
     setupCancelButton();
 
     try {
-
         await Promise.all([
             loadSidebarSocieties(),
             loadNotifications(),
             loadSocieties(),
             loadUserData()
         ]);
-
     } catch (err) {
-
         console.log(err);
-
     } finally {
-
-        finishPageLoader();
+        setTimeout(() => {
+            finishPageLoader();
+        }, 500);
     }
 });
 
