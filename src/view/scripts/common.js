@@ -262,22 +262,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
 const pageLoader = document.getElementById('pageLoader');
 
+function getPageLoader() {
+    return document.getElementById('pageLoader');
+}
+
 function startPageLoader() {
+    const pageLoader = getPageLoader();
     if (!pageLoader) return;
 
     pageLoader.classList.remove('hide');
-    pageLoader.style.width = '0%';
+    pageLoader.style.opacity = '1';
+    pageLoader.style.width = '15%';
 
     setTimeout(() => {
-        pageLoader.style.width = '40%';
-    }, 100);
+        pageLoader.style.width = '45%';
+    }, 200);
 
     setTimeout(() => {
         pageLoader.style.width = '75%';
-    }, 400);
+    }, 600);
 }
 
 function finishPageLoader() {
+    const pageLoader = getPageLoader();
     if (!pageLoader) return;
 
     pageLoader.style.width = '100%';
@@ -291,12 +298,3 @@ function finishPageLoader() {
     }, 700);
 }
 
-startPageLoader();
-
-window.addEventListener('load', finishPageLoader);
-
-document.querySelectorAll('a[href]').forEach(link => {
-    link.addEventListener('click', () => {
-        startPageLoader();
-    });
-});

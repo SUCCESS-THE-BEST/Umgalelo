@@ -10,3 +10,20 @@ body {
         opacity: 1;
     }
 }
+
+/* Top page loading bar */
+.page-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 4px;
+    width: 0%;
+    background: linear-gradient(90deg, #a96c41, #d99173);
+    z-index: 99999;
+    transition: width 0.35s ease, opacity 0.3s ease;
+    opacity: 1;
+}
+
+.page-loader.hide {
+    opacity: 0;
+}
