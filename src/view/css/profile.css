@@ -97,9 +97,12 @@ body {
 
     background: url(../images/community.jpg);
     color: white;
-
-    overflow-y: hidden;
     transition: transform 0.3s ease;
+    overflow: auto;
+}
+
+.sidebar::-webkit-scrollbar {
+  display: none;
 }
 
 .sidebar.collapsed {

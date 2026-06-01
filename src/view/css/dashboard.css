@@ -87,9 +87,12 @@ body {
 
     background: url(../images/community.jpg);
     color: white;
-
-    overflow-y: hidden;
     transition: transform 0.3s ease;
+    overflow: auto;
+}
+
+.sidebar::-webkit-scrollbar {
+  display: none;
 }
 
 /* Hides the sidebar on large screens when toggled */

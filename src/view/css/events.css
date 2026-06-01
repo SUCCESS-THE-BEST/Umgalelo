@@ -53,6 +53,11 @@
   height: 100vh;
 
   transition: transform 0.3s ease;
+    overflow: auto;
+}
+
+.sidebar::-webkit-scrollbar {
+  display: none;
 }
 
 .sidebar-logo {
