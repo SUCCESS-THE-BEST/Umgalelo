@@ -84,7 +84,7 @@ function renderSociety(s, members = [], u) {
 
     if (locationText) {
         locationText.innerHTML =
-            `<img src="../images/location.png" width="15px"> ${s.city}, ${s.province}`;
+            `<img src="../images/location.png" width="10px"> ${s.city}, ${s.province}`;
     }
 
     // Optional overview fields
