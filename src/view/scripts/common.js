@@ -259,3 +259,44 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
+
+const pageLoader = document.getElementById('pageLoader');
+
+function startPageLoader() {
+    if (!pageLoader) return;
+
+    pageLoader.classList.remove('hide');
+    pageLoader.style.width = '0%';
+
+    setTimeout(() => {
+        pageLoader.style.width = '40%';
+    }, 100);
+
+    setTimeout(() => {
+        pageLoader.style.width = '75%';
+    }, 400);
+}
+
+function finishPageLoader() {
+    if (!pageLoader) return;
+
+    pageLoader.style.width = '100%';
+
+    setTimeout(() => {
+        pageLoader.classList.add('hide');
+    }, 300);
+
+    setTimeout(() => {
+        pageLoader.style.width = '0%';
+    }, 700);
+}
+
+startPageLoader();
+
+window.addEventListener('load', finishPageLoader);
+
+document.querySelectorAll('a[href]').forEach(link => {
+    link.addEventListener('click', () => {
+        startPageLoader();
+    });
+});
