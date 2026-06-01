@@ -10,9 +10,9 @@
     --soft-surface: #fff8f4;
     --shadow: 0 24px 70px rgba(53, 28, 18, 0.16);
     --shadow-soft: 0 14px 35px rgba(53, 28, 18, 0.10);
-    --radius-xl: 27px;
-    --radius-lg: 18px;
-    --radius-md: 12px;
+    --radius-xl: 36px;
+    --radius-lg: 24px;
+    --radius-md: 16px;
     --transition: 220ms ease;
 }
 
@@ -59,6 +59,9 @@ body {
     content: "";
     position: absolute;
     inset: 0;
+    /* background:
+        radial-gradient(circle at 30% 20%, rgba(217, 145, 115, 0.35), transparent 35%),
+        linear-gradient(135deg, rgba(59, 36, 31, 0.72), rgba(169, 108, 65, 0.35)); */
     z-index: 0;
     animation: panelGlow 8s ease-in-out infinite alternate;
 }
@@ -66,7 +69,7 @@ body {
 .welcome-content {
     position: relative;
     z-index: 1;
-    padding: 22px 38px;
+    padding: 30px 50px;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -77,23 +80,22 @@ body {
     width: fit-content;
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     color: white;
     background: rgba(255, 255, 255, 0.11);
     border: 1px solid rgba(255, 255, 255, 0.24);
     border-radius: 999px;
-    padding: 8px 12px;
+    padding: 10px 16px;
     cursor: pointer;
     font-family: 'DM Sans', sans-serif;
     font-weight: 600;
-    font-size: 13px;
     transition:
         transform var(--transition),
         background var(--transition),
         border-color var(--transition),
         box-shadow var(--transition);
     backdrop-filter: blur(12px);
-    margin-bottom: clamp(45px, 12vh, 150px);
+    margin-bottom: clamp(60px, 16vh, 200px);
 }
 
 .back-link:hover {
@@ -108,8 +110,8 @@ body {
 }
 
 .logo {
-    width: min(195px, 70%);
-    margin: 0 auto 45px;
+    width: min(260px, 70%);
+    margin: 0 auto 60px;
 }
 
 .logo img {
@@ -123,12 +125,12 @@ body {
 .welcome-heading {
     font-family: 'Poppins', sans-serif;
     font-weight: 700;
-    font-size: clamp(1.65rem, 3.75vw, 3.68rem);
+    font-size: clamp(2.2rem, 5vw, 4.9rem);
     color: white;
-    margin-bottom: 22px;
+    margin-bottom: 30px;
     line-height: 0.98;
     letter-spacing: -0.06em;
-    max-width: 315px;
+    max-width: 420px;
     margin-left: auto;
     margin-right: auto;
     text-align: center;
@@ -137,10 +139,10 @@ body {
 
 .welcome-text {
     font-family: 'Padauk', sans-serif;
-    font-size: clamp(0.83rem, 1.5vw, 1.13rem);
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
     color: rgba(255, 255, 255, 0.88);
-    margin-bottom: 45px;
-    max-width: 338px;
+    margin-bottom: 60px;
+    max-width: 450px;
     line-height: 1.4;
     margin-left: auto;
     margin-right: auto;
@@ -151,7 +153,7 @@ body {
 .signup-section {
     display: flex;
     align-items: center;
-    gap: 11px;
+    gap: 15px;
     justify-content: center;
     flex-wrap: wrap;
     animation: fadeUp 750ms ease 450ms both;
@@ -160,16 +162,16 @@ body {
 .signup-text {
     color: white;
     font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
+    font-size: 20px;
 }
 
 .signup-button {
     border: 1px solid rgba(255, 255, 255, 0.65);
-    border-radius: 26px;
-    padding: 6px 19px;
+    border-radius: 35px;
+    padding: 8px 25px;
     font-family: 'DM Sans', sans-serif;
     font-weight: 600;
-    font-size: 12px;
+    font-size: 15px;
     color: white;
     cursor: pointer;
     background: rgba(255, 255, 255, 0.1);
@@ -195,7 +197,7 @@ body {
 .form-section {
     width: 60%;
     min-height: 100vh;
-    padding: 45px 60px;
+    padding: 60px 80px;
     overflow-y: auto;
     display: flex;
     align-items: center;
@@ -203,27 +205,28 @@ body {
 }
 
 .login-form {
-    width: min(100%, 600px);
+    width: min(100%, 800px);
     background-color: rgba(255, 255, 255, 0.92);
+    /* background-color: white; */
     border: 1px solid rgba(169, 108, 65, 0.12);
-    border-radius: 30px;
-    padding: clamp(34px, 4.5vw, 68px) clamp(24px, 5.25vw, 90px);
+    border-radius: 40px;
+    padding: clamp(45px, 6vw, 90px) clamp(32px, 7vw, 120px);
     box-shadow: var(--shadow);
     backdrop-filter: blur(16px);
     animation: fadeInRight 700ms ease both, softFloat 7s ease-in-out infinite;
 }
 
 .form-group {
-    margin-bottom: 5px;
+    margin-bottom: 6px;
 }
 
 .form-group label {
     display: block;
     color: #3d3d3d;
     font-family: 'Poppins', sans-serif;
-    font-size: 13px;
-    margin-bottom: 8px;
-    margin-top: 8px;
+    font-size: 16px;
+    margin-bottom: 10px;
+    margin-top: 10px;
     transition: color var(--transition), transform var(--transition);
 }
 
@@ -231,10 +234,10 @@ body {
     width: 100%;
     background: #f9f9f9;
     border: 1px solid rgb(214, 214, 214);
-    border-radius: 9px;
-    padding: 11px 15px;
+    border-radius: 12px;
+    padding: 15px 20px;
     font-family: 'Poppins', sans-serif;
-    font-size: 13px;
+    font-size: 16px;
     outline: none;
     transition:
         border-color var(--transition),
@@ -255,7 +258,7 @@ body {
 .form-group input:focus {
     border-color: var(--primary-light);
     background: white;
-    box-shadow: 0 0 0 3px rgba(217, 145, 115, 0.18);
+    box-shadow: 0 0 0 4px rgba(217, 145, 115, 0.18);
     transform: translateY(-1px);
 }
 
@@ -264,19 +267,19 @@ body {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    margin: 22px 0;
-    gap: 14px;
+    margin: 30px 0;
+    gap: 18px;
 }
 
 .remember-me {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
 }
 
 .remember-me input[type="checkbox"] {
-    width: 17px;
-    height: 17px;
+    width: 22px;
+    height: 22px;
     accent-color: var(--primary);
     cursor: pointer;
 }
@@ -284,14 +287,14 @@ body {
 .remember-me label {
     color: #3f3f3f;
     font-family: 'Poppins', sans-serif;
-    font-size: 11px;
+    font-size: 14px;
     cursor: pointer;
 }
 
 .forgot-password {
     color: var(--muted);
     font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
+    font-size: 16px;
     text-decoration: none;
     transition: color var(--transition);
 }
@@ -303,10 +306,10 @@ body {
 .login-button,
 .demo-button {
     width: 100%;
-    border-radius: 26px;
+    border-radius: 35px;
     font-family: 'DM Sans', sans-serif;
     font-weight: 600;
-    font-size: 15px;
+    font-size: 20px;
     cursor: pointer;
     transition:
         transform var(--transition),
@@ -317,8 +320,8 @@ body {
 }
 
 .login-button {
-    padding: 11px 30px;
-    margin-bottom: 19px;
+    padding: 15px 40px;
+    margin-bottom: 25px;
     background: var(--primary);
     border: none;
     color: white;
@@ -340,7 +343,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 11px;
+    gap: 15px;
 }
 
 .divider hr {
@@ -352,28 +355,28 @@ body {
 .divider span {
     color: var(--muted);
     font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
+    font-size: 16px;
 }
 
 .demo-button {
     width: 100%;
-    max-width: 407px;
-    min-height: 41px;
-    margin: 21px auto 0;
-    margin-bottom: 19px;
+    max-width: 543px;
+    min-height: 54px;
+    margin: 28px auto 0;
+    margin-bottom: 25px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 9px;
+    gap: 12px;
 
     background: white;
     border: 1px solid rgb(214, 214, 214);
-    border-radius: 26px;
+    border-radius: 35px;
 
     color: var(--text);
     font-family: 'DM Sans', sans-serif;
     font-weight: 700;
-    font-size: 13px;
+    font-size: 16px;
 
     cursor: pointer;
     transition:
@@ -384,8 +387,8 @@ body {
 }
 
 .demo-button img {
-    width: 17px;
-    height: 17px;
+    width: 22px;
+    height: 22px;
     object-fit: contain;
 }
 
@@ -396,6 +399,35 @@ body {
     box-shadow: var(--shadow-soft);
 }
 
+/* .demo-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 10px 40px;
+    background: #ffffff;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+.demo-button:hover {
+    background: var(--primary-dark);
+    color: white;
+    border-color: var(--primary-dark);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-soft);
+}
+
+.google-img {
+    transition: transform var(--transition);
+}
+
+.demo-button:hover .google-img {
+    transform: rotate(-6deg) scale(1.06);
+} */
+
 .demo-info {
     text-align: center;
     width: 100%;
@@ -404,39 +436,70 @@ body {
 .demo-info p {
     color: rgb(77, 77, 77);
     font-family: 'Poppins', sans-serif;
-    font-size: 12px;
+    font-size: 15px;
     line-height: 1.5;
     margin: 0;
 }
 
 /* Animations */
 @keyframes slideInLeft {
-    from { opacity: 0; transform: translateX(-28px); }
-    to { opacity: 1; transform: translateX(0); }
+    from {
+        opacity: 0;
+        transform: translateX(-28px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 @keyframes fadeInRight {
-    from { opacity: 0; transform: translateX(28px); }
-    to { opacity: 1; transform: translateX(0); }
+    from {
+        opacity: 0;
+        transform: translateX(28px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(22px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(22px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @keyframes softFloat {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-8px);
+    }
 }
 
 @keyframes panelGlow {
-    from { opacity: 0.88; transform: scale(1); }
-    to { opacity: 1; transform: scale(1.04); }
+    from {
+        opacity: 0.88;
+        transform: scale(1);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1.04);
+    }
 }
 
+/* Accessibility: reduce animation for users who prefer it */
 @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
+    *,
+    *::before,
+    *::after {
         animation-duration: 1ms !important;
         animation-iteration-count: 1 !important;
         scroll-behavior: auto !important;
@@ -452,11 +515,11 @@ body {
 
     .form-section {
         width: 62%;
-        padding: 30px;
+        padding: 40px;
     }
 
     .login-form {
-        padding: 45px 41px;
+        padding: 60px 55px;
     }
 }
 
@@ -473,74 +536,78 @@ body {
     }
 
     .welcome-content {
-        padding: 17px 18px 24px;
+        padding: 22px 24px 32px;
     }
 
     .back-link {
-        margin-bottom: 21px;
+        margin-bottom: 28px;
     }
 
     .logo {
-        width: 113px;
-        margin-bottom: 14px;
+        width: 150px;
+        margin-bottom: 18px;
     }
 
     .welcome-heading {
-        font-size: clamp(1.5rem, 6vw, 2.25rem);
-        margin-bottom: 11px;
+        font-size: clamp(2rem, 8vw, 3rem);
+        margin-bottom: 14px;
         letter-spacing: -0.04em;
     }
 
     .welcome-text {
-        font-size: 14px;
-        margin-bottom: 17px;
-        max-width: 390px;
+        font-size: 18px;
+        margin-bottom: 22px;
+        max-width: 520px;
     }
 
     .signup-section {
-        gap: 8px;
+        gap: 10px;
     }
 
     .signup-text {
-        font-size: 13px;
+        font-size: 16px;
     }
 
     .form-section {
         width: 100%;
         min-height: auto;
-        padding: 21px 14px 27px;
+        padding: 28px 18px 36px;
     }
 
     .login-form {
-        width: min(100%, 510px);
-        border-radius: 21px;
-        padding: 29px 18px;
+        width: min(100%, 680px);
+        border-radius: 28px;
+        padding: 38px 24px;
         animation: fadeUp 600ms ease both;
     }
 }
 
 @media (max-width: 620px) {
+    .login-container {
+        background-position: center top;
+    }
+
     .welcome-content {
-        padding: 14px 12px 20px;
+        padding: 18px 16px 26px;
     }
 
     .back-link {
-        font-size: 11px;
-        padding: 7px 10px;
+        font-size: 14px;
+        padding: 9px 13px;
     }
 
     .logo {
-        width: 98px;
-        margin-bottom: 11px;
+        width: 130px;
+        margin-bottom: 14px;
     }
 
     .welcome-heading {
-        font-size: 1.5rem;
+        font-size: 2rem;
         line-height: 1.05;
     }
 
     .welcome-text {
-        font-size: 13px;
+        font-size: 16px;
         line-height: 1.35;
     }
 
@@ -550,63 +617,67 @@ body {
 
     .signup-button {
         width: 100%;
-        max-width: 165px;
+        max-width: 220px;
     }
 
     .form-section {
-        padding: 15px 9px 21px;
+        padding: 20px 12px 28px;
     }
 
     .login-form {
-        border-radius: 17px;
-        padding: 21px 12px;
+        border-radius: 22px;
+        padding: 28px 16px;
     }
 
     .form-options {
         flex-direction: column;
         align-items: flex-start;
-        margin: 17px 0;
+        margin: 22px 0;
     }
 
     .forgot-password {
-        font-size: 11px;
+        font-size: 14px;
     }
 
     .login-button,
     .demo-button {
-        font-size: 13px;
-        padding-left: 14px;
-        padding-right: 14px;
+        font-size: 17px;
+        padding-left: 18px;
+        padding-right: 18px;
     }
 
     .demo-button {
-        gap: 9px;
+        gap: 12px;
+    }
+
+    .google-img {
+        width: 28px;
     }
 
     .demo-info p {
-        font-size: 11px;
+        font-size: 13px;
     }
 }
 
 @media (max-width: 380px) {
     .welcome-heading {
-        font-size: 1.31rem;
+        font-size: 1.75rem;
     }
 
     .welcome-text {
-        font-size: 12px;
+        font-size: 15px;
     }
 
     .login-form {
-        padding: 18px 11px;
+        padding: 24px 14px;
     }
 
     .form-group input {
-        font-size: 11px;
-        padding: 10px 11px;
+        font-size: 14px;
+        padding: 13px 14px;
     }
 
     .divider span {
-        font-size: 11px;
+        font-size: 13px;
     }
 }
