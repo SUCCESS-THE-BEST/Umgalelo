@@ -11,31 +11,19 @@ const editableSections = {
     kin: ['nextOfKinName', 'nextOfKinPhone']
 };
 
-window.addEventListener('DOMContentLoaded', async () => {
-
-    startPageLoader();
+window.onload = async () => {
+    await loadUser();
+    await loadSidebarSocieties();
+    await loadNotifications();
+    await loadSocieties();
+    await loadUserData();
 
     renderDate();
     setupSectionButtons();
     setupIdParser();
     setupProfileUploadButton();
     setupCancelButton();
-
-    try {
-        await Promise.all([
-            loadSidebarSocieties(),
-            loadSocieties(),
-            loadUserData(),
-            loadNotifications()
-        ]);
-    } catch (err) {
-        console.log(err);
-    } finally {
-        setTimeout(() => {
-            finishPageLoader();
-        }, 500);
-    }
-});
+};
 
 // ================= DATE =================
 function renderDate() {
