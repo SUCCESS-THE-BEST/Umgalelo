@@ -141,8 +141,8 @@ const updateClaimStatus = async (req, res) => {
     await claimModel.updateStatus(id, status);
 
     await notificationModel.createNotification(
-      claimInfo[0].user_id,
-      claimInfo[0].society_id,
+      claimInfo.user_id,
+      claimInfo.society_id,
       `Your claim has been ${status}.`,
       'claim'
     );
