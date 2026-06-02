@@ -129,28 +129,27 @@ const updateClaimStatus = async (req, res) => {
     }
 
     // ======== APPROVE CLAIMS ========
-    if (status === 'approved') {
 
-      const claimInfo = await claimModel.getById(id);
-      const claim = claimInfo[0];
+    const claimInfo = await claimModel.getById(id);
+    const claim = claimInfo[0];
 
-      if (!claim) {
-        return res.status(404).json({
-          message: "Claim not found"
-        });
-      }
-
-      await claimModel.updateStatus(id, status);
-
-      await notificationModel.createNotification(
-        claim.user_id,
-        claim.society_id,
-        `Your claim has been ${status}.`,
-        'claim'
-      );
-
-      res.json({ message: `Claim ${status}` });
+    if (!claim) {
+      return res.status(404).json({
+        message: "Claim not found"
+      });
     }
+
+    await claimModel.updateStatus(id, status);
+
+    await notificationModel.createNotification(
+      claim.user_id,
+      claim.society_id,
+      `Your claim has been ${status}.`,
+      'claim'
+    );
+
+    res.json({ message: `Claim ${status}` });
+
 
     // await claimModel.updateStatus(id, status)
 
