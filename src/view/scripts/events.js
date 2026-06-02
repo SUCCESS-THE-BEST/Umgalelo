@@ -125,8 +125,7 @@ function renderEvents(events) {
         container.innerHTML += `
             <div class="event-card"
                  data-event-id="${event.id}"
-                 data-event-type="${event.type}"
-                 onclick="openEventDetails(${event.id})">
+                 data-event-type="${event.type}">
 
                 <div class="event-date">
                     <div class="date-badge">
