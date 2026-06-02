@@ -29,9 +29,14 @@ function renderClaims(claims) {
         const card = document.createElement("section");
         card.className = "card claim-card";
 
-        card.addEventListener("click", () => {
-            openClaimDetails(c);
-        });
+        const userRole = localStorage.getItem("role");
+
+        if (userRole === "admin") {
+            card.style.cursor = "pointer";
+            card.addEventListener("click", () => {
+                openClaimDetails(c);
+            });
+        }
 
         card.innerHTML = `
             <div class="claim-header">
