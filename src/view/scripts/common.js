@@ -1,3 +1,56 @@
+// ================= PAGE LOADER =================
+(function () {
+    let activeRequests = 0;
+    let loaderTimeout = null;
+    let progressInterval = null;
+    let currentWidth = 0;
+
+    function getLoader() {
+        return document.getElementById('pageLoader');
+    }
+
+    function startLoader() {
+        const loader = getLoader();
+        if (!loader) return;
+        clearTimeout(loaderTimeout);
+        clearInterval(progressInterval);
+        currentWidth = 0;
+        loader.style.width = '0%';
+        loader.style.opacity = '1';
+        loader.classList.remove('hide');
+
+        // Animate to ~85% while requests are pending
+        progressInterval = setInterval(() => {
+            if (currentWidth < 85) {
+                currentWidth += (85 - currentWidth) * 0.07;
+                loader.style.width = currentWidth + '%';
+            }
+        }, 80);
+    }
+
+    function finishLoader() {
+        const loader = getLoader();
+        if (!loader) return;
+        clearInterval(progressInterval);
+        currentWidth = 100;
+        loader.style.width = '100%';
+        loaderTimeout = setTimeout(() => {
+            loader.classList.add('hide');
+        }, 300);
+    }
+
+    const originalFetch = window.fetch;
+    window.fetch = function (...args) {
+        if (activeRequests === 0) startLoader();
+        activeRequests++;
+
+        return originalFetch.apply(this, args).finally(() => {
+            activeRequests--;
+            if (activeRequests === 0) finishLoader();
+        });
+    };
+})();
+
 // ===================== API BASE ===================
 const API_BASE = 'https://umgalelo-production.up.railway.app';
 // ================= TOKEN =================
