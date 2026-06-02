@@ -133,7 +133,7 @@ const updateClaimStatus = async (req, res) => {
     const claimInfo = await claimModel.getById(id);
     const claim = claimInfo[0];
 
-    if (!claim) {
+    if (!claimInfo) {
       return res.status(404).json({
         message: "Claim not found"
       });
