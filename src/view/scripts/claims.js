@@ -133,6 +133,10 @@ function openClaimDetails(claim) {
         .classList.add("active");
 }
 
+function closeViewClaimModal() {
+    document.getElementById("viewClaimModal").classList.remove("active");
+}
+
 // ===============ADMIN ONLY (APPROVE/REJECT CLAIM) =====================
 function renderClaimActions(c) {
 
