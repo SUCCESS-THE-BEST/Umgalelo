@@ -71,41 +71,47 @@ function renderClaims(claims) {
 
 function openClaimDetails(claim) {
 
-    const fakeCertificate =
-        "https://res.cloudinary.com/dfkvu3ixa/image/upload/v1780414878/death_cert_v0mn8x.jpg";
+    const fakeCertificate = "https://res.cloudinary.com/dfkvu3ixa/image/upload/v1780414878/death_cert_v0mn8x.jpg";
 
     document.getElementById("viewClaimContent").innerHTML = `
-        <div class="claim-view-grid">
+        <div class="society-details">
 
-            <div class="detail-box">
+            <div class="detail-item">
                 <p class="detail-label">Claimant</p>
                 <p class="detail-value">
                     ${claim.first_name} ${claim.last_name}
                 </p>
             </div>
 
-            <div class="detail-box">
+            <div class="detail-item">
+                <p class="detail-label">Deceased</p>
+                <p class="detail-value">
+                    ${claim.deceased_name}
+                </p>
+            </div>
+
+            <div class="detail-item">
                 <p class="detail-label">Relationship</p>
                 <p class="detail-value">
                     ${claim.relationship}
                 </p>
             </div>
 
-            <div class="detail-box">
-                <p class="detail-label">Amount</p>
+            <div class="detail-item">
+                <p class="detail-label">Claim Amount</p>
                 <p class="detail-value">
                     R${claim.claim_amount}
                 </p>
             </div>
 
-            <div class="detail-box">
+            <div class="detail-item">
                 <p class="detail-label">Date of Passing</p>
                 <p class="detail-value">
                     ${claim.date_of_death}
                 </p>
             </div>
 
-            <div class="detail-box">
+            <div class="detail-item">
                 <p class="detail-label">Status</p>
                 <p class="detail-value">
                     ${claim.status}
@@ -114,18 +120,22 @@ function openClaimDetails(claim) {
 
         </div>
 
-        <h3>Death Certificate</h3>
+        <div class="card" style="margin:20px 0 0 0;">
+            <div class="card-header">
+                <h2>Death Certificate</h2>
+            </div>
 
-        <img
-            src="${fakeCertificate}"
-            alt="Death Certificate"
-            style="
-                width:100%;
-                max-height:600px;
-                object-fit:contain;
-                border-radius:10px;
-            "
-        >
+            <div class="card-divider"></div>
+
+            <img
+                src="${fakeCertificate}"
+                style="
+                    width:100%;
+                    border-radius:12px;
+                    object-fit:contain;
+                "
+            >
+        </div>
     `;
 
     document
