@@ -132,17 +132,29 @@ const updateClaimStatus = async (req, res) => {
     if (status === 'approved') {
 
       const claimInfo = await claimModel.getById(id);
+      const claim = claimInfo[0];
+
+      if (!claim) {
+        return res.status(404).json({
+          message: "Claim not found"
+        });
+      }
+
+      await claimModel.updateStatus(id, status);
 
       await notificationModel.createNotification(
-          claimInfo[0].user_id,
-          claimInfo[0].society_id,
-          `Your claim has been approved.`
+        claim.user_id,
+        claim.society_id,
+        `Your claim has been ${status}.`,
+        'claim'
       );
+
+      res.json({ message: `Claim ${status}` });
     }
 
-    await claimModel.updateStatus(id, status)
+    // await claimModel.updateStatus(id, status)
 
-    res.json({ message: `Claim ${status}` });
+    // res.json({ message: `Claim ${status}` });
 
   } catch (err) {
     console.error(err);
@@ -185,13 +197,13 @@ const deleteClaim = async (req, res) => {
             });
         }
 
-        if (Number(claim.user_id) !== Number(userId)) {
+        if (Number(claim[0].user_id) !== Number(userId)) {
             return res.status(403).json({
                 message: 'Unauthorized'
             });
         }
 
-        if (claim.status !== 'pending') {
+        if (claim[0].status !== 'pending') {
             return res.status(400).json({
                 message: 'Only pending claims can be cancelled'
             });
