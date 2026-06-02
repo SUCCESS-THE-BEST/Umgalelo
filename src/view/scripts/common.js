@@ -16,8 +16,8 @@
         clearInterval(progressInterval);
         currentWidth = 0;
         loader.style.width = '0%';
-        loader.style.opacity = '1';
         loader.classList.remove('hide');
+        loader.classList.add('active');
 
         // Animate to ~85% while requests are pending
         progressInterval = setInterval(() => {
@@ -36,6 +36,7 @@
         loader.style.width = '100%';
         loaderTimeout = setTimeout(() => {
             loader.classList.add('hide');
+            loader.classList.remove('active');
         }, 300);
     }
 
@@ -49,6 +50,14 @@
             if (activeRequests === 0) finishLoader();
         });
     };
+
+    // Fallback: force-hide once the page is fully loaded,
+    // catches cases where all fetches finished before the bar could clean up
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            if (activeRequests === 0) finishLoader();
+        }, 500);
+    });
 })();
 
 // ===================== API BASE ===================

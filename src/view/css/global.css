@@ -24,6 +24,10 @@ body {
     opacity: 1;
 }
 
+.page-loader.active {
+    opacity: 1;
+}
+
 .page-loader.hide {
     opacity: 0;
 }
