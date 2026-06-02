@@ -224,7 +224,7 @@ async function handleClaim(claimId, action) {
     alert(data.message);
 
     // reload claims after update
-    loadClaims();
+    location.reload();
 
   } catch (err) {
     console.error(err);
