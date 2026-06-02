@@ -195,13 +195,13 @@ const deleteClaim = async (req, res) => {
             });
         }
 
-        if (Number(claim[0].user_id) !== Number(userId)) {
+        if (Number(claim.user_id) !== Number(userId)) {
             return res.status(403).json({
                 message: 'Unauthorized'
             });
         }
 
-        if (claim[0].status !== 'pending') {
+        if (claim.status !== 'pending') {
             return res.status(400).json({
                 message: 'Only pending claims can be cancelled'
             });

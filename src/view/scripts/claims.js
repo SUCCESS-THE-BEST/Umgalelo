@@ -224,7 +224,13 @@ async function handleClaim(claimId, action) {
     alert(data.message);
 
     // reload claims after update
-    location.reload();
+    const claim = allClaims.find(c => c.claim_id === claimId);
+
+    if (claim) {
+        claim.status = action;
+    }
+
+    renderClaims(allClaims);
 
   } catch (err) {
     console.error(err);
@@ -262,7 +268,11 @@ async function cancelClaim(claimId) {
 
         alert(data.message);
 
-        loadSociety();
+        allClaims = allClaims.filter(
+            c => c.claim_id !== claimId
+        );
+
+        renderClaims(allClaims);
 
     } catch (err) {
 
