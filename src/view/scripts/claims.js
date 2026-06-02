@@ -30,9 +30,12 @@ function renderClaims(claims) {
         card.className = "card claim-card";
 
         const userRole = localStorage.getItem("role");
+        const currentUserId = Number(localStorage.getItem("user_id"));
+        const claimOwnerId = Number(c.user_id);
 
-        if (userRole === "admin") {
+        if (userRole === "admin" || currentUserId === claimOwnerId) {
             card.style.cursor = "pointer";
+
             card.addEventListener("click", () => {
                 openClaimDetails(c);
             });
@@ -195,7 +198,7 @@ function renderClaimActions(c) {
         buttons += `
             <button
                 class="btn btn-outline btn-sm"
-                onclick="cancelClaim(${c.claim_id})"
+                onclick="event.stopPropagation(); cancelClaim(${c.claim_id})"
             >
                 Cancel Claim
             </button>
