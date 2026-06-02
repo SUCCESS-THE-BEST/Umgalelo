@@ -29,6 +29,10 @@ function renderClaims(claims) {
         const card = document.createElement("section");
         card.className = "card claim-card";
 
+        card.addEventListener("click", () => {
+            openClaimDetails(c);
+        });
+
         card.innerHTML = `
             <div class="claim-header">
                 <div class="claim-title-section">
@@ -65,6 +69,70 @@ function renderClaims(claims) {
 
 }
 
+function openClaimDetails(claim) {
+
+    const fakeCertificate =
+        "https://res.cloudinary.com/dfkvu3ixa/image/upload/v1780414878/death_cert_v0mn8x.jpg";
+
+    document.getElementById("viewClaimContent").innerHTML = `
+        <div class="claim-view-grid">
+
+            <div class="detail-box">
+                <p class="detail-label">Claimant</p>
+                <p class="detail-value">
+                    ${claim.first_name} ${claim.last_name}
+                </p>
+            </div>
+
+            <div class="detail-box">
+                <p class="detail-label">Relationship</p>
+                <p class="detail-value">
+                    ${claim.relationship}
+                </p>
+            </div>
+
+            <div class="detail-box">
+                <p class="detail-label">Amount</p>
+                <p class="detail-value">
+                    R${claim.claim_amount}
+                </p>
+            </div>
+
+            <div class="detail-box">
+                <p class="detail-label">Date of Passing</p>
+                <p class="detail-value">
+                    ${claim.date_of_death}
+                </p>
+            </div>
+
+            <div class="detail-box">
+                <p class="detail-label">Status</p>
+                <p class="detail-value">
+                    ${claim.status}
+                </p>
+            </div>
+
+        </div>
+
+        <h3>Death Certificate</h3>
+
+        <img
+            src="${fakeCertificate}"
+            alt="Death Certificate"
+            style="
+                width:100%;
+                max-height:600px;
+                object-fit:contain;
+                border-radius:10px;
+            "
+        >
+    `;
+
+    document
+        .getElementById("viewClaimModal")
+        .classList.add("active");
+}
+
 // ===============ADMIN ONLY (APPROVE/REJECT CLAIM) =====================
 function renderClaimActions(c) {
 
@@ -86,14 +154,14 @@ function renderClaimActions(c) {
         buttons += `
             <button
                 class="btn btn-primary btn-sm"
-                onclick="handleClaim(${c.claim_id}, 'approved')"
+                onclick="event.stopPropagation(); handleClaim(${c.claim_id}, 'approved')"
             >
                 Approve
             </button>
 
             <button
                 class="btn btn-outline btn-sm"
-                onclick="handleClaim(${c.claim_id}, 'rejected')"
+                onclick="event.stopPropagation(); handleClaim(${c.claim_id}, 'rejected')"
             >
                 Reject
             </button>
