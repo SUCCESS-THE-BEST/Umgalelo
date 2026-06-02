@@ -25,25 +25,25 @@ document.querySelectorAll('.event-type-option').forEach(btn => {
 const eventModal = document.getElementById("eventDetailsModal");
 const closeBtn = document.getElementById("closeEventDetails");
 
-document.querySelectorAll(".event-card").forEach(card => {
-    card.addEventListener("click", async () => {
-        
-        const eventId = card.dataset.eventId;
+// ========== OPEN EVENT CARD ==========
+async function openEventDetails(eventId) {
 
-        const res = await fetch(`${API_BASE}/api/events/single/${eventId}`);
-        const event = await res.json();
-        console.log(event)
-        document.getElementById("eventTitle").innerText = event.title;
-        document.getElementById("eventMember").innerText = event.member || "-";
-        document.getElementById("eventDateTime").innerText =
-            `${event.date} · ${event.time}`;
-        document.getElementById("eventLocation").innerText = event.location;
-        document.getElementById("eventNotes").innerText = event.notes || "-";
+    const res = await fetch(
+        `${API_BASE}/api/events/single/${eventId}`
+    );
 
-        eventModal.classList.add("active");
-        document.body.style.overflow = 'hidden';
-    });
-});
+    const event = await res.json();
+
+    document.getElementById("eventTitle").innerText = event.title;
+    document.getElementById("eventMember").innerText = event.member || "-";
+    document.getElementById("eventDateTime").innerText =
+        `${event.date} · ${event.time}`;
+    document.getElementById("eventLocation").innerText = event.location;
+    document.getElementById("eventNotes").innerText = event.notes || "-";
+
+    eventModal.classList.add("active");
+    document.body.style.overflow = "hidden";
+}
 
 closeBtn.addEventListener("click", () => {
     eventModal.classList.remove("active");
@@ -124,7 +124,8 @@ function renderEvents(events) {
         container.innerHTML += `
             <div class="event-card"
                  data-event-id="${event.id}"
-                 data-event-type="${event.type}">
+                 data-event-type="${event.type}"
+                 onclick="openEventDetails(${event.id})">
 
                 <div class="event-date">
                     <div class="date-badge">
