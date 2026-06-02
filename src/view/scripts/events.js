@@ -34,6 +34,7 @@ async function openEventDetails(eventId) {
 
     const event = await res.json();
 
+    document.getElementById('eventTypeBadge').innerText = event.type;
     document.getElementById("eventTitle").innerText = event.title;
     document.getElementById("eventMember").innerText = event.member || "-";
     document.getElementById("eventDateTime").innerText =
