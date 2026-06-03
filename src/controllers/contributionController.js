@@ -220,20 +220,28 @@ const getUserContributionHistory = async (req, res) => {
 };
 
 
-//society contribution history
+// ============= society contribution history ===============
 const getSocietyContributionHistory = async (req, res) => {
   try {
     const user_id = req.user.userId;
     const society_id = req.params.id;
-    
 
-    // ====== ONLY MEMBERS ==========
-    const isMember = await membershipModel.findMember(user_id, society_id);
-    if (!isMember) {
+    const member = await membershipModel.findMember(user_id, society_id);
+
+    if (!member) {
       return res.status(403).json({ message: 'Access denied' });
     }
 
-    const payments = await contributionModel.getSocietyPaymentHistory(society_id);
+    let payments;
+
+    if (member.role === 'admin') {
+      payments = await contributionModel.getSocietyPaymentHistory(society_id);
+    } else {
+      payments = await contributionModel.getMemberSocietyPaymentHistory(
+        user_id,
+        society_id
+      );
+    }
 
     const formatted = payments.map(p => ({
       id: p.contribution_id,
@@ -241,7 +249,9 @@ const getSocietyContributionHistory = async (req, res) => {
       last_name: p.last_name,
       amount: p.amount,
       status: p.status,
-      payment_date: p.payment_date != null ? new Date(p.payment_date).toLocaleDateString() : null,
+      payment_date: p.payment_date != null
+        ? new Date(p.payment_date).toLocaleDateString()
+        : null,
       payment_month: p.payment_month
     }));
 

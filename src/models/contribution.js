@@ -61,6 +61,8 @@ const getUserContributionHistory = async (user_id) => {
   return rows;
 };
 
+
+// OVERALL SOCIETY CONTRIBUTION HISTORY
 const getSocietyPaymentHistory = async (society_id) => {
     const currentMonth = getCurrentPaymentMonth();
 
@@ -118,6 +120,31 @@ const getSocietyPaymentHistory = async (society_id) => {
     );
 
     return rows;
+};
+
+// ============= MEMBER CONTRIBUTION HISTORY ==============
+const getMemberSocietyPaymentHistory = async (user_id, society_id) => {
+  const [rows] = await db.execute(
+    `
+    SELECT 
+      c.contribution_id,
+      u.first_name,
+      u.last_name,
+      c.amount,
+      c.status,
+      c.payment_date,
+      c.payment_month
+    FROM contributions c
+    JOIN users u 
+      ON c.user_id = u.user_id
+    WHERE c.user_id = ?
+    AND c.society_id = ?
+    ORDER BY c.payment_month DESC
+    `,
+    [user_id, society_id]
+  );
+
+  return rows;
 };
 
 const getTotalBySociety = async (society_id) => {
@@ -203,7 +230,8 @@ module.exports = {
   createContribution, 
   UpdateSocietyWallet, 
   getUserContributionHistory, 
-  getSocietyPaymentHistory, 
+  getSocietyPaymentHistory,
+  getMemberSocietyPaymentHistory,
   getTotalBySociety,
   checkMonthlyContributionExists,
   getUnpaidMembers,
