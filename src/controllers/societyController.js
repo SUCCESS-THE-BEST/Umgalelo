@@ -4,6 +4,7 @@ const membershipModel = require('../models/membership');
 const joinRequestModel = require('../models/joinRequest');
 const notificationModel = require('../models/notifications');
 const userModel = require('../models/user');
+const { sendEmail } = require('../services/emailServices');
 
 const getCurrentPaymentMonth = () => {
     const formatter = new Intl.DateTimeFormat('en-ZA', {
@@ -51,6 +52,42 @@ const createSociety = async (req, res) => {
         `Your society “${societyName}” has been created successfully. 
         Members can now discover, request to join, and contribute to your society.`,
         'Created'
+    );
+
+    const [user] = await userModel.findUserById(user_id);
+
+    await sendEmail(
+        user.email,
+        'Society Created Successfully - Umgalelo',
+        `
+            <h2>Society Created Successfully</h2>
+
+            <p>Hi ${user.first_name},</p>
+
+            <p>
+                Your society
+                <strong>${societyName}</strong>
+                has been created successfully on Umgalelo.
+            </p>
+
+            <p><strong>Location:</strong> ${city}, ${province}</p>
+            <p><strong>Monthly Contribution:</strong> R${monthlyContribution}</p>
+            <p><strong>Cover Amount:</strong> R${coverAmount}</p>
+
+            <p>
+                You have automatically been assigned as the
+                <strong>Society Administrator</strong>.
+            </p>
+
+            <p>
+                Members can now discover your society, submit join requests,
+                and begin contributing.
+            </p>
+
+            <br>
+
+            <p>Thank you for using Umgalelo.</p>
+        `
     );
 
     res.status(201).json({ message: 'Society created' });
