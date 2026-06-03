@@ -81,3 +81,16 @@ function validate(){
   return isValid
  
 }
+
+const passwordInput = document.getElementById('password');
+const togglePassword = document.getElementById('togglePassword');
+
+togglePassword.addEventListener('click', () => {
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        togglePassword.src = '../images/visible.png';
+    } else {
+        passwordInput.type = 'password';
+        togglePassword.src = '../images/visible (1).png';
+    }
+});

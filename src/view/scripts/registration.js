@@ -149,3 +149,16 @@ if (googleSignup) {
         window.location.href = 'https://umgalelo-production.up.railway.app/api/auth/google';
     });
 }
+
+function togglePassword(inputId, button) {
+    const input = document.getElementById(inputId);
+    const img = button.querySelector('img');
+
+    if (input.type === 'password') {
+        input.type = 'text';
+        img.src = '../images/visible.png';
+    } else {
+        input.type = 'password';
+        img.src = '../images/visible (1).png';
+    }
+}
